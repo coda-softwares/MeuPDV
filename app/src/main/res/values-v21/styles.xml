@@ -4,6 +4,13 @@
     <style name="AppTheme" parent="android:Theme.Material.Light">
         <!-- Customize your theme here. -->
         <item name="android:colorAccent">@color/cor_acento</item>
+
+    </style>
+
+    <style name="AppTheme.NoBar" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="android:colorAccent">@color/cor_acento</item>
     </style>
 
 </resources>

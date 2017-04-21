@@ -2,4 +2,6 @@
     <string name="app_name">MeuPDV</string>
     <string name="descr_logo">Logo do projeto</string>
     <string name="usernname">Nome de usuário</string>
+    <string name="senha">Senha</string>
+    <string name="login">Entrar</string>
 </resources>
