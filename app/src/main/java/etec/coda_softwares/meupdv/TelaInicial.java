@@ -1,6 +1,7 @@
 package etec.coda_softwares.meupdv;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TelaInicial extends Activity {
-    private EditText tbUsername;
-    private EditText tbSenha;
     final Animation outAnim = new ScaleAnimation(1, 0, 1, 0);
     final Animation inAnim = new ScaleAnimation(0, 1, 0, 1);
+    private EditText tbUsername;
+    private EditText tbSenha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,11 @@ public class TelaInicial extends Activity {
     public void logar(final View v) {
         final String username = tbUsername.getText().toString();
         final String senha = tbSenha.getText().toString();
+        if (username.length() < 3) {
+            Toast.makeText(this, "Usuario muito curto", Toast.LENGTH_LONG).show();
+        } else if (senha.length() < 6) {
+            Toast.makeText(this, "Senha muito curta", Toast.LENGTH_LONG).show();
+        }
         v.setEnabled(false);
         final ProgressBar load =
                 (ProgressBar) TelaInicial.this.findViewById(R.id.log_loading);
@@ -94,7 +100,7 @@ public class TelaInicial extends Activity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -105,9 +111,13 @@ public class TelaInicial extends Activity {
                         Toast.makeText(TelaInicial.this,
                                 "Usuario é: " + username, Toast.LENGTH_LONG).show();
                         setEditable(true);
-                        load.startAnimation(outAnim);
-                        load.setVisibility(View.GONE);
-                        v.setEnabled(true);
+                        //FIXME These are supposed when the login fails.
+                        //load.startAnimation(outAnim);
+                        //load.setVisibility(View.GONE);
+                        //v.setEnabled(true);
+                        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
+                        startActivity(i);
+                        finish();
                     }
                 });
             }

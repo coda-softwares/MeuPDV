@@ -4,4 +4,6 @@
     <string name="usernname">Nome de usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
+    <string name="title_activity_menu_principal">MenuPrincipal</string>
+    <string name="sair">Fechar</string>
 </resources>

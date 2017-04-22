@@ -4,12 +4,26 @@
     <style name="AppTheme" parent="android:Theme.Material.Light">
         <!-- Customize your theme here. -->
         <item name="android:colorAccent">@color/cor_acento</item>
-
+        <item name="android:toolbarStyle">@style/AppTheme.ActionBar</item>
     </style>
 
     <style name="AppTheme.NoBar" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Customize your theme here. -->
 
+        <item name="android:colorAccent">@color/cor_acento</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.Text" parent="@android:style/TextAppearance.Material.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="AppTheme.ActionBar" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:background">@color/cor_acento</item>
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.Text</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="AppTheme.Compat21" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:colorAccent">@color/cor_acento</item>
     </style>
 

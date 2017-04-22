@@ -9,13 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TelaInicial"
-            android:logo="@mipmap/ic_launcher">
-
+        <activity
+            android:name=".TelaInicial"
+            android:logo="@mipmap/ic_launcher"
+            android:theme="@style/AppTheme.NoBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MenuPrincipal"
+            android:label="@string/title_activity_menu_principal"
+            android:theme="@style/AppCompatTheme">
         </activity>
     </application>
 

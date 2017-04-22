@@ -2,7 +2,17 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="android:color">@color/cor_acento</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:color">@color/cor_acento</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="textaum" parent="@android:style/TextAppearance.Holo.Medium">
+        <item name="android:textSize">30sp</item>
     </style>
 
 </resources>
