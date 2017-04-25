@@ -1,4 +1,4 @@
-package etec.coda_softwares.meupdv;
+package etec.coda_softwares.meupdv.menuPrincipal;
 
 import android.content.Context;
 import android.support.annotation.IdRes;
@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import etec.coda_softwares.meupdv.R;
 
 /**
  * Created by dovahkiin on 22/04/17.
@@ -34,7 +37,7 @@ public class MenuPrincipalAdapter extends ArrayAdapter<ItemMenuPrincipal> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final ItemMenuPrincipal ie = getItem(position);
         if (ie == null) {
-            Log.wtf("self", "ie is null");
+            Log.wtf(this.getClass().getName(), "Indentificator of list is null");
             System.exit(1);
         }
         View v;
@@ -43,6 +46,10 @@ public class MenuPrincipalAdapter extends ArrayAdapter<ItemMenuPrincipal> {
         } else {
             v = convertView;
         }
+
+        ImageView imageView = (ImageView) v.findViewById(R.id.item_img);
+        imageView.setImageResource(ie.getImage());
+
         TextView title = (TextView) v.findViewById(R.id.item_Title);
         title.setText(ie.getTitulo());
 

@@ -4,6 +4,17 @@
     <string name="usernname">Nome de usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
-    <string name="title_activity_menu_principal">MenuPrincipal</string>
+    <string name="title_activity_menu_principal">Menu Principal</string>
     <string name="sair">Fechar</string>
+    <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
+    <string name="prod_nome">Nome do Produto</string>
+    <string name="prod_quant">Quant. de Produtos</string>
+    <string name="prod_preco">Preço do Produto</string>
+    <string name="prod_validade">Validade</string>
+    <string name="prod_barras">Código de Barras</string>
+    <string name="carregando">Carregando…</string>
+
+    <!-- Pagina Cadastro!-->
+
+
 </resources>

@@ -1,5 +1,6 @@
-package etec.coda_softwares.meupdv;
+package etec.coda_softwares.meupdv.menuPrincipal;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import etec.coda_softwares.meupdv.CadastrarProduto;
+import etec.coda_softwares.meupdv.R;
 
 public class MenuPrincipal extends AppCompatActivity {
 
@@ -34,6 +38,7 @@ public class MenuPrincipal extends AppCompatActivity {
         Toolbar ab = (Toolbar) findViewById(R.id.mp_toolbar);
         ab.setBackgroundColor(getResources().getColor(R.color.cor_acento));
         ab.setTitleTextColor(Color.rgb(255, 255, 255));
+        ab.getMenu().add("Send").setIcon(R.drawable.ic_camera);
         setSupportActionBar(ab);
         populateList();
     }
@@ -42,10 +47,12 @@ public class MenuPrincipal extends AppCompatActivity {
         ListView a = (ListView) findViewById(R.id.mp_listaItems);
         MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
                 R.id.item_Title);
-        adapter.add(new ItemMenuPrincipal(R.drawable.mypdv, "Samuel", "is awesome", new Runnable() {
+        adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",
+                "Cadastra novos produtos no banco de dados.", new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MenuPrincipal.this, "Certo", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MenuPrincipal.this, CadastrarProduto.class);
+                startActivity(i);
             }
         }));
         adapter.add(new ItemMenuPrincipal(R.drawable.mypdv, "Jeffe", "is awesome", new Runnable() {

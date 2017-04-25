@@ -1,129 +1,96 @@
 package etec.coda_softwares.meupdv;
 
-import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class TelaInicial extends Activity {
-    final Animation outAnim = new ScaleAnimation(1, 0, 1, 0);
-    final Animation inAnim = new ScaleAnimation(0, 1, 0, 1);
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.gson.Gson;
+
+import java.net.SocketTimeoutException;
+import java.util.HashMap;
+
+import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
+
+public class TelaInicial extends AppCompatActivity {
     private EditText tbUsername;
     private EditText tbSenha;
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_inicial);
-        final TextView lbUsername = (TextView) findViewById(R.id.log_lb_username);
+        //final TextView lbUsername = (TextView) findViewById(R.id.log_lb_username);
         tbUsername = (EditText) findViewById(R.id.log_tb_username);
-        final TextView lbSenha = (TextView) findViewById(R.id.log_lb_senha);
+        //final TextView lbSenha = (TextView) findViewById(R.id.log_lb_senha);
         tbSenha = (EditText) findViewById(R.id.log_tb_senha);
 
-        inAnim.setDuration(700);
-        outAnim.setDuration(700);
-
-        tbUsername.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equals("")) {
-                    lbUsername.startAnimation(outAnim);
-                    lbUsername.setVisibility(View.INVISIBLE);
-                } else if (start == 0) {
-                    lbUsername.setVisibility(View.VISIBLE);
-                    lbUsername.startAnimation(inAnim);
-                }
-            }
-        });
-        tbSenha.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equals("")) {
-                    lbSenha.startAnimation(outAnim);
-                    lbSenha.setVisibility(View.INVISIBLE);
-                } else if (start == 0) {
-                    lbSenha.setVisibility(View.VISIBLE);
-                    lbSenha.startAnimation(inAnim);
-                }
-            }
-        });
-    }
-
-    private void setEditable(boolean editable) {
-        tbUsername.setClickable(editable);
-        tbUsername.setFocusable(editable);
-        tbUsername.setEnabled(editable);
-
-        tbSenha.setClickable(editable);
-        tbSenha.setFocusable(editable);
-        tbSenha.setEnabled(editable);
     }
 
     public void logar(final View v) {
-        final String username = tbUsername.getText().toString();
-        final String senha = tbSenha.getText().toString();
+        final String username = tbUsername.getText().toString().trim();
+        final String senha = tbSenha.getText().toString().trim();
         if (username.length() < 3) {
             Toast.makeText(this, "Usuario muito curto", Toast.LENGTH_LONG).show();
+            return;
         } else if (senha.length() < 6) {
             Toast.makeText(this, "Senha muito curta", Toast.LENGTH_LONG).show();
+            return;
         }
-        v.setEnabled(false);
-        final ProgressBar load =
-                (ProgressBar) TelaInicial.this.findViewById(R.id.log_loading);
-        load.setVisibility(View.VISIBLE);
-        load.startAnimation(inAnim);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        AlertDialog.Builder builder = new AlertDialog.Builder(TelaInicial.this);
+        builder.setCancelable(false)
+                .setTitle("Logando")
+                .setView(R.layout.layout_loading);
+        final Dialog d = builder.create();
+        final Usuario u = new Usuario("", username, senha, "");
         new Thread(new Runnable() {
             @Override
             public void run() {
+                int code = 0;
+                HashMap<String, String> postForm = new HashMap<>();
+                postForm.put("body", gson.toJson(u));
                 try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    HttpRequest req = HttpRequest.post("http://192.168.0.150/login", postForm,
+                            false).connectTimeout(2000).readTimeout(5000);
+                    code = req.code();
+                } catch (HttpRequest.HttpRequestException e) {
+                    if (e.getCause() instanceof SocketTimeoutException) {
+                        code = 408;
+                    } else {
+                        e.printStackTrace();
+                    }
                 }
-
+                final int fcode = code;
                 TelaInicial.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(TelaInicial.this,
-                                "Usuario é: " + username, Toast.LENGTH_LONG).show();
-                        setEditable(true);
-                        //FIXME These are supposed when the login fails.
-                        //load.startAnimation(outAnim);
-                        //load.setVisibility(View.GONE);
-                        //v.setEnabled(true);
-                        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
-                        startActivity(i);
-                        finish();
+                        networkAnswer(d, fcode);
                     }
                 });
             }
         }).start();
-        setEditable(false);
-        //Stub
+        d.show();
+    }
+
+    private void networkAnswer(Dialog d, int code) {
+        code = 200; //FIXME: DEBUG ONLY!!!
+        d.dismiss();
+        if (code == 200) {
+            Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
+            startActivity(i);
+            finish();
+        }
+        Toast.makeText(this, "Login falhou, código do erro: " + code, Toast.LENGTH_LONG).show();
     }
 
 }

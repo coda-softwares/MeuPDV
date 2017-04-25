@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="etec.coda_softwares.meupdv">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -15,14 +17,21 @@
             android:theme="@style/AppTheme.NoBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuPrincipal"
+            android:name=".menuPrincipal.MenuPrincipal"
             android:label="@string/title_activity_menu_principal"
-            android:theme="@style/AppCompatTheme">
+            android:theme="@style/AppTheme.NoBar"></activity>
+        <activity
+            android:name=".CadastrarProduto"
+            android:label="@string/title_activity_cadastrar_produto"
+            android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:theme="@style/AppTheme.NoBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
         </activity>
     </application>
 
