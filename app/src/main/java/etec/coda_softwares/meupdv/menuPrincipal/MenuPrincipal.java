@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,11 +42,12 @@ public class MenuPrincipal extends AppCompatActivity {
         ab.setBackgroundColor(getResources().getColor(R.color.cor_acento));
         ab.setTitleTextColor(Color.rgb(255, 255, 255));
         setSupportActionBar(ab);
-        populateList();
+        //populateList();
+        populateGrid();
     }
-
+    // NOTE: Estou modificando para GridView
     private void populateList() {
-        ListView a = (ListView) findViewById(R.id.mp_listaItems);
+        //ListView a = (ListView) findViewById(R.id.mp_listaItems);
         MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
                 R.id.item_Title);
         adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",
@@ -70,8 +72,35 @@ public class MenuPrincipal extends AppCompatActivity {
                 System.exit(0);
             }
         }));
-        a.setAdapter(adapter);
+        //a.setAdapter(adapter);
     }
+    private void populateGrid(){
+        GridView g = (GridView) findViewById(R.id.mp_menuItems);
+        MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
+                R.id.item_Title);
+        adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",
+                "Cadastra novos produtos no banco de dados.", new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(MenuPrincipal.this, CadastrarProduto.class);
+                startActivity(i);
+            }
+        }));
 
+        adapter.add(new ItemMenuPrincipal(R.drawable.ic_fornecedor, "Cadastrar Fornecedor", "", new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(MenuPrincipal.this, CadastrarFornecedor.class));
+            }
+        }));
+
+        adapter.add(new ItemMenuPrincipal(R.drawable.ic_meupdv, "Cianureto", "Is the only option", new Runnable() {
+            @Override
+            public void run() {
+                System.exit(0);
+            }
+        }));
+        g.setAdapter(adapter);
+    }
 }
 

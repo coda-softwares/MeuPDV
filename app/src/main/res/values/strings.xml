@@ -1,11 +1,18 @@
 <resources>
     <string name="app_name">MeuPDV</string>
     <string name="descr_logo">Logo do projeto</string>
-    <string name="usernname">Nome de usuário</string>
+    <string name="username">Nome de usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
+    <!-- MenuPrincipal -->
     <string name="title_activity_menu_principal">Menu Principal</string>
     <string name="sair">Fechar</string>
+    <string-array name="menu_items">
+        <item>Registrar Entrega</item>
+        <item>Registrar Produto</item>
+        <item>Registrar Fornecedor</item>
+    </string-array>
+    <!-- Produto -->
     <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
     <string name="prod_nome">Nome do Produto</string>
     <string name="prod_quant">Quant. de Produtos</string>
@@ -16,11 +23,12 @@
     <string name="fornecedor_nome">nome completo</string>
     <string name="fornecedor_email">email</string>
     <string name="fornecedor_telefone">telefone</string>
-
+    <!-- Tela de entrada -->
     <string name="carregando">Carregando…</string>
     <string name="pdv_own">Meus PDV\'s</string>
     <string name="pdv_shared">PDV\'s que eu participo</string>
-    <string name="title_activity_cadastrar_fornecedor">CadastrarFornecedor</string>
+    <string name="title_activity_cadastrar_fornecedor">Cadastrar Fornecedor</string>
+
 
     <!-- Pagina Cadastro!-->
 

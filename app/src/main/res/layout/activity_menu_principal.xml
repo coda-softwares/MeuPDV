@@ -11,9 +11,16 @@
         android:id="@+id/mp_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <ListView
-        android:id="@+id/mp_listaItems"
+    <!-- NOTE: Creating a Grid menu -->
+    <!--<ListView-->
+        <!--android:id="@+id/mp_listaItems"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+    <GridView
+        android:id="@+id/mp_menuItems"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"/>
 </LinearLayout>
