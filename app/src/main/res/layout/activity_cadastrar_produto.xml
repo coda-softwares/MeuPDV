@@ -19,7 +19,7 @@
         android:adjustViewBounds="true"
         android:maxHeight="180dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/mypdv" />
+        app:srcCompat="@drawable/ic_meupdv" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -76,6 +76,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:hint="@string/prod_quant"
                     android:inputType="numberSigned"

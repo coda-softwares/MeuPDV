@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/item_img"
+    <etec.coda_softwares.meupdv.RoundImageView
+        android:id="@+id/pdv_img"
         android:layout_width="96dp"
         android:layout_height="83dp"
         android:scaleType="fitCenter"
@@ -27,7 +27,7 @@
         tools:ignore="HardcodedText">
 
         <TextView
-            android:id="@+id/item_Title"
+            android:id="@+id/pdv_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Opção"
@@ -35,7 +35,7 @@
             android:textAppearance="@style/textaum" />
 
         <TextView
-            android:id="@+id/item_Descr"
+            android:id="@+id/pdv_Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
