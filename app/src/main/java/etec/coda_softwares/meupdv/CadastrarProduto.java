@@ -4,15 +4,20 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,12 +26,14 @@ import java.util.Date;
 
 public class CadastrarProduto extends AppCompatActivity {
     Date validade;
+    EditText tb_barras;
 
     // id_Prod, id_Forn, nome_Prod, validade_Prod, cdgBarras_Prod, val_Prod, quant_Prod
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_produto);
+        tb_barras = (EditText) findViewById(R.id.prod_barras);
         Toolbar tbar = (Toolbar) findViewById(R.id.prod_toolbar);
         tbar.setBackgroundColor(getResources().getColor(R.color.cor_acento));
         tbar.setTitleTextColor(Color.WHITE);
@@ -78,9 +85,16 @@ public class CadastrarProduto extends AppCompatActivity {
         });
     }
 
-    public void carregarCodBarras(View v) {
-        EditText tb_barras = (EditText) findViewById(R.id.prod_barras);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        Log.w(this.getClass().getName(), resultCode + " WORKS!"+data.getDataString() + barcode.toString());
+        tb_barras.setText(barcode.getContents());
+    }
 
+    public void carregarCodBarras(View v) {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);
     }
 
 }

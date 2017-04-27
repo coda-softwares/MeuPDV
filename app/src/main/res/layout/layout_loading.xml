@@ -14,7 +14,9 @@
         android:layout_marginEnd="14dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="14dp" />
 
     <TextView
         android:id="@+id/load_title"

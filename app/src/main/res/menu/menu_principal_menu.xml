@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="AppCompatResource"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/mp_sair"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:title="@string/sair"
-        app:showAsAction="ifRoom"></item>
+        android:showAsAction="always"
+        tools:ignore="AppCompatResource"></item>
 </menu>

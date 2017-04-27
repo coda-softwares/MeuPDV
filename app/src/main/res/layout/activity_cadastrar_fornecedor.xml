@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="etec.coda_softwares.meupdv.CadastrarFornecedor"
+    android:orientation="vertical"
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/fornecedor_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.rey.material.widget.EditText
+        android:hint="@string/fornecedor_nome"
+        app:et_inputId="@+id/fornecedor_nome"
+        android:layout_weight="1"
+        app:et_dividerHeight="2dp"
+        app:et_labelEnable="true"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName" />
+    <com.rey.material.widget.EditText
+        android:hint="@string/fornecedor_email"
+        app:et_inputId="@+id/fornecedor_email"
+        android:layout_weight="1"
+        app:et_dividerHeight="2dp"
+        app:et_labelEnable="true"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress" />
+
+    <!-- TODO: Coloque opcao de selecionar telefone dos contatos do proprio android -->
+    <com.rey.material.widget.EditText
+        android:hint="@string/fornecedor_telefone"
+        app:et_inputId="@+id/fornecedor_telefone"
+        android:layout_weight="1"
+        app:et_dividerHeight="2dp"
+        app:et_labelEnable="true"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone" />
+</LinearLayout>

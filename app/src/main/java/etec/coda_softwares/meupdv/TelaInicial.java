@@ -1,96 +1,144 @@
 package etec.coda_softwares.meupdv;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.kevinsawicki.http.HttpRequest;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.gson.Gson;
 
-import java.net.SocketTimeoutException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import etec.coda_softwares.meupdv.entitites.Contato;
+import etec.coda_softwares.meupdv.entitites.Fornecedor;
+import etec.coda_softwares.meupdv.entitites.PDV;
 import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
 
 public class TelaInicial extends AppCompatActivity {
-    private EditText tbUsername;
-    private EditText tbSenha;
+    private static final int REQ_CODE = 742;
+    private static String PDV_ID = "";
     private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_inicial);
-        //final TextView lbUsername = (TextView) findViewById(R.id.log_lb_username);
-        tbUsername = (EditText) findViewById(R.id.log_tb_username);
-        //final TextView lbSenha = (TextView) findViewById(R.id.log_lb_senha);
-        tbSenha = (EditText) findViewById(R.id.log_tb_senha);
-
+        tryLogin();
     }
 
-    public void logar(final View v) {
-        final String username = tbUsername.getText().toString().trim();
-        final String senha = tbSenha.getText().toString().trim();
-        if (username.length() < 3) {
-            Toast.makeText(this, "Usuario muito curto", Toast.LENGTH_LONG).show();
-            return;
-        } else if (senha.length() < 6) {
-            Toast.makeText(this, "Senha muito curta", Toast.LENGTH_LONG).show();
-            return;
+    private void tryLogin() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            AuthUI.SignInIntentBuilder aui = AuthUI.getInstance().createSignInIntentBuilder();
+            aui.setLogo(R.drawable.ic_meupdv);
+            aui.setTheme(R.style.AppTheme);
+            aui.setAllowNewEmailAccounts(true);
+            aui.setProviders(Arrays.asList(
+                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
+            startActivityForResult(aui.build(), REQ_CODE);
+        } else {
+            populateList();
         }
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        AlertDialog.Builder builder = new AlertDialog.Builder(TelaInicial.this);
-        builder.setCancelable(false)
-                .setTitle("Logando")
-                .setView(R.layout.layout_loading);
-        final Dialog d = builder.create();
-        final Usuario u = new Usuario("", username, senha, "");
-        new Thread(new Runnable() {
+    }
+
+    private void populatePDVView(View v, PDV model) {
+        v.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void run() {
-                int code = 0;
-                HashMap<String, String> postForm = new HashMap<>();
-                postForm.put("body", gson.toJson(u));
-                try {
-                    HttpRequest req = HttpRequest.post("http://192.168.0.150/login", postForm,
-                            false).connectTimeout(2000).readTimeout(5000);
-                    code = req.code();
-                } catch (HttpRequest.HttpRequestException e) {
-                    if (e.getCause() instanceof SocketTimeoutException) {
-                        code = 408;
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-                final int fcode = code;
-                TelaInicial.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        networkAnswer(d, fcode);
-                    }
-                });
+            public void onClick(View view) {
+                TelaInicial.this.nextActivity();
             }
-        }).start();
-        d.show();
+        });
+        TextView titulo = (TextView) v.findViewById(R.id.pdv_Title);
+        titulo.setText(model.getName());
+        TextView subT = (TextView) v.findViewById(R.id.pdv_Data);
+        subT.setText(model.getLema());
+        RoundImageView rdv = (RoundImageView) v.findViewById(R.id.pdv_img);
+        rdv.setImageResource(R.drawable.ic_meupdv);
     }
 
-    private void networkAnswer(Dialog d, int code) {
-        code = 200; //FIXME: DEBUG ONLY!!!
-        d.dismiss();
-        if (code == 200) {
-            Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
-            startActivity(i);
-            finish();
+    private void populateList(){
+
+        Contato a = new Contato(new ArrayList<>(Arrays.asList("1112345678", "1111234567")),
+                "samosaara@gmail.com");
+        Fornecedor awesome = new Fornecedor("Samuel", "http://github.com/coda_softwares", a);
+        awesome.saveOnDB();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        DatabaseReference ds = FirebaseDatabase.getInstance().getReference(user.getUid())
+                .child("pdv").child("own");
+
+        Query query = ds.limitToFirst(3);
+        final FirebaseListAdapter<PDV> ownPDVList = new FirebaseListAdapter<PDV>(this, PDV.class,
+                R.layout.pdv_item, query) {
+            @Override
+            protected void populateView(View v, PDV model, int position) {
+                populatePDVView(v, model);
+
+            }
+        };
+        Query qr2 = ds.getParent().child("shared").startAt(0);
+        ((ListView) findViewById(R.id.inicio_own_pdv)).setAdapter(ownPDVList);
+        FirebaseListAdapter<PDV> sharedPDVAdpater = new FirebaseListAdapter<PDV>(this, PDV.class,
+                R.layout.pdv_item, query) {
+            @Override
+            protected void populateView(View v, PDV model, int position) {
+                populatePDVView(v, model);
+            }
+        };
+        ((ListView) findViewById(R.id.inicio_shared_pdv)).setAdapter(sharedPDVAdpater);
+        nextActivity();
+
+    }
+
+    private void nextActivity(){
+        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (REQ_CODE == requestCode) {
+            IdpResponse res = IdpResponse.fromResultIntent(data);
+            if (resultCode == RESULT_OK) {
+                populateList();
+            } else {
+                if (res == null) {
+                    Toast.makeText(this, "Login cancelado.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (res.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                    Toast.makeText(this, "Login cancelado.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (res.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                    Toast.makeText(this, "Erro desconhecido", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
-        Toast.makeText(this, "Login falhou, código do erro: " + code, Toast.LENGTH_LONG).show();
     }
 
+    public static String getPdvId() {
+        return PDV_ID;
+    }
+
+    private static void setPdvId(String pdvId) {
+        PDV_ID = pdvId;
+    }
 }

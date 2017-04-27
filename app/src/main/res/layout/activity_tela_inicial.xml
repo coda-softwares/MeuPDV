@@ -23,48 +23,51 @@
         android:weightSum="1">
 
         <ImageView
+            android:id="@+id/logo_projeto"
             android:layout_width="match_parent"
             android:layout_height="165dp"
             android:layout_weight="0.33"
             android:adjustViewBounds="false"
             android:contentDescription="@string/descr_logo"
             android:cropToPadding="true"
-            android:padding="-5dp"
-            android:src="@drawable/mypdv" />
+            android:src="@drawable/ic_meupdv" />
 
-        <!--Inicio Usuario!-->
-        <com.rey.material.widget.EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/login"
-            android:paddingBottom="8dp"
-            android:paddingEnd="4dp"
-            android:paddingStart="4dp"
-            app:et_dividerHeight="2dp"
-            app:et_inputId="@+id/log_tb_username"
-            app:et_labelEnable="true"></com.rey.material.widget.EditText>
-        <!--Fim Usuario!-->
+            android:layout_weight="0.33"
+            android:text="@string/pdv_own"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:textColor="#000000"
+            android:background="#d1c4e9"/>
 
-        <!--Inico senha!-->
-        <com.rey.material.widget.EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/senha"
-            android:inputType="textPassword"
-            android:paddingBottom="5dp"
-            android:paddingEnd="4dp"
-            android:paddingStart="4dp"
-            app:et_dividerHeight="2dp"
-            app:et_inputId="@+id/log_tb_senha"
-            app:et_labelEnable="true"></com.rey.material.widget.EditText>
         <!--Fim Senha!-->
-        <com.rey.material.widget.Button
-            android:id="@+id/button"
+        <ListView
+            android:id="@+id/inicio_own_pdv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:onClick="logar"
-            android:text="@string/login" />
+            android:layout_weight="0.33"
+            android:background="#d1c4e9"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:text="@string/pdv_shared"
+            android:textColor="#000000" />
+
+        <ListView
+            android:id="@+id/inicio_shared_pdv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33" />
 
     </LinearLayout>
 </ScrollView>
