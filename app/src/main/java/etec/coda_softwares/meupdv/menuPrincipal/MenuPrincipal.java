@@ -11,6 +11,7 @@ import android.widget.GridView;
 
 import etec.coda_softwares.meupdv.CadastrarFornecedor;
 import etec.coda_softwares.meupdv.CadastrarProduto;
+import etec.coda_softwares.meupdv.Produtos.Produtos;
 import etec.coda_softwares.meupdv.R;
 
 public class MenuPrincipal extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class MenuPrincipal extends AppCompatActivity {
         MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
                 R.id.item_Title);
         adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",
-                "Cadastra novos produtos no banco de dados.", new Runnable() {
+                new Runnable() {
             @Override
             public void run() {
                 Intent i = new Intent(MenuPrincipal.this, CadastrarProduto.class);
@@ -53,10 +54,16 @@ public class MenuPrincipal extends AppCompatActivity {
         }));
 
         adapter.add(new ItemMenuPrincipal(R.drawable.ic_fornecedor, "Cadastrar Fornecedor",
-                "Insere novo fornecedor no banco de dados", new Runnable() {
+                new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(MenuPrincipal.this, CadastrarFornecedor.class));
+            }
+        }));
+        adapter.add(new ItemMenuPrincipal(R.drawable.ic_produtos, "Produtos", new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(MenuPrincipal.this, Produtos.class));
             }
         }));
         g.setAdapter(adapter);

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="etec.coda_softwares.meupdv.Produtos.Produtos">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/prods_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:paddingTop="20dp">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="10">
+            <com.rey.material.widget.EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Pesquise Aqui"
+                android:inputType="text"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+        <com.rey.material.widget.ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_pesquisa"
+            android:layout_weight="1"
+            android:onClick="pesquisar"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/lista_produtos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="20dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <!-- Listagem de Cada Produto em Ordem Alfabetica -->
+        <!-- Cada item terá um botão do lado direito -->
+    </ListView>
+
+
+</LinearLayout>

@@ -126,10 +126,9 @@
                         android:id="@+id/prod_barras"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/prod_barras"
-                    android:inputType="number|numberSigned"
-
+                        android:ems="10"
+                        android:hint="@string/prod_barras"
+                        android:inputType="number|numberSigned"
                         android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 

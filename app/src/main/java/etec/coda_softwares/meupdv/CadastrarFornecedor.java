@@ -30,18 +30,18 @@ public class CadastrarFornecedor extends AppCompatActivity {
                                 .toString().trim();
                         String nome = ((EditText) findViewById(R.id.fornecedor_nome)).getText()
                                 .toString().trim();
-                        if (telefone.equals("")) {
-                            Toast.makeText(CadastrarFornecedor.this, "Telefone nao pode ser vazio",
+                        if (nome.equals("")) {
+                            Toast.makeText(CadastrarFornecedor.this, R.string.nome_vazio,
                                     Toast.LENGTH_SHORT).show();
                             return true;
                         }
                         if (email.equals("")) {
-                            Toast.makeText(CadastrarFornecedor.this, "Email nao pode ser vazio",
+                            Toast.makeText(CadastrarFornecedor.this, R.string.email_vazio,
                                     Toast.LENGTH_SHORT).show();
                             return true;
                         }
-                        if (nome.equals("")) {
-                            Toast.makeText(CadastrarFornecedor.this, "Nome nao pode ser vazio",
+                        if (telefone.equals("")) {
+                            Toast.makeText(CadastrarFornecedor.this, R.string.telefone_vazio,
                                     Toast.LENGTH_SHORT).show();
                             return true;
                         }

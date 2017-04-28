@@ -1,18 +1,20 @@
-package etec.coda_softwares.meupdv.menuPrincipal;
+package etec.coda_softwares.meupdv.Produtos;
+
+import android.view.View;
 
 /**
- * Created by dovahkiin on 22/04/17.
+ * Created by jeffbustercase on 28/04/17.
  */
 
-public class ItemMenuPrincipal {
+public class ItemProdutos {
     private int image;
     private String titulo;
-    private Runnable action;
+    private double preco;
 
-    public ItemMenuPrincipal(int image, String titulo, Runnable action) {
+    public ItemProdutos(int image, String titulo, double preco) {
         this.image = image;
         this.titulo = titulo;
-        this.action = action;
+        this.preco = preco;
     }
 
     public int getImage() {
@@ -31,11 +33,7 @@ public class ItemMenuPrincipal {
         this.titulo = titulo;
     }
 
-    public Runnable getAction() {
-        return action;
-    }
+    public double getPreco() {return preco;}
 
-    public void setAction(Runnable action) {
-        this.action = action;
-    }
+    public void setPreco(Double preco) {this.preco = preco;}
 }

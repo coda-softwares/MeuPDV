@@ -30,7 +30,7 @@
             android:id="@+id/item_Title"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text="Cadastrar Fornecedor"
             android:textAlignment="center"
             android:textAppearance="@style/textaum" />

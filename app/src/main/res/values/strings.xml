@@ -25,6 +25,11 @@
     <string name="carregando">Carregando…</string>
     <string name="pdv_own">Meus PDV\'s</string>
 
+    <!-- Alertas -->
+    <string name="nome_vazio">você não digitou um nome</string>
+    <string name="email_vazio">você não digitou um email</string>
+    <string name="telefone_vazio">você não digitou um telefone</string>
+
     <!--Cadastro de fornecedor-->
     <string name="title_activity_cadastrar_fornecedor">Cadastrar Fornecedor</string>
     <string name="atividade_novo_fornecedor">Novo Fornecedor</string>
@@ -38,4 +43,6 @@
     <!--bug android studio-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+    <string name="title_activity_produtos">Produtos</string>
+    <string name="title_activity_produto">Produto</string>
 </resources>

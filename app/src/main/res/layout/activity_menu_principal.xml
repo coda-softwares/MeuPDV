@@ -19,7 +19,7 @@
         android:id="@+id/mp_gridItems"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3"
+        android:numColumns="2"
         android:horizontalSpacing="1dp"
         android:verticalSpacing="1dp"/>
 </LinearLayout>
