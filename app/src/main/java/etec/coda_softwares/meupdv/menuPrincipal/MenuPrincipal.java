@@ -11,6 +11,7 @@ import android.widget.GridView;
 
 import etec.coda_softwares.meupdv.CadastrarFornecedor;
 import etec.coda_softwares.meupdv.CadastrarProduto;
+import etec.coda_softwares.meupdv.R;
 
 public class MenuPrincipal extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class MenuPrincipal extends AppCompatActivity {
         populateGrid();
     }
     private void populateGrid(){
-        GridView g = (GridView) findViewById(R.id.mp_menuItems);
+        GridView g = (GridView) findViewById(R.id.mp_gridItems);
         MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
                 R.id.item_Title);
         adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",

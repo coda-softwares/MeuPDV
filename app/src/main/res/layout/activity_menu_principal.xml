@@ -16,7 +16,7 @@
         app:title="@string/title_activity_menu_principal" />
 
     <GridView
-        android:id="@+id/mp_listaItems"
+        android:id="@+id/mp_gridItems"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:numColumns="3"
