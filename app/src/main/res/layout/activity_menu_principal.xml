@@ -15,8 +15,11 @@
         android:layout_height="wrap_content"
         app:title="@string/title_activity_menu_principal" />
 
-    <ListView
+    <GridView
         android:id="@+id/mp_listaItems"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"/>
 </LinearLayout>

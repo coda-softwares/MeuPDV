@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">MeuPDV</string>
     <string name="descr_logo">Logo do projeto</string>
-    <string name="usernname">Nome de usuário</string>
+    <string name="username">Nome de usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
+    <!-- MenuPrincipal -->
     <string name="title_activity_menu_principal">Menu Principal</string>
     <string name="sair">Fechar</string>
 
@@ -27,6 +28,7 @@
     <!--Cadastro de fornecedor-->
     <string name="title_activity_cadastrar_fornecedor">Cadastrar Fornecedor</string>
     <string name="atividade_novo_fornecedor">Novo Fornecedor</string>
+
 
     <!-- Pagina Cadastro!-->
     <string name="title_activity_novo_pdv">Novo Ponto de Venda</string>

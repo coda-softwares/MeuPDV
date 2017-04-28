@@ -7,11 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import etec.coda_softwares.meupdv.CadastrarFornecedor;
 import etec.coda_softwares.meupdv.CadastrarProduto;
-import etec.coda_softwares.meupdv.R;
 
 public class MenuPrincipal extends AppCompatActivity {
 
@@ -37,11 +36,10 @@ public class MenuPrincipal extends AppCompatActivity {
         setContentView(R.layout.activity_menu_principal);
         Toolbar ab = (Toolbar) findViewById(R.id.mp_toolbar);
         setSupportActionBar(ab);
-        populateList();
+        populateGrid();
     }
-
-    private void populateList() {
-        ListView a = (ListView) findViewById(R.id.mp_listaItems);
+    private void populateGrid(){
+        GridView g = (GridView) findViewById(R.id.mp_menuItems);
         MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
                 R.id.item_Title);
         adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",
@@ -60,9 +58,7 @@ public class MenuPrincipal extends AppCompatActivity {
                 startActivity(new Intent(MenuPrincipal.this, CadastrarFornecedor.class));
             }
         }));
-
-        a.setAdapter(adapter);
+        g.setAdapter(adapter);
     }
-
 }
 

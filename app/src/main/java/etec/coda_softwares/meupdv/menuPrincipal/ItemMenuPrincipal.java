@@ -7,13 +7,13 @@ package etec.coda_softwares.meupdv.menuPrincipal;
 public class ItemMenuPrincipal {
     private int image;
     private String titulo;
-    private String descricao;
+    //private String descricao;
     private Runnable action;
 
     public ItemMenuPrincipal(int image, String titulo, String descricao, Runnable action) {
         this.image = image;
         this.titulo = titulo;
-        this.descricao = descricao;
+        //this.descricao = descricao;
         this.action = action;
     }
 
@@ -33,13 +33,9 @@ public class ItemMenuPrincipal {
         this.titulo = titulo;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
+    //public String getDescricao() {return descricao;}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+    //public void setDescricao(String descricao) {this.descricao = descricao;}
 
     public Runnable getAction() {
         return action;

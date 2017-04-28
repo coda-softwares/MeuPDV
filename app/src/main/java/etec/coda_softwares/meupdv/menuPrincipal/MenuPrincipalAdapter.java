@@ -37,7 +37,7 @@ public class MenuPrincipalAdapter extends ArrayAdapter<ItemMenuPrincipal> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final ItemMenuPrincipal ie = getItem(position);
         if (ie == null) {
-            Log.wtf(this.getClass().getName(), "Indentificator of list is null");
+            Log.wtf(this.getClass().getName(), "Indentificador da lista é nulo!");
             System.exit(1);
         }
         View v;
@@ -53,8 +53,8 @@ public class MenuPrincipalAdapter extends ArrayAdapter<ItemMenuPrincipal> {
         TextView title = (TextView) v.findViewById(R.id.item_Title);
         title.setText(ie.getTitulo());
 
-        TextView decr = (TextView) v.findViewById(R.id.item_Descr);
-        decr.setText(ie.getDescricao());
+        //TextView decr = (TextView) v.findViewById(R.id.item_Descr);
+        //decr.setText(ie.getDescricao());
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
