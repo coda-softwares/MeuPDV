@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MotionEvent;
@@ -96,7 +95,7 @@ public class CadastrarProduto extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        Log.w(this.getClass().getName(), resultCode + " WORKS!"+data.getDataString() + barcode.toString());
+        if (barcode == null) return;
         tb_barras.setText(barcode.getContents());
     }
 

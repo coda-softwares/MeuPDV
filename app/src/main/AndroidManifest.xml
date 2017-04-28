@@ -30,6 +30,7 @@
             android:name=".CadastrarProduto"
             android:label="@string/title_activity_cadastrar_produto"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -39,6 +40,7 @@
             android:name=".CadastrarFornecedor"
             android:label="@string/title_activity_cadastrar_fornecedor"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -48,6 +50,7 @@
             android:name=".NovoPDV"
             android:label="@string/atividade_novo_fornecedor"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoBar">
         </activity>
     </application>

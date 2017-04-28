@@ -12,15 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/prod_image"
-        android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:adjustViewBounds="true"
-        android:maxHeight="180dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_meupdv" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,67 +25,89 @@
             android:orientation="vertical"
             android:paddingBottom="16dp">
 
-            <com.rey.material.widget.EditText
+            <ImageView
+                android:id="@+id/prod_image"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="180dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_meupdv" />
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/prod_nome"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:nextFocusDown="@string/prod_quant"
-                android:nextFocusForward="@string/prod_quant"
-                android:nextFocusRight="@string/prod_quant"
-                android:nextFocusUp="@string/prod_quant"
-                app:et_dividerHeight="2dp"
-                app:et_inputId="@+id/prod_nome"
-                app:et_labelEnable="true" />
+                android:layout_marginBottom="8dp">
 
-            <com.rey.material.widget.EditText
+                <EditText
+                    android:id="@+id/prod_nome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/prod_nome"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:nextFocusDown="@string/prod_quant"
+                    android:nextFocusForward="@string/prod_quant"
+                    android:nextFocusRight="@string/prod_quant"
+                    android:nextFocusUp="@string/prod_quant" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/prod_validade"
-                android:imeOptions="actionNext"
-                android:inputType="date"
-                android:maxLines="1"
-                app:et_dividerHeight="2dp"
-                app:et_inputId="@+id/prod_validade"
-                app:et_labelEnable="true" />
+                android:layout_marginBottom="8dp">
 
+                <EditText
+                    android:id="@+id/prod_validade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/prod_validade"
+                    android:imeOptions="actionNext"
+                    android:inputType="date"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
-                <com.rey.material.widget.EditText
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_weight="1"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/prod_quant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                     android:hint="@string/prod_quant"
                     android:inputType="numberSigned"
-                    android:maxLines="1"
-                    app:et_dividerHeight="2dp"
-                    app:et_inputId="@+id/prod_quant"
-                    app:et_labelEnable="true" />
 
-                <com.rey.material.widget.EditText
-                    android:layout_width="0dp"
+                        android:maxLines="1" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/prod_preco"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                     android:hint="@string/prod_preco"
                     android:inputType="numberDecimal"
-                    android:maxLines="1"
-                    app:et_dividerHeight="2dp"
-                    app:et_inputId="@+id/prod_preco"
-                    app:et_labelEnable="true" />
+
+                        android:maxLines="1" />
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -104,22 +117,28 @@
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
-                <com.rey.material.widget.EditText
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="10">
+
+                    <EditText
+                        android:id="@+id/prod_barras"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/prod_barras"
                     android:inputType="number|numberSigned"
-                    android:maxLines="1"
-                    app:et_dividerHeight="2dp"
-                    app:et_inputId="@+id/prod_barras"
-                    app:et_labelEnable="true" />
+
+                        android:maxLines="1" />
+                </android.support.design.widget.TextInputLayout>
 
                 <com.rey.material.widget.ImageButton
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:background="@color/cor_primaria"
                     android:onClick="carregarCodBarras"
                     android:src="@drawable/ic_camera" />
             </LinearLayout>
