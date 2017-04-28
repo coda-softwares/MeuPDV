@@ -72,6 +72,7 @@ public class TelaInicial extends AppCompatActivity {
                     System.exit(1);
                 }
                 //TODO: Atualizar ImageView.
+                a.initId(dataSnapshot.getKey());
                 CURRENT_PDV = a;
                 nextActivity();
             }

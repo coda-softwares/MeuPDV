@@ -1,12 +1,18 @@
 package etec.coda_softwares.meupdv;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import etec.coda_softwares.meupdv.entitites.Contato;
+import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
 public class CadastrarFornecedor extends AppCompatActivity {
 
@@ -18,9 +24,43 @@ public class CadastrarFornecedor extends AppCompatActivity {
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        Toast.makeText(CadastrarFornecedor.this, "Yei! There you are!",
-                                Toast.LENGTH_SHORT).show();
-                        return false;
+                        String telefone = ((EditText) findViewById(R.id.fornecedor_telefone))
+                                .getText().toString().trim();
+                        String email = ((EditText) findViewById(R.id.fornecedor_email)).getText()
+                                .toString().trim();
+                        String nome = ((EditText) findViewById(R.id.fornecedor_nome)).getText()
+                                .toString().trim();
+                        if (telefone.equals("")) {
+                            Toast.makeText(CadastrarFornecedor.this, "Telefone nao pode ser vazio",
+                                    Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        if (email.equals("")) {
+                            Toast.makeText(CadastrarFornecedor.this, "Email nao pode ser vazio",
+                                    Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        if (nome.equals("")) {
+                            Toast.makeText(CadastrarFornecedor.this, "Nome nao pode ser vazio",
+                                    Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        final AlertDialog.Builder ab = new AlertDialog.Builder(CadastrarFornecedor.this);
+                        ab.setView(R.layout.layout_loading);
+                        final Dialog d = ab.create();
+                        d.show();
+                        Contato c = new Contato(telefone, email);
+                        Fornecedor f = new Fornecedor(nome, c);
+                        TelaInicial.getCurrentPdv().addFornecedor(f, new Runnable() {
+                            @Override
+                            public void run() {
+                                d.dismiss();
+                                finish();
+                                Toast.makeText(getBaseContext(), "Cadastrado com sucesso",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return true;
                     }
                 });
         return true;

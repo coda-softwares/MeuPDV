@@ -1,7 +1,5 @@
 package etec.coda_softwares.meupdv.entitites;
 
-import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -9,26 +7,30 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import etec.coda_softwares.meupdv.TelaInicial;
 
 /**
  * Created by dovahkiin on 26/04/17.
  */
 
 public class Fornecedor {
-    private static final String TAG = Contato.class.getName();
+    private static final String TAG = Fornecedor.class.getName();
     private String id = "";
     private String nome;
-    private String endereco;
     private Contato contato;
 
     public Fornecedor() {
     }
 
-    public Fornecedor(String nome, String endereco, Contato contato) {
+    public Fornecedor(String nome, Contato contato) {
         this.nome = nome;
-        this.endereco = endereco;
         this.contato = contato;
     }
 
@@ -40,21 +42,9 @@ public class Fornecedor {
         this.nome = nome;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
     @Exclude
     public Contato getContato() {
         return contato;
-    }
-
-    public void setContato(Contato contato) {
-        this.contato = contato;
     }
 
     @Exclude
@@ -62,43 +52,66 @@ public class Fornecedor {
         return id;
     }
 
-    public void setId(String id) {
+    void setId(String id) {
         this.id = id;
     }
 
-    public void saveOnDB(PDV pdv) {
+    void saveOnDB(final Runnable callback) {
         FirebaseUser info = FirebaseAuth.getInstance().getCurrentUser();
-        if (info == null) {
-            Log.wtf(TAG, "User is null, WTF???");
-            return;
-        }
-
-        contato.saveOnDB();
+        assert info != null;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference self = firebaseDatabase.getReference(pdv.getId()).child("fornecedor");
-
+        DatabaseReference self = firebaseDatabase.getReference().child("pdv")
+                .child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
         if (id.equals("")) {
-            self = self.push();
-            id = self.getKey();
-        } else {
-            self = self.child(id);
+            id = self.push().getKey();
         }
-        self.runTransaction(new Transaction.Handler() {
+        self.runTransaction(new HandlerPadrao() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                mutableData.setValue(Fornecedor.this);
-                mutableData.child("contato").setValue(contato.getEmail());
+                GenericTypeIndicator<Map<String, Fornecedor>> tipo =
+                        new GenericTypeIndicator<Map<String, Fornecedor>>() {
+                        };
+                Map<String, Fornecedor> curr = mutableData.getValue(tipo);
+                Fornecedor esse = Fornecedor.this;
+
+                if (curr != null) {
+                    esse = curr.get(esse.getId());
+                    if (esse != null) {
+                        return Transaction.abort();
+                    } else esse = Fornecedor.this;
+                } else curr = new HashMap<>();
+
+                curr.put(id, esse);
+                mutableData.setValue(curr);
+                if (esse.contato != null) {
+                    contato.saveOnDB();
+                    mutableData.child(id).child("contato").setValue(esse.contato.getId());
+                }
                 return Transaction.success(mutableData);
             }
 
             @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                if (databaseError == null){
-                    Log.d(TAG, "onComplete() returned: " + b + " and id " + dataSnapshot.toString());
-                } else {
-                    Log.wtf(TAG, "onComplete the error was " + databaseError.toString());
+            public void onComplete(DatabaseError dbError, boolean b, DataSnapshot dataSnapshot) {
+                super.onComplete(dbError, b, dataSnapshot);
+                if (callback != null) {
+                    callback.run();
                 }
             }
         });
+
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Fornecedor that = (Fornecedor) o;
+
+        if (!id.equals(that.id)) return false;
+        if (nome != null ? !nome.equals(that.nome) : that.nome != null) return false;
+        return contato != null ? contato.equals(that.contato) : that.contato == null;
+
     }
 }
