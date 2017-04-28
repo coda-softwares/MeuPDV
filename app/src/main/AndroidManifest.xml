@@ -25,7 +25,7 @@
         <activity
             android:name=".menuPrincipal.MenuPrincipal"
             android:label="@string/title_activity_menu_principal"
-            android:theme="@style/AppTheme.NoBar"></activity>
+            android:theme="@style/AppTheme.NoBar" />
         <activity
             android:name=".CadastrarProduto"
             android:label="@string/title_activity_cadastrar_produto"
@@ -43,6 +43,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
+        </activity>
+        <activity
+            android:name=".NovoPDV"
+            android:label="@string/atividade_novo_fornecedor"
+            android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:theme="@style/AppTheme.NoBar">
         </activity>
     </application>
 

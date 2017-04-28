@@ -7,30 +7,35 @@
     <!-- MenuPrincipal -->
     <string name="title_activity_menu_principal">Menu Principal</string>
     <string name="sair">Fechar</string>
-    <string-array name="menu_items">
-        <item>Registrar Entrega</item>
-        <item>Registrar Produto</item>
-        <item>Registrar Fornecedor</item>
-    </string-array>
-    <!-- Produto -->
+
+    <!--Cadastrar produtos-->
     <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
     <string name="prod_nome">Nome do Produto</string>
     <string name="prod_quant">Quant. de Produtos</string>
     <string name="prod_preco">Preço do Produto</string>
     <string name="prod_validade">Validade</string>
     <string name="prod_barras">Código de Barras</string>
+
     <!-- Fornecedor -->
     <string name="fornecedor_nome">nome completo</string>
     <string name="fornecedor_email">email</string>
     <string name="fornecedor_telefone">telefone</string>
-    <!-- Tela de entrada -->
+
+    <!--Tela principal-->
     <string name="carregando">Carregando…</string>
     <string name="pdv_own">Meus PDV\'s</string>
-    <string name="pdv_shared">PDV\'s que eu participo</string>
+
+    <!--Cadastro de fornecedor-->
     <string name="title_activity_cadastrar_fornecedor">Cadastrar Fornecedor</string>
+    <string name="atividade_novo_fornecedor">Novo Fornecedor</string>
 
 
     <!-- Pagina Cadastro!-->
+    <string name="title_activity_novo_pdv">Novo Ponto de Venda</string>
+    <string name="npdv_nome">Nome do Ponto de Venda</string>
+    <string name="npdv_lema">Slogan do seu PDV</string>
 
-
+    <!--bug android studio-->
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
 </resources>

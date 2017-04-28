@@ -5,11 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
@@ -28,6 +29,14 @@ public class CadastrarProduto extends AppCompatActivity {
     Date validade;
     EditText tb_barras;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.menu_confirma, menu);
+        //TODO: Botão confirma.
+        return true;
+    }
+
     // id_Prod, id_Forn, nome_Prod, validade_Prod, cdgBarras_Prod, val_Prod, quant_Prod
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +44,9 @@ public class CadastrarProduto extends AppCompatActivity {
         setContentView(R.layout.activity_cadastrar_produto);
         tb_barras = (EditText) findViewById(R.id.prod_barras);
         Toolbar tbar = (Toolbar) findViewById(R.id.prod_toolbar);
-        tbar.setBackgroundColor(getResources().getColor(R.color.cor_acento));
-        tbar.setTitleTextColor(Color.WHITE);
-
         setSupportActionBar(tbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupValidade();
     }
 

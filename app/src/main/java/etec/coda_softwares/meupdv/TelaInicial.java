@@ -3,34 +3,35 @@ package etec.coda_softwares.meupdv;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.gson.Gson;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
-import etec.coda_softwares.meupdv.entitites.Contato;
-import etec.coda_softwares.meupdv.entitites.Fornecedor;
 import etec.coda_softwares.meupdv.entitites.PDV;
 import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
 
 public class TelaInicial extends AppCompatActivity {
     private static final int REQ_CODE = 742;
-    private static String PDV_ID = "";
-    private Gson gson = new Gson();
+    private static PDV CURRENT_PDV;
+    private final AtomicReference<PDV> databasePDV = new AtomicReference<>();
+
+    public static PDV getCurrentPdv() {
+        return CURRENT_PDV;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,61 +52,63 @@ public class TelaInicial extends AppCompatActivity {
                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
             startActivityForResult(aui.build(), REQ_CODE);
         } else {
+            //Muito muito provavelmente já faz parte de um PDV
             populateList();
         }
     }
 
-    private void populatePDVView(View v, PDV model) {
-        v.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                TelaInicial.this.nextActivity();
-            }
-        });
-        TextView titulo = (TextView) v.findViewById(R.id.pdv_Title);
-        titulo.setText(model.getName());
-        TextView subT = (TextView) v.findViewById(R.id.pdv_Data);
-        subT.setText(model.getLema());
-        RoundImageView rdv = (RoundImageView) v.findViewById(R.id.pdv_img);
-        rdv.setImageResource(R.drawable.ic_meupdv);
-    }
-
     private void populateList(){
-
-        Contato a = new Contato(new ArrayList<>(Arrays.asList("1112345678", "1111234567")),
-                "samosaara@gmail.com");
-        Fornecedor awesome = new Fornecedor("Samuel", "http://github.com/coda_softwares", a);
-        awesome.saveOnDB();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
-        DatabaseReference ds = FirebaseDatabase.getInstance().getReference(user.getUid())
-                .child("pdv").child("own");
+        final DatabaseReference ds;
 
-        Query query = ds.limitToFirst(3);
-        final FirebaseListAdapter<PDV> ownPDVList = new FirebaseListAdapter<PDV>(this, PDV.class,
-                R.layout.pdv_item, query) {
+        final ValueEventListener pdvLoader = new ValueEventListener() {
             @Override
-            protected void populateView(View v, PDV model, int position) {
-                populatePDVView(v, model);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                PDV a = dataSnapshot.getValue(PDV.class);
+                if (a == null) {
+                    Log.wtf(getClass().getName(), "PDV is set and leads to nothing!");
+                    FirebaseCrash.log("PDV is set and leads to nothing!");
+                    System.exit(1);
+                }
+                //TODO: Atualizar ImageView.
+                a.initId(dataSnapshot.getKey());
+                CURRENT_PDV = a;
+                nextActivity();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                FirebaseCrash.report(databaseError.toException());
+                System.exit(0);
             }
         };
-        Query qr2 = ds.getParent().child("shared").startAt(0);
-        ((ListView) findViewById(R.id.inicio_own_pdv)).setAdapter(ownPDVList);
-        FirebaseListAdapter<PDV> sharedPDVAdpater = new FirebaseListAdapter<PDV>(this, PDV.class,
-                R.layout.pdv_item, query) {
-            @Override
-            protected void populateView(View v, PDV model, int position) {
-                populatePDVView(v, model);
-            }
-        };
-        ((ListView) findViewById(R.id.inicio_shared_pdv)).setAdapter(sharedPDVAdpater);
-        nextActivity();
 
+        ds = FirebaseDatabase.getInstance().getReference()
+                .child("user").child(user.getUid()).child("pdv");
+        ds.addListenerForSingleValueEvent(new ValueEventListener() { //Async databases be like
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String local = dataSnapshot.getValue(String.class);
+                if (local == null) {
+                    Intent i = new Intent(TelaInicial.this, NovoPDV.class);
+                    startActivityForResult(i, 200);
+                    return;
+                }
+                ds.getRoot().child("pdv").child(local).addListenerForSingleValueEvent(pdvLoader);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                FirebaseCrash.report(databaseError.toException());
+                System.exit(0);
+            }
+        });
     }
 
     private void nextActivity(){
-        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
+        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class); //FIXME: CHANGE BACK!
+        i.putExtra("pdv", PDV.class);
         startActivity(i);
         finish();
     }
@@ -124,21 +127,23 @@ public class TelaInicial extends AppCompatActivity {
                     return;
                 }
                 if (res.getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(this, "Login cancelado.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sem internet disponivel.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (res.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
                     Toast.makeText(this, "Erro desconhecido", Toast.LENGTH_SHORT).show();
                 }
             }
+        } else if (requestCode == 200) { // Retorno da atividade de novo PDV TODO: constante int
+            PDV res = (PDV) data.getExtras().get("pdv");
+            if (res != null) {
+                TelaInicial.CURRENT_PDV = res;
+                nextActivity();
+            }
         }
     }
 
-    public static String getPdvId() {
-        return PDV_ID;
-    }
-
-    private static void setPdvId(String pdvId) {
-        PDV_ID = pdvId;
-    }
+//    private static void setPDV(PDV PDV) {
+//        TelaInicial.PDV = PDV;
+//    }
 }

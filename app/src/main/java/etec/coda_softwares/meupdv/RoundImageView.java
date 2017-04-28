@@ -27,28 +27,6 @@ public class RoundImageView extends AppCompatImageView {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-
-        Drawable drawable = getDrawable();
-
-        if (drawable == null) {
-            return;
-        }
-
-        if (getWidth() == 0 || getHeight() == 0) {
-            return;
-        }
-        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
-        Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
-
-        int w = getWidth();
-
-        Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
-        canvas.drawBitmap(roundBitmap, 0, 0, null);
-
-    }
-
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
         Bitmap sbmp;
 
@@ -71,14 +49,36 @@ public class RoundImageView extends AppCompatImageView {
         paint.setAntiAlias(true);
         paint.setFilterBitmap(true);
         paint.setDither(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(Color.parseColor("#BAB399"));
-        canvas.drawCircle(radius / 2 + 0.7f,
-                radius / 2 + 0.7f, radius / 2 + 0.1f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setColor(Color.parseColor("#FFFFFF"));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST));
+        canvas.drawCircle(radius / 2 + 0.1f,
+                radius / 2 + 0.1f, radius / 2 + 0.1f, paint);
         canvas.drawBitmap(sbmp, rect, rect, paint);
 
         return output;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        Drawable drawable = getDrawable();
+
+        if (drawable == null) {
+            return;
+        }
+
+        if (getWidth() == 0 || getHeight() == 0) {
+            return;
+        }
+        super.onDraw(canvas);
+        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
+        Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
+
+        int w = getWidth();
+
+        Bitmap roundBitmap = getCroppedBitmap(b, w);
+        canvas.drawBitmap(roundBitmap, 0, 0, null);
+
     }
 
 }

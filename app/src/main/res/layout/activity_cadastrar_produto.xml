@@ -76,14 +76,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
                     android:hint="@string/prod_quant"
                     android:inputType="numberSigned"
                     android:maxLines="1"
-                    android:layout_weight="1"
                     app:et_dividerHeight="2dp"
                     app:et_inputId="@+id/prod_quant"
-                    app:et_labelEnable="true"
-                    android:layout_marginRight="8dp" />
+                    app:et_labelEnable="true" />
 
                 <com.rey.material.widget.EditText
                     android:layout_width="0dp"

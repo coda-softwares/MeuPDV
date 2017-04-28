@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/cor_acento"
     android:paddingEnd="16dp"
     android:paddingStart="16dp"
     tools:actionBarNavMode="standard"
@@ -32,42 +31,14 @@
             android:cropToPadding="true"
             android:src="@drawable/ic_meupdv" />
 
-        <TextView
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:text="@string/pdv_own"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
-            android:textColor="#000000"
-            android:background="#d1c4e9"/>
+            android:layout_weight="0.33" />
 
         <!--Fim Senha!-->
-        <ListView
-            android:id="@+id/inicio_own_pdv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.33" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:background="#d1c4e9"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp"
-            android:text="@string/pdv_shared"
-            android:textColor="#000000" />
-
-        <ListView
-            android:id="@+id/inicio_shared_pdv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33" />
 
     </LinearLayout>
 </ScrollView>
