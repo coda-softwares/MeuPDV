@@ -29,6 +29,8 @@ public class Produtos extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        populateList();
     }
 
     public void pesquisar(View v){

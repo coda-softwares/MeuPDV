@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <!-- Barra para pesquisa com EditText e Button-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,18 +45,14 @@
             android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
-
-    <ListView
+    <!-- Lista dos produtos -->
+    <com.rey.material.widget.ListView
         android:id="@+id/lista_produtos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="20dp"
         android:paddingStart="15dp"
-        android:paddingEnd="15dp">
-
-        <!-- Listagem de Cada Produto em Ordem Alfabetica -->
-        <!-- Cada item terá um botão do lado direito -->
-    </ListView>
+        android:paddingEnd="15dp"/>
 
 
 </LinearLayout>
