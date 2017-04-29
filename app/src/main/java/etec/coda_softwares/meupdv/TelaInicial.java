@@ -50,6 +50,8 @@ public class TelaInicial extends AppCompatActivity {
             aui.setProviders(Arrays.asList(
                     new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
+
+
             startActivityForResult(aui.build(), REQ_CODE);
         } else {
             //Muito muito provavelmente já faz parte de um PDV
@@ -127,7 +129,7 @@ public class TelaInicial extends AppCompatActivity {
                     return;
                 }
                 if (res.getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(this, "Sem internet disponivel.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Não foi possivel conectar a internet", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (res.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {

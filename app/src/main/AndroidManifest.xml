@@ -68,7 +68,7 @@
                 android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
         </activity>
         <activity
-            android:name=".Produto"
+            android:name=".DetalhesProduto"
             android:label="@string/title_activity_produto"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

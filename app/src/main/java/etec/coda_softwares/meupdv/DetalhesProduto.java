@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 // Esta atividade servira para mostrar informações especificas do produto
-public class Produto extends AppCompatActivity {
+public class DetalhesProduto extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

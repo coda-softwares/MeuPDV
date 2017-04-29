@@ -1,22 +1,14 @@
 package etec.coda_softwares.meupdv.Produtos;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import com.rey.material.widget.ListView;
 
-import etec.coda_softwares.meupdv.CadastrarFornecedor;
-import etec.coda_softwares.meupdv.CadastrarProduto;
-import etec.coda_softwares.meupdv.Produto;
 import etec.coda_softwares.meupdv.R;
-import etec.coda_softwares.meupdv.menuPrincipal.ItemMenuPrincipal;
-import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
-import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipalAdapter;
 
 public class Produtos extends AppCompatActivity {
 
@@ -38,10 +30,19 @@ public class Produtos extends AppCompatActivity {
     }
     private void populateList(){
         ListView l = (ListView) findViewById(R.id.lista_produtos);
-        ListaProdutosAdapter adapter = new ListaProdutosAdapter(this, R.layout.menu_principal_item,
-                R.id.item_Title);
+        ListaProdutosAdapter adapter = new ListaProdutosAdapter(this, R.layout.produtos_item,
+                R.id.prod_titulo);
         // TODO: Trocar ic_produtos, pelo icone do produto, provavelmente estara no aparelho
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Dolly", 1.0));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Dolly", 1));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Coca-Cola", 2.5));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Fanta", 6.3));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Cheetos", 5));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Biribinha", 2.5));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "bala de mel", .10));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Caneta", 1.5));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Lapin", 1.0));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Borracha", 3.5));
+        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Caderno", 19.99));
         l.setAdapter(adapter);
     }
 }

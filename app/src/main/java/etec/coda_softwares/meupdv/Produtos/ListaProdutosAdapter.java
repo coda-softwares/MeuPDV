@@ -17,9 +17,8 @@ import android.widget.TextView;
 
 import com.rey.material.widget.Button;
 
-import etec.coda_softwares.meupdv.Produto;
+import etec.coda_softwares.meupdv.DetalhesProduto;
 import etec.coda_softwares.meupdv.R;
-import etec.coda_softwares.meupdv.Produtos.ItemProdutos;
 
 /**
  * Created by jeffbustercase on 28/04/17.
@@ -65,7 +64,7 @@ public class ListaProdutosAdapter extends ArrayAdapter<ItemProdutos> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), Produto.class);
+                Intent intent = new Intent(getContext(), DetalhesProduto.class);
                 // Se for necessário utilizar um id para carregar a imagem do produto
                 intent.getExtras().putString("title", ie.getTitulo());
                 intent.getExtras().putDouble("preco", ie.getPreco());

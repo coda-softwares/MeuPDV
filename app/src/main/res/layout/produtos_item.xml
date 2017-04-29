@@ -33,6 +33,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        android:maxHeight="20dp"
+        android:maxWidth="20dp"
+        android:layout_weight="2"
         android:src="@drawable/ic_seta_direita"/><!-- onClick estara setado na classe adapter -->
 
 </LinearLayout>
