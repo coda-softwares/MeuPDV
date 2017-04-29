@@ -38,7 +38,6 @@ public class NovoPDV extends AppCompatActivity {
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        String imgPDV = "";
                         String nomePDV = ((EditText) findViewById(R.id.npdv_nome)).getText()
                                 .toString().trim();
                         String lemaPDV = ((EditText) findViewById(R.id.npdv_lema)).getText()
@@ -58,7 +57,7 @@ public class NovoPDV extends AppCompatActivity {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         assert user != null;
                         final PDV pdv = new PDV(nomePDV, Collections.singletonList(user.getUid()),
-                                imgPDV, lemaPDV);
+                                lemaPDV);
 
                         if (image != null) {
                             final Handler handler = new Handler();

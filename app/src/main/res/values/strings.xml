@@ -40,9 +40,10 @@
     <string name="npdv_nome">Nome do Ponto de Venda</string>
     <string name="npdv_lema">Slogan do seu PDV</string>
 
+    <string name="title_activity_produtos">Produtos</string>
+    <string name="title_activity_produto">Produto</string>
+
     <!--bug android studio-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
-    <string name="title_activity_produtos">Produtos</string>
-    <string name="title_activity_produto">Produto</string>
 </resources>

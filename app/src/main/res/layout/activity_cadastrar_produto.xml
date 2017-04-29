@@ -129,7 +129,7 @@
                         android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 
-                <com.rey.material.widget.ImageButton
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

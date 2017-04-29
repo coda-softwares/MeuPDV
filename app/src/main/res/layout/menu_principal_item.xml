@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?><!--Esse arquivo de layout XML representa os items da lista do menu inicial!-->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/item_img"
-        android:layout_width="96dp"
-        android:layout_height="83dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_meupdv" />
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    app:cardElevation="4dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="0dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center_vertical"
-        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:orientation="vertical"
-        tools:ignore="HardcodedText">
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/menu_item_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_meupdv" />
+
 
         <TextView
-            android:id="@+id/item_Title"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:id="@+id/menu_item_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lines="2"
             android:maxLines="2"
+            android:paddingBottom="8dp"
             android:text="Cadastrar Fornecedor"
             android:textAlignment="center"
             android:textAppearance="@style/textaum" />
 
     </LinearLayout>
-
-</LinearLayout>
+</android.support.v7.widget.CardView>

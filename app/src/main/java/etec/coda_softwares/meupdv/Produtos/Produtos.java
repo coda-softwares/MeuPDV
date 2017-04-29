@@ -30,8 +30,8 @@ public class Produtos extends AppCompatActivity {
     }
     private void populateList(){
         ListView l = (ListView) findViewById(R.id.lista_produtos);
-        ListaProdutosAdapter adapter = new ListaProdutosAdapter(this, R.layout.produtos_item,
-                R.id.prod_titulo);
+        ListaProdutosAdapter adapter = new ListaProdutosAdapter(this, R.layout.menu_principal_item,
+                R.id.menu_item_Title);
         // TODO: Trocar ic_produtos, pelo icone do produto, provavelmente estara no aparelho
         adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Dolly", 1));
         adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Coca-Cola", 2.5));

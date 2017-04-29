@@ -4,10 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.GridView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.apmem.tools.layouts.FlowLayout;
+
+import java.util.Arrays;
+import java.util.List;
 
 import etec.coda_softwares.meupdv.CadastrarFornecedor;
 import etec.coda_softwares.meupdv.CadastrarProduto;
@@ -41,32 +49,48 @@ public class MenuPrincipal extends AppCompatActivity {
         populateGrid();
     }
     private void populateGrid(){
-        GridView g = (GridView) findViewById(R.id.mp_gridItems);
-        MenuPrincipalAdapter adapter = new MenuPrincipalAdapter(this, R.layout.menu_principal_item,
-                R.id.item_Title);
-        adapter.add(new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Estoque",
-                new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(MenuPrincipal.this, CadastrarProduto.class);
-                startActivity(i);
-            }
-        }));
+        FlowLayout g = (FlowLayout) findViewById(R.id.mp_gridItems);
+        LayoutInflater factory = LayoutInflater.from(this);
+        ImageView v;
+        TextView titulo;
+        //Essa lista contem todos os items do menu inicial. adicione mais um ItemMenuPrincipal
+        //no metodo asList, pra adicionar mais itens.
+        List<ItemMenuPrincipal> itens = Arrays.asList(
+                new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Produto", new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuPrincipal.this, CadastrarProduto.class));
+                    }
+                }),
+                new ItemMenuPrincipal(R.drawable.ic_fornecedor, "Novo Fornecedor", new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuPrincipal.this, CadastrarFornecedor.class));
+                    }
+                }),
+                new ItemMenuPrincipal(R.drawable.ic_produtos, "Ver Produtos", new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuPrincipal.this, Produtos.class));
+                    }
+                })
+        );
 
-        adapter.add(new ItemMenuPrincipal(R.drawable.ic_fornecedor, "Cadastrar Fornecedor",
-                new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(MenuPrincipal.this, CadastrarFornecedor.class));
-            }
-        }));
-        adapter.add(new ItemMenuPrincipal(R.drawable.ic_produtos, "Produtos", new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(MenuPrincipal.this, Produtos.class));
-            }
-        }));
-        g.setAdapter(adapter);
+        //Carrega e coloca no menu os items
+        for (final ItemMenuPrincipal m : itens) {
+            View menuItem = factory.inflate(R.layout.menu_principal_item, g, false);
+            titulo = (TextView) menuItem.findViewById(R.id.menu_item_Title);
+            titulo.setText(m.getTitulo());
+            v = (ImageView) menuItem.findViewById(R.id.menu_item_img);
+            v.setImageResource(m.getImage());
+            menuItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    m.getAction().run();
+                }
+            });
+            g.addView(menuItem);
+        }
     }
 }
 

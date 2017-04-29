@@ -31,7 +31,6 @@ public class PDV implements Serializable {
     private List<String> integrantes = new ArrayList<>();
     private Map<String, Contato> contatos = new HashMap<>();
     private Map<String, Fornecedor> fornecedores = new HashMap<>();
-    private String imagemURL = ""; //TODO: Configurar FIrebaseStorage e fazer um setter com bitmap
 
     public PDV() {
         new Handler().postAtTime(new Runnable() {
@@ -50,15 +49,14 @@ public class PDV implements Serializable {
                     }
                 }
             }
-        }, 100);
+        }, 300);
 
     }
 
-    public PDV(String nome, List<String> integrantes, String imagemURL, String lema) {
+    public PDV(String nome, List<String> integrantes, String lema) {
         this.nome = nome;
         this.lema = lema;
         this.integrantes = integrantes;
-        this.imagemURL = imagemURL;
     }
 
     public String getNome() {
@@ -67,14 +65,6 @@ public class PDV implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getImagemURL() {
-        return imagemURL;
-    }
-
-    public void setImagemURL(String imagemURL) {
-        this.imagemURL = imagemURL;
     }
 
     public String getLema() {
@@ -179,9 +169,7 @@ public class PDV implements Serializable {
         if (integrantes != null ? !integrantes.equals(pdv.integrantes) : pdv.integrantes != null)
             return false;
         if (contatos != null ? !contatos.equals(pdv.contatos) : pdv.contatos != null) return false;
-        if (fornecedores != null ? !fornecedores.equals(pdv.fornecedores) : pdv.fornecedores != null)
-            return false;
-        return imagemURL.equals(pdv.imagemURL);
+        return fornecedores != null ? fornecedores.equals(pdv.fornecedores) : pdv.fornecedores == null;
 
     }
 
@@ -193,7 +181,6 @@ public class PDV implements Serializable {
         result = 31 * result + (integrantes != null ? integrantes.hashCode() : 0);
         result = 31 * result + (contatos != null ? contatos.hashCode() : 0);
         result = 31 * result + (fornecedores != null ? fornecedores.hashCode() : 0);
-        result = 31 * result + imagemURL.hashCode();
         return result;
     }
 }
