@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.CadastrarFornecedor;
-import etec.coda_softwares.meupdv.CadastrarProduto;
 import etec.coda_softwares.meupdv.Produtos.Produtos;
 import etec.coda_softwares.meupdv.R;
 
@@ -56,12 +55,6 @@ public class MenuPrincipal extends AppCompatActivity {
         //Essa lista contem todos os items do menu inicial. adicione mais um ItemMenuPrincipal
         //no metodo asList, pra adicionar mais itens.
         List<ItemMenuPrincipal> itens = Arrays.asList(
-                new ItemMenuPrincipal(R.drawable.ic_entrega, "Registrar Produto", new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuPrincipal.this, CadastrarProduto.class));
-                    }
-                }),
                 new ItemMenuPrincipal(R.drawable.ic_fornecedor, "Novo Fornecedor", new Runnable() {
                     @Override
                     public void run() {

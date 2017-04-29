@@ -34,11 +34,11 @@
         <activity
             android:name=".CadastrarProduto"
             android:label="@string/title_activity_cadastrar_produto"
-            android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:parentActivityName=".Produtos.Produtos"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
+                android:value="etec.coda_softwares.meupdv.Produtos.Produtos" />
         </activity>
         <activity
             android:name=".CadastrarFornecedor"
@@ -70,6 +70,7 @@
         <activity
             android:name=".DetalhesProduto"
             android:label="@string/title_activity_produto"
+            android:parentActivityName=".Produtos.Produtos"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

@@ -1,5 +1,6 @@
 package etec.coda_softwares.meupdv.Produtos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import com.rey.material.widget.ListView;
 
+import etec.coda_softwares.meupdv.CadastrarProduto;
 import etec.coda_softwares.meupdv.R;
 
 public class Produtos extends AppCompatActivity {
@@ -28,6 +30,12 @@ public class Produtos extends AppCompatActivity {
     public void pesquisar(View v){
         Toast.makeText(v.getContext(), "We Found! Nothing!", Toast.LENGTH_LONG).show();
     }
+
+    public void add_produto(View view) {
+        //Toast.makeText(view.getContext(), "Ohppa gangnam style!", Toast.LENGTH_SHORT).show();
+        view.getContext().startActivity(new Intent(Produtos.this, CadastrarProduto.class));
+    }
+
     private void populateList(){
         ListView l = (ListView) findViewById(R.id.lista_produtos);
         ListaProdutosAdapter adapter = new ListaProdutosAdapter(this, R.layout.menu_principal_item,

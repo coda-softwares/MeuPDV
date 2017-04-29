@@ -1,58 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="etec.coda_softwares.meupdv.Produtos.Produtos">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/prods_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <!-- Barra para pesquisa com EditText e Button-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp"
-        android:paddingTop="20dp">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="10">
-            <com.rey.material.widget.EditText
-                android:id="@+id/search_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="20"
-                android:hint="Pesquise Aqui"
-                android:inputType="text"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
-        <com.rey.material.widget.ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/prods_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Barra para pesquisa com EditText e Button-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:maxHeight="20dp"
-            android:onClick="pesquisar"
-            android:src="@drawable/ic_pesquisa" />
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="20dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/search_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="20"
+                    android:hint="Pesquise Aqui"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:maxHeight="20dp"
+                android:onClick="pesquisar"
+                android:src="@drawable/ic_pesquisa" />
+
+        </LinearLayout>
+
+        <!-- Lista dos produtos -->
+        <com.rey.material.widget.ListView
+            android:id="@+id/lista_produtos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="20dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp" />
+
     </LinearLayout>
 
-    <!-- Lista dos produtos -->
-    <com.rey.material.widget.ListView
-        android:id="@+id/lista_produtos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="20dp"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp" />
-
-
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_float_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="47dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/cor_secundaria"
+        android:elevation="16dp"
+        android:onClick="add_produto"
+        android:src="@drawable/ic_plus"
+        android:tint="@color/tw__composer_white"
+        app:elevation="16dp" />
+</android.support.design.widget.CoordinatorLayout>
