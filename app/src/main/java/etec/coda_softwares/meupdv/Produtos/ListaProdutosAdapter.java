@@ -58,7 +58,7 @@ public class ListaProdutosAdapter extends ArrayAdapter<ItemProdutos> {
         title.setText(ie.getTitulo());
 
         TextView preco = (TextView) v.findViewById(R.id.prod_preco);
-        preco.setText(ie.getPreco()+"");
+        preco.setText("R$" + ie.getPreco());
 
         Button button = (Button) v.findViewById(R.id.prod_button);
         button.setOnClickListener(new View.OnClickListener() {

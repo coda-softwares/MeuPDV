@@ -8,4 +8,7 @@
     <color name="cor_secundaria">#5c6bc0</color>
     <color name="cor_primaria">#efebe9</color>
 
+    <!-- Cor do texto de preço -->
+    <color name="cor_preco">#fff721</color>
+    <color name="border_preco">#2E2E2E</color>
 </resources>

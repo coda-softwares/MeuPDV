@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="81dp"
+    android:orientation="horizontal"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
+    android:weightSum="10">
 
     <!-- Icone do produto do lado esquerdo -->
     <com.rey.material.widget.ImageView
         android:id="@+id/prod_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"/>
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_gravity="start"
+        android:layout_weight="3" />
 
-    <!-- Titulo do produto com o nome do produto no meio -->
-    <com.rey.material.widget.TextView
-        android:id="@+id/prod_titulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_produtos"
-        android:textSize="30dp"
-        android:layout_gravity="center_vertical"/>
 
-    <!-- Provavelmente o preço estara em baixo do titulo em letras amarelas) -->
-    <com.rey.material.widget.TextView
-        android:id="@+id/prod_preco"
-        android:layout_width="wrap_content"
+    <com.rey.material.widget.LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="center_vertical"
+        android:layout_weight="4"
+        android:orientation="vertical">
+        <!-- Titulo do produto com o nome do produto no meio -->
+        <com.rey.material.widget.TextView
+            android:id="@+id/prod_titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_produtos"
+            android:text="Coca-Cola"
+            android:textSize="25sp" />
+
+        <!-- Provavelmente o preço estara em baixo do titulo( em letras amarelas) -->
+        <com.rey.material.widget.TextView
+            android:id="@+id/prod_preco"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:shadowColor="@color/border_preco"
+            android:shadowRadius="3"
+            android:text="R$2.50"
+            android:textColor="@color/cor_preco"
+            android:textSize="20sp" />
+    </com.rey.material.widget.LinearLayout>
 
     <!-- Botão seta para o lado direito -->
     <com.rey.material.widget.Button
         android:id="@+id/prod_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
         android:layout_gravity="end"
-        android:maxHeight="20dp"
-        android:maxWidth="20dp"
-        android:layout_weight="2"
+        android:layout_weight="3"
+        android:maxHeight="100dp"
+        android:maxWidth="150dp"
         android:src="@drawable/ic_seta_direita"/><!-- onClick estara setado na classe adapter -->
 
 </LinearLayout>
