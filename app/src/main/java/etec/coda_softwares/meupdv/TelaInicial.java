@@ -138,6 +138,7 @@ public class TelaInicial extends AppCompatActivity {
             PDV res = (PDV) data.getExtras().get("pdv");
             if (res != null) {
                 TelaInicial.CURRENT_PDV = res;
+                CURRENT_PDV.saveOnDB();
                 nextActivity();
             }
         }

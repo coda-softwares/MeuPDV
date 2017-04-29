@@ -145,13 +145,13 @@ public class PDV implements Serializable {
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String userId = (String)dataSnapshot.getValue();
-                            if (userId != null) {
-                                if (!userId.equals(""))
+                            String usrid = (String) dataSnapshot.getValue();
+                            if (usrid != null) {
+                                if (!usrid.equals(""))
                                     return;
                             }
                             DatabaseReference dfr = userPDV.push();
-                            id = dfr.getKey();
+                            initId(dfr.getKey());
                             dfr.runTransaction(save);
                         }
 

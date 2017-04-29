@@ -9,43 +9,50 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/npdv_toolbar"
-        style="@style/AppTheme.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="@string/title_activity_novo_pdv"
-        app:titleTextColor="@color/cor_acento" />
+        app:elevation="8dp"
+        app:title="@string/title_activity_novo_pdv" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical">
 
-        <etec.coda_softwares.meupdv.RoundImageView
-            android:id="@+id/npdv_img"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="false"
-            android:padding="20dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_pdv_padrao" />
+            android:background="@color/cor_secundaria"
+            android:clipToPadding="true"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/npdv_img"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:adjustViewBounds="false"
+                android:background="@color/cor_primaria"
+                android:clickable="true"
+                android:onClick="addFoto"
+                android:padding="50dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_add_foto" />
+        </FrameLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp">
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp">
 
             <EditText
                 android:id="@+id/npdv_nome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/npdv_nome"
-                android:inputType="textPersonName"
+                android:inputType="textCapWords|textPersonName"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -58,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/npdv_lema"
+                android:inputType="textCapSentences|textPersonName"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
