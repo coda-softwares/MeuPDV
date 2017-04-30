@@ -70,8 +70,7 @@
             android:name=".DetalhesProduto"
             android:label="@string/title_activity_produto"
             android:parentActivityName=".Produtos.Produtos"
-            android:theme="@style/AppTheme.NoActionBar" />
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Fornecedores"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
