@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/cor_primaria</color>
-    <color name="colorPrimaryDark">#4527a0</color>
-    <color name="colorAccent">@color/cor_acento</color>
+    <color name="colorPrimary">@color/primaria</color>
+    <color name="colorPrimaryDark">@color/primaria_dark</color>
+    <color name="colorAccent">@color/acento</color>
 
-    <color name="cor_acento">#512da8</color>
-    <color name="cor_secundaria">#5c6bc0</color>
-    <color name="cor_primaria">#efebe9</color>
+    <color name="acento">#ff8f00</color>
+    <color name="acento_dark">#c56000</color>
+    <color name="primaria">#1976d2</color>
+    <color name="primaria_dark">#004ba0</color>
+    <color name="primaria_clara">#63a4ff</color>
 
     <!-- Cor do texto de preço -->
     <color name="cor_preco">#fff721</color>

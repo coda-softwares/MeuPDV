@@ -17,6 +17,8 @@
     <string name="prod_barras">Código de Barras</string>
 
     <!-- Fornecedor -->
+    <string name="fornecedor_mult">Fornecedores</string>
+    <string name="fornecedor_novo">Novo Fornecedor</string>
     <string name="fornecedor_nome">nome completo</string>
     <string name="fornecedor_email">email</string>
     <string name="fornecedor_telefone">telefone</string>

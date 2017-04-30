@@ -20,28 +20,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import etec.coda_softwares.meupdv.TelaInicial;
+
 /**
- * Created by dovahkiin on 26/04/17.
+ * Classe que representa o PDV do usuario, contendo todos os dados, o logo nome, produtos, etc.
+ * Teoricamente somente uma instancia dessa classe por programa, instancia que fica salva em
+ * {@link TelaInicial#getCurrentPdv()}
+ *
  */
+@SuppressWarnings("unused")
 public class PDV implements Serializable {
     public static final DatabaseReference root = FirebaseDatabase.getInstance().getReference();
     private String nome = "";
     private String lema = "";
     private String id = "";
     private List<String> integrantes = new ArrayList<>();
-    private Map<String, Contato> contatos = new HashMap<>();
     private Map<String, Fornecedor> fornecedores = new HashMap<>();
 
     public PDV() {
         new Handler().postAtTime(new Runnable() {
             @Override
             public void run() {
-                if (contatos != null) {
-                    for (String id : contatos.keySet()) {
-                        Contato c = contatos.get(id);
-                        c.setId(id);
-                    }
-                }
                 if (fornecedores != null) {
                     for (String id : fornecedores.keySet()) {
                         Fornecedor c = fornecedores.get(id);
@@ -50,7 +49,6 @@ public class PDV implements Serializable {
                 }
             }
         }, 300);
-
     }
 
     public PDV(String nome, List<String> integrantes, String lema) {
@@ -83,22 +81,30 @@ public class PDV implements Serializable {
         this.integrantes = integrantes;
     }
 
-    Map<String, Contato> getContatos() {
-        return contatos;
-    }
-
     Map<String, Fornecedor> getFornecedores() {
         return fornecedores;
     }
 
+
+    /**
+     * Método usado para salvar objetos fornecedor no banco de dados. Adiciona os itens relevantes
+     * as seus respectivos mapas.
+     *
+     * @param c O objeto fornecedor a ser salvo
+     * @param r Tarefa para ser executada quando o processo (assincrono) estiver completo. Pode ser
+     *          nulo.
+     */
     public void addFornecedor(Fornecedor c, Runnable r) {
-        Fornecedor backup = fornecedores.put(c.getId(), c);
-        if (backup == null) {
+        if (c.getId().equals("")) {
             c.saveOnDB(r);
+            fornecedores.put(c.getId(), c);
         } else {
-            FirebaseCrash.log("Adicionando fornecedor já presente");
-            fornecedores.put(backup.getId(), backup);
+            Fornecedor backup = fornecedores.get(c.getId());
+            if (backup == null) {
+                fornecedores.put(c.getId(), c);
+            }
         }
+
     }
 
     @Exclude
@@ -110,12 +116,18 @@ public class PDV implements Serializable {
         if (this.id.equals("")) this.id = id;
     }
 
+
+    /**
+     * Atualiza ou salva a instancia desse PDV no banco de dados atual e assimila com
+     * {@link FirebaseAuth#getCurrentUser()} até agora todas as entidades atualizão-se
+     * automaticamente quando modificadas. (29/04/17)
+     */
     public void saveOnDB() {
         final DatabaseReference userPDV = root.child("pdv");
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
 
-        final HandlerPadrao save = new HandlerPadrao() {
+        final HandlerPadrao save = new HandlerPadrao(null) {
             @Override
             public Transaction.Result doTransaction(MutableData data) {
                 PDV saved = data.getValue(PDV.class);
@@ -154,33 +166,5 @@ public class PDV implements Serializable {
         } else {
             userPDV.child(id).runTransaction(save);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PDV pdv = (PDV) o;
-
-        if (!nome.equals(pdv.nome)) return false;
-        if (!lema.equals(pdv.lema)) return false;
-        if (!id.equals(pdv.id)) return false;
-        if (integrantes != null ? !integrantes.equals(pdv.integrantes) : pdv.integrantes != null)
-            return false;
-        if (contatos != null ? !contatos.equals(pdv.contatos) : pdv.contatos != null) return false;
-        return fornecedores != null ? fornecedores.equals(pdv.fornecedores) : pdv.fornecedores == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = nome.hashCode();
-        result = 31 * result + lema.hashCode();
-        result = 31 * result + id.hashCode();
-        result = 31 * result + (integrantes != null ? integrantes.hashCode() : 0);
-        result = 31 * result + (contatos != null ? contatos.hashCode() : 0);
-        result = 31 * result + (fornecedores != null ? fornecedores.hashCode() : 0);
-        return result;
     }
 }

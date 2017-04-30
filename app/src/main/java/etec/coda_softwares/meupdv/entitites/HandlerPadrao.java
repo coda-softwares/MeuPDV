@@ -11,6 +11,12 @@ import com.google.firebase.database.Transaction;
  */
 
 abstract class HandlerPadrao implements Transaction.Handler {
+    Runnable after;
+
+    public HandlerPadrao(Runnable r) {
+        after = r;
+    }
+
     @Override
     public abstract Transaction.Result doTransaction(MutableData mutableData);
 
@@ -20,6 +26,9 @@ abstract class HandlerPadrao implements Transaction.Handler {
             //TODO: Atualizar esse metodo quando novas permissões forem implementadas
             FirebaseCrash.report(dbError.toException());
             System.exit(1);
+        }
+        if (after != null) {
+            after.run();
         }
     }
 }

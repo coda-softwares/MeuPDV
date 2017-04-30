@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.rey.material.widget.Button;
 
+import java.text.NumberFormat;
+
 import etec.coda_softwares.meupdv.DetalhesProduto;
 import etec.coda_softwares.meupdv.R;
 
@@ -25,6 +27,7 @@ import etec.coda_softwares.meupdv.R;
  */
 
 public class ListaProdutosAdapter extends ArrayAdapter<ItemProdutos> {
+    private final NumberFormat formatter = NumberFormat.getCurrencyInstance();
     private AlphaAnimation an = new AlphaAnimation(.5f, 1);
 
     public ListaProdutosAdapter(@NonNull Context context, @LayoutRes int resource,
@@ -58,7 +61,7 @@ public class ListaProdutosAdapter extends ArrayAdapter<ItemProdutos> {
         title.setText(ie.getTitulo());
 
         TextView preco = (TextView) v.findViewById(R.id.prod_preco);
-        preco.setText("R$" + ie.getPreco());
+        preco.setText(formatter.format(ie.getPreco()));
 
         Button button = (Button) v.findViewById(R.id.prod_button);
         button.setOnClickListener(new View.OnClickListener() {

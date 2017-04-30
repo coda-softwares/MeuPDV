@@ -1,37 +1,67 @@
 package etec.coda_softwares.meupdv.entitites;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import etec.coda_softwares.meupdv.TelaInicial;
 
 /**
- * Created by dovahkiin on 26/04/17.
+ * Classe para represntar o fornecedor no bando de dados. Para salvar realmente, utilize o metodo
+ * {@link PDV#addFornecedor(Fornecedor, Runnable)}
  */
 
-public class Fornecedor {
-    private static final String TAG = Fornecedor.class.getName();
+public class Fornecedor implements Serializable {
     private String id = "";
-    private String nome;
-    private Contato contato;
-
+    private List<String> telefones = new ArrayList<>();
+    private String email = "";
+    private String nome = "";
     public Fornecedor() {
     }
 
-    public Fornecedor(String nome, Contato contato) {
+    public Fornecedor(String nome, String email, List<String> telefones) {
+        this.telefones = telefones;
+        this.email = email;
         this.nome = nome;
-        this.contato = contato;
+    }
+
+    public List<String> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(ArrayList<String> telefones) {
+        this.telefones = telefones;
+    }
+
+    private String formatEmail() {
+        return this.email;
+    }
+
+    /**
+     * Por causa do firebase, o getter normal retorna o email sem caracteres especiais;
+     * Para o email normal use {@link Fornecedor#formatEmail()}
+     *
+     * @return O email sem caracteres especiais
+     */
+    public String getEmail() {
+        return email.toLowerCase().replaceAll("@", "_A").replaceAll("\\.", "_P");
+    }
+
+    public void setEmail(String email) {
+        if (email.contains("_A")) {
+            email = email.replaceAll("_A", "@").replaceAll("_P", ".");
+        }
+        this.email = email;
     }
 
     public String getNome() {
@@ -40,11 +70,6 @@ public class Fornecedor {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    @Exclude
-    public Contato getContato() {
-        return contato;
     }
 
     @Exclude
@@ -59,47 +84,18 @@ public class Fornecedor {
     void saveOnDB(final Runnable callback) {
         FirebaseUser info = FirebaseAuth.getInstance().getCurrentUser();
         assert info != null;
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference self = firebaseDatabase.getReference().child("pdv")
+        DatabaseReference self = FirebaseDatabase.getInstance().getReference("pdv")
                 .child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
         if (id.equals("")) {
+            self = self.push();
             id = self.push().getKey();
-        }
-        self.runTransaction(new HandlerPadrao() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                GenericTypeIndicator<Map<String, Fornecedor>> tipo =
-                        new GenericTypeIndicator<Map<String, Fornecedor>>() {
-                        };
-                Map<String, Fornecedor> curr = mutableData.getValue(tipo);
-                Fornecedor esse = Fornecedor.this;
-
-                if (curr != null) {
-                    esse = curr.get(esse.getId());
-                    if (esse != null) {
-                        return Transaction.abort();
-                    } else esse = Fornecedor.this;
-                } else curr = new HashMap<>();
-
-                curr.put(id, esse);
-                mutableData.setValue(curr);
-                if (esse.contato != null) {
-                    contato.saveOnDB();
-                    mutableData.child(id).child("contato").setValue(esse.contato.getId());
-                }
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError dbError, boolean b, DataSnapshot dataSnapshot) {
-                super.onComplete(dbError, b, dataSnapshot);
-                if (callback != null) {
+            self.setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
                     callback.run();
                 }
-            }
-        });
-
-
+            });
+        }
     }
 
     @Override
@@ -110,8 +106,19 @@ public class Fornecedor {
         Fornecedor that = (Fornecedor) o;
 
         if (!id.equals(that.id)) return false;
-        if (nome != null ? !nome.equals(that.nome) : that.nome != null) return false;
-        return contato != null ? contato.equals(that.contato) : that.contato == null;
+        if (telefones != null ? !telefones.equals(that.telefones) : that.telefones != null)
+            return false;
+        if (!email.equals(that.email)) return false;
+        return nome.equals(that.nome);
 
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (telefones != null ? telefones.hashCode() : 0);
+        result = 31 * result + email.hashCode();
+        result = 31 * result + nome.hashCode();
+        return result;
     }
 }

@@ -1,31 +1,11 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-
-        <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-
-        <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-
-        <!-- colorAccent is used as the default value for colorControlActivated
-             which is used to tint widgets -->
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
-
-        <!-- You can also set colorControlNormal, colorControlActivated
-             colorControlHighlight & colorSwitchThumbNormal. -->
-    </style>
-
     <style name="AppTheme.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/cor_acento</item>
+        <item name="android:background">@color/primaria</item>
         <item name="titleTextAppearance">@style/AppTheme.Toolbar.text</item>
     </style>
 
     <style name="AppTheme.Toolbar.text" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@color/cor_primaria</item>
+        <item name="android:textColor">#e0e0e0</item>
     </style>
 
     <style name="AppTheme.NoBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -38,28 +18,23 @@
         <item name="colorPrimary">@color/colorPrimary</item>
 
         <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/primaria_dark</item>
 
         <!-- colorAccent is used as the default value for colorControlActivated
              which is used to tint widgets -->
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/acento</item>
 
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight & colorSwitchThumbNormal. -->
     </style>
 
     <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:color">@color/cor_primaria</item>
+        <item name="android:color">@color/primaria</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="textaum" parent="@android:style/TextAppearance.Holo.Medium">
         <item name="android:textSize">13sp</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!--Não queria, mas pra cortar imagens é nescessario-->
+    <!-- Não queria, mas pra cortar imagens é nescessario -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -61,8 +61,7 @@
             android:name=".Produtos.Produtos"
             android:label="@string/title_activity_produtos"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoBar">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
@@ -72,6 +71,15 @@
             android:label="@string/title_activity_produto"
             android:parentActivityName=".Produtos.Produtos"
             android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Fornecedores"
+            android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
+        </activity>
     </application>
 
 </manifest>

@@ -11,7 +11,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import etec.coda_softwares.meupdv.entitites.Contato;
+import java.util.Collections;
+
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
 public class CadastrarFornecedor extends AppCompatActivity {
@@ -49,8 +50,8 @@ public class CadastrarFornecedor extends AppCompatActivity {
                         ab.setView(R.layout.layout_loading);
                         final Dialog d = ab.create();
                         d.show();
-                        Contato c = new Contato(telefone, email);
-                        Fornecedor f = new Fornecedor(nome, c);
+                        final Fornecedor f = new Fornecedor(nome, email,
+                                Collections.singletonList(telefone));
                         TelaInicial.getCurrentPdv().addFornecedor(f, new Runnable() {
                             @Override
                             public void run() {

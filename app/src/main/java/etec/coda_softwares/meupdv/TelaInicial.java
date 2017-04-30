@@ -2,6 +2,7 @@ package etec.coda_softwares.meupdv;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,16 +20,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 
 import etec.coda_softwares.meupdv.entitites.PDV;
 import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
 
 public class TelaInicial extends AppCompatActivity {
-    private static final int REQ_CODE = 742;
+    public static final int REQ_NOVO_PDV = 200;
+    private static final int REQ_LOGIN = 742;
     private static PDV CURRENT_PDV;
-    private final AtomicReference<PDV> databasePDV = new AtomicReference<>();
+    // Propriedade de controle pro watcher da databse se essa atividade ainda esta viva
+    private static boolean LOADING = true;
 
+    /**
+     * Forma principal e global de conseguiur uma instancia do PDV atual.
+     *
+     * @return o PDV atual.
+     */
     public static PDV getCurrentPdv() {
         return CURRENT_PDV;
     }
@@ -45,16 +52,13 @@ public class TelaInicial extends AppCompatActivity {
         if (auth.getCurrentUser() == null) {
             AuthUI.SignInIntentBuilder aui = AuthUI.getInstance().createSignInIntentBuilder();
             aui.setLogo(R.drawable.ic_meupdv);
-            aui.setTheme(R.style.AppTheme);
+            aui.setTheme(R.style.AppTheme_NoBar);
             aui.setAllowNewEmailAccounts(true);
             aui.setProviders(Arrays.asList(
                     new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
-
-
-            startActivityForResult(aui.build(), REQ_CODE);
+            startActivityForResult(aui.build(), REQ_LOGIN);
         } else {
-            //Muito muito provavelmente já faz parte de um PDV
             populateList();
         }
     }
@@ -69,14 +73,18 @@ public class TelaInicial extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 PDV a = dataSnapshot.getValue(PDV.class);
                 if (a == null) {
-                    Log.wtf(getClass().getName(), "PDV is set and leads to nothing!");
-                    FirebaseCrash.log("PDV is set and leads to nothing!");
+                    Log.wtf(getClass().getName(), "PDV definido leva a lugar nenhum");
+                    FirebaseCrash.log("PDV definido leva a lugar nenhum");
                     System.exit(1);
                 }
                 //TODO: Atualizar ImageView.
-                a.initId(dataSnapshot.getKey());
                 CURRENT_PDV = a;
-                nextActivity();
+                if (LOADING) {
+                    LOADING = false;
+                    a.initId(dataSnapshot.getKey());
+                    nextActivity();
+                    finish();
+                }
             }
 
             @Override
@@ -86,18 +94,22 @@ public class TelaInicial extends AppCompatActivity {
             }
         };
 
-        ds = FirebaseDatabase.getInstance().getReference()
-                .child("user").child(user.getUid()).child("pdv");
-        ds.addListenerForSingleValueEvent(new ValueEventListener() { //Async databases be like
+        // acessa o node do usuario na database identificado pelo o seu UID
+        ds = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid())
+                .child("pdv");
+        ds.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Primeiro carregamos a key do PDV do usuario:
                 String local = dataSnapshot.getValue(String.class);
+                //Se a key nao existir:
                 if (local == null) {
                     Intent i = new Intent(TelaInicial.this, NovoPDV.class);
-                    startActivityForResult(i, 200);
+                    startActivityForResult(i, REQ_NOVO_PDV);
                     return;
                 }
-                ds.getRoot().child("pdv").child(local).addListenerForSingleValueEvent(pdvLoader);
+                //Se ja existir carrega o PDV e fica de olho por alterações futuras também!
+                ds.getRoot().child("pdv").child(local).addValueEventListener(pdvLoader);
             }
 
             @Override
@@ -117,26 +129,30 @@ public class TelaInicial extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (REQ_CODE == requestCode) {
+        if (requestCode == REQ_LOGIN) {
             IdpResponse res = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 populateList();
-            } else {
-                if (res == null) {
-                    Toast.makeText(this, "Login cancelado.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                return;
+            } else if (res != null) {
                 if (res.getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(this, "Não foi possivel conectar a internet", Toast.LENGTH_SHORT).show();
-                    return;
+                    Toast.makeText(this, "Não foi possivel se conectar a internet",
+                            Toast.LENGTH_LONG).show();
                 }
                 if (res.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                    Toast.makeText(this, "Erro desconhecido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Erro desconhecido", Toast.LENGTH_LONG).show();
                 }
+                FirebaseCrash.log("Erro de login! " + res.getErrorCode());
+            } else {
+                Toast.makeText(this, "Login cancelado.", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == 200) { // Retorno da atividade de novo PDV TODO: constante int
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    System.exit(1); // Sai se o login falha.
+                }
+            }, 2000);
+        } else if (requestCode == REQ_NOVO_PDV) { // Retorno da atividade de novo PDV
             PDV res = (PDV) data.getExtras().get("pdv");
             if (res != null) {
                 TelaInicial.CURRENT_PDV = res;

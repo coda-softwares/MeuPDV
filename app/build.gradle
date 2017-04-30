@@ -18,17 +18,25 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
-    compile 'org.apmem.tools:layouts:1.10'
+
+    //Bibliotecas do projeto.
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0' // Leitor de codigo de barras
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1' //Cortador de imagens
+    compile 'org.apmem.tools:layouts:1.10' // Flow layout
+    compile 'de.hdodenhof:circleimageview:2.1.0' //Imageview redonda
+    compile 'com.github.rey5137:material:1.2.4'
+
+    //Bibliotecas android versão antiga por causa do firebase
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
     compile 'com.android.support:cardview-v7:25.1.1'
-    compile 'com.github.kevinsawicki:http-request:6.0'
-    compile 'com.github.rey5137:material:1.2.4'
+
+    //Firebase
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.google.firebase:firebase-auth:10.2.0'
@@ -36,8 +44,6 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.2.0'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -34,60 +34,60 @@ public class NovoPDV extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
         inflater.inflate(R.menu.menu_confirma, menu);
-        menu.findItem(R.id.botao_confirma)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        String nomePDV = ((EditText) findViewById(R.id.npdv_nome)).getText()
-                                .toString().trim();
-                        String lemaPDV = ((EditText) findViewById(R.id.npdv_lema)).getText()
-                                .toString().trim();
+        MenuItem confirma = menu.findItem(R.id.botao_confirma);
+        confirma.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                String nomePDV = ((EditText) findViewById(R.id.npdv_nome)).getText()
+                        .toString().trim();
+                String lemaPDV = ((EditText) findViewById(R.id.npdv_lema)).getText()
+                        .toString().trim();
 
-                        if (nomePDV.equals("")) {
-                            Toast.makeText(NovoPDV.this, "Nome não pode ser vazio",
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-                        if (lemaPDV.equals("")) {
-                            Toast.makeText(NovoPDV.this, "Lema não pode ser vazio",
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
+                if (nomePDV.equals("")) {
+                    Toast.makeText(NovoPDV.this, "Nome não pode ser vazio",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                if (lemaPDV.equals("")) {
+                    Toast.makeText(NovoPDV.this, "Lema não pode ser vazio",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
 
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        assert user != null;
-                        final PDV pdv = new PDV(nomePDV, Collections.singletonList(user.getUid()),
-                                lemaPDV);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                assert user != null;
+                final PDV pdv = new PDV(nomePDV, Collections.singletonList(user.getUid()),
+                        lemaPDV);
 
-                        if (image != null) {
-                            final Handler handler = new Handler();
-                            final Runnable r = new Runnable() {
-                                Handler h = handler;
-                                Uri image = NovoPDV.this.image;
+                if (image != null) {
+                    final Handler handler = new Handler();
+                    final Runnable r = new Runnable() {
+                        Handler h = handler;
+                        Uri image = NovoPDV.this.image;
 
-                                @Override
-                                public void run() {
-                                    PDV currentPdv = TelaInicial.getCurrentPdv();
-                                    if (currentPdv != null)
-                                        if (!currentPdv.getId().equals("")) {
-                                            StorageReference s = FirebaseStorage.getInstance()
-                                                    .getReference("pdvLogo")
-                                                    .child(currentPdv.getId() + ".jpg");
-                                            s.putFile(image);
-                                            return;
-                                        }
-                                    h.postDelayed(this, 300);
+                        @Override
+                        public void run() {
+                            PDV currentPdv = TelaInicial.getCurrentPdv();
+                            if (currentPdv != null)
+                                if (!currentPdv.getId().equals("")) {
+                                    StorageReference s = FirebaseStorage.getInstance()
+                                            .getReference("pdvLogo")
+                                            .child(currentPdv.getId() + ".jpg");
+                                    s.putFile(image);
+                                    return;
                                 }
-                            };
-                            handler.postDelayed(r, 1000);
+                            h.postDelayed(this, 300);
                         }
-                        Intent i = getIntent();
-                        i.putExtra("pdv", pdv);
-                        setResult(RESULT_OK, i);
-                        finish();
-                        return true;
-                    }
-                });
+                    };
+                    handler.postDelayed(r, 1000);
+                }
+                Intent i = getIntent();
+                i.putExtra("pdv", pdv);
+                setResult(RESULT_OK, i);
+                finish();
+                return true;
+            }
+        });
         return true;
     }
 
