@@ -68,11 +68,14 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="end|bottom"
-        android:layout_marginBottom="35dp"
-        android:layout_marginEnd="22dp"
-        android:layout_marginRight="22dp"
-        android:background="@color/acento"
+        android:layout_marginBottom="47dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/secundaria"
         android:onClick="add_produto"
         android:src="@drawable/ic_plus"
-        app:elevation="6dp" />
+        android:tint="@color/tw__composer_white"
+        android:elevation="16dp"
+        app:elevation="16dp" />
+
 </android.support.design.widget.CoordinatorLayout>
