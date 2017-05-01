@@ -27,7 +27,6 @@ import etec.coda_softwares.meupdv.entitites.PDV;
 public class NovoPDV extends AppCompatActivity {
     private static final String TAG = NovoPDV.class.getName();
     private final int REQUEST_FOTO = 444;
-    private final int CORTAR_FOTO = 888;
     Uri image;
 
     @Override
@@ -71,8 +70,8 @@ public class NovoPDV extends AppCompatActivity {
                             if (currentPdv != null)
                                 if (!currentPdv.getId().equals("")) {
                                     StorageReference s = FirebaseStorage.getInstance()
-                                            .getReference("pdvLogo")
-                                            .child(currentPdv.getId() + ".jpg");
+                                            .getReference("pdv")
+                                            .child(currentPdv.getId()).child("logo.jpg");
                                     s.putFile(image);
                                     return;
                                 }

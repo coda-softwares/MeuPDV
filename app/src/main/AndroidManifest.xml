@@ -43,15 +43,15 @@
         <activity
             android:name=".CadastrarFornecedor"
             android:label="@string/title_activity_cadastrar_fornecedor"
-            android:parentActivityName=".menuPrincipal.MenuPrincipal"
+            android:parentActivityName=".Fornecedores"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
+                android:value=".Fornecedores" />
         </activity>
         <activity
             android:name=".NovoPDV"
-            android:label="@string/atividade_novo_fornecedor"
+            android:noHistory="true"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
             android:screenOrientation="portrait" />
         <activity

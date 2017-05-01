@@ -23,21 +23,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            android:paddingTop="20dp">
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="10">
 
-                <android.support.v7.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/search_input"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:ems="20"
+                    android:layout_height="wrap_content"
                     android:hint="Pesquise Aqui"
                     android:inputType="text"
                     android:maxLines="1" />
@@ -45,10 +44,10 @@
 
             <android.support.v7.widget.AppCompatImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:maxHeight="20dp"
+                android:background="?android:attr/colorBackground"
                 android:onClick="pesquisar"
                 android:src="@drawable/ic_pesquisa" />
 
@@ -59,9 +58,8 @@
             android:id="@+id/lista_produtos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="20dp"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp" />
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp" />
 
     </LinearLayout>
 
@@ -70,13 +68,11 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="end|bottom"
-        android:layout_marginBottom="47dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/cor_secundaria"
-        android:elevation="16dp"
+        android:layout_marginBottom="35dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
+        android:background="@color/acento"
         android:onClick="add_produto"
         android:src="@drawable/ic_plus"
-        android:tint="@color/tw__composer_white"
-        app:elevation="16dp" />
+        app:elevation="6dp" />
 </android.support.design.widget.CoordinatorLayout>

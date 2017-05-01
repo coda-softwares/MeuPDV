@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/npdv_nome"
                 android:inputType="textCapWords|textPersonName"
+                android:maxLength="50"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -71,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/npdv_lema"
                 android:inputType="textCapSentences|textPersonName"
+                android:maxLength="50"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>

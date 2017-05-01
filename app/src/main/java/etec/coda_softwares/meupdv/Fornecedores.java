@@ -1,6 +1,9 @@
 package etec.coda_softwares.meupdv;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
 public class Fornecedores extends AppCompatActivity {
-    private static final int REQ_NOVO_FORNECEDOR = 120;
+    private FirebaseListAdapter<Fornecedor> adapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,25 +52,79 @@ public class Fornecedores extends AppCompatActivity {
         populateList();
     }
 
+    private void showOptions(final Fornecedor item) {
+        AlertDialog.Builder fabrica = new AlertDialog.Builder(this);
+        fabrica.setTitle(item.getNome().split(" ")[0]);
+        fabrica.setCancelable(true);
+
+        final ArrayAdapter<String> opcoes =
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        opcoes.add("Editar");
+        opcoes.add("Apagar");
+
+        fabrica.setAdapter(opcoes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String opcao = opcoes.getItem(which);
+                String[] path = item.getImagem().split("/");
+                String id = path[path.length - 1].replace(".jpg", "");
+
+                if (opcao.equalsIgnoreCase("editar")) {
+                    Intent i = new Intent(Fornecedores.this, CadastrarFornecedor.class);
+                    i.putExtra("fornecedor", item);
+                    i.putExtra("id", id);
+                    startActivity(i);
+                } else if (opcao.equalsIgnoreCase("apagar")) {
+                    TelaInicial.eraseFile(item.getImagem());
+                    Fornecedor.DBROOT.child(id).setValue(null);
+                }
+            }
+        });
+        fabrica.show();
+    }
+
     private void populateList() {
         ListView list = (ListView) findViewById(R.id.fornecedores_lista);
         DatabaseReference fornecedores = FirebaseDatabase.getInstance().getReference("pdv")
                 .child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
 
-        FirebaseListAdapter<Fornecedor> adapter = new FirebaseListAdapter<Fornecedor>(this,
+        adapter = new FirebaseListAdapter<Fornecedor>(this,
                 Fornecedor.class, R.layout.fornecedor_item, fornecedores.orderByKey()) {
             @Override
-            protected void populateView(View v, Fornecedor model, int position) {
+            protected void populateView(final View v, final Fornecedor model, int position) {
                 TextView titulo = (TextView) v.findViewById(R.id.fornecedor_item_nome),
                         telefone = (TextView) v.findViewById(R.id.fornecedor_item_telefone);
+
+                // Menu de contexo.
+                v.setLongClickable(true);
+                v.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        showOptions(model);
+                        return true;
+                    }
+                });
+
                 //TODO: Carregar imagem, nescessita rework
-                CircleImageView imagem = (CircleImageView) v.findViewById(R.id.fornecedor_img);
-                imagem.setImageResource(R.drawable.ic_def_fornecedor);
+                if (!model.getImagem().equals("")) {
+                    TelaInicial.getFile(model.getImagem(), new TelaInicial.UriCallback() {
+                        @Override
+                        void done(Uri u) {
+                            ((CircleImageView) v.findViewById(R.id.fornecedor_img)).setImageURI(u);
+                        }
+                    });
+                }
                 titulo.setText(model.getNome());
                 telefone.setText(model.getTelefones().get(0));
             }
         };
 
         list.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        adapter.cleanup();
+        super.onDestroy();
     }
 }

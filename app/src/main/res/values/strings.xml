@@ -19,9 +19,9 @@
     <!-- Fornecedor -->
     <string name="fornecedor_mult">Fornecedores</string>
     <string name="fornecedor_novo">Novo Fornecedor</string>
-    <string name="fornecedor_nome">nome completo</string>
-    <string name="fornecedor_email">email</string>
-    <string name="fornecedor_telefone">telefone</string>
+    <string name="fornecedor_nome">Nome Completo</string>
+    <string name="fornecedor_email">Email</string>
+    <string name="fornecedor_telefone">Telefone</string>
 
     <!--Tela principal-->
     <string name="carregando">Carregando…</string>

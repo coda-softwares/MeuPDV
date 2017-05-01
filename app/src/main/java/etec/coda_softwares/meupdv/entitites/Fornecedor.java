@@ -1,13 +1,6 @@
 package etec.coda_softwares.meupdv.entitites;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
@@ -17,15 +10,17 @@ import java.util.List;
 import etec.coda_softwares.meupdv.TelaInicial;
 
 /**
- * Classe para represntar o fornecedor no bando de dados. Para salvar realmente, utilize o metodo
- * {@link PDV#addFornecedor(Fornecedor, Runnable)}
+ * Classe para represntar o fornecedor no bando de dados.
  */
 
 public class Fornecedor implements Serializable {
-    private String id = "";
+    public static final DatabaseReference DBROOT = FirebaseDatabase.getInstance()
+            .getReference("pdv").child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
     private List<String> telefones = new ArrayList<>();
     private String email = "";
     private String nome = "";
+    private String imagem = "";
+
     public Fornecedor() {
     }
 
@@ -43,7 +38,7 @@ public class Fornecedor implements Serializable {
         this.telefones = telefones;
     }
 
-    private String formatEmail() {
+    public String formatEmail() {
         return this.email;
     }
 
@@ -72,30 +67,12 @@ public class Fornecedor implements Serializable {
         this.nome = nome;
     }
 
-    @Exclude
-    public String getId() {
-        return id;
+    public String getImagem() {
+        return imagem;
     }
 
-    void setId(String id) {
-        this.id = id;
-    }
-
-    void saveOnDB(final Runnable callback) {
-        FirebaseUser info = FirebaseAuth.getInstance().getCurrentUser();
-        assert info != null;
-        DatabaseReference self = FirebaseDatabase.getInstance().getReference("pdv")
-                .child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
-        if (id.equals("")) {
-            self = self.push();
-            id = self.push().getKey();
-            self.setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    callback.run();
-                }
-            });
-        }
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     @Override
@@ -105,20 +82,20 @@ public class Fornecedor implements Serializable {
 
         Fornecedor that = (Fornecedor) o;
 
-        if (!id.equals(that.id)) return false;
         if (telefones != null ? !telefones.equals(that.telefones) : that.telefones != null)
             return false;
         if (!email.equals(that.email)) return false;
-        return nome.equals(that.nome);
+        if (!nome.equals(that.nome)) return false;
+        return imagem.equals(that.imagem);
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (telefones != null ? telefones.hashCode() : 0);
+        int result = (telefones != null ? telefones.hashCode() : 0);
         result = 31 * result + email.hashCode();
         result = 31 * result + nome.hashCode();
+        result = 31 * result + imagem.hashCode();
         return result;
     }
 }
