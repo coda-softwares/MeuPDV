@@ -51,7 +51,6 @@
         </activity>
         <activity
             android:name=".NovoPDV"
-            android:noHistory="true"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
             android:screenOrientation="portrait" />
         <activity

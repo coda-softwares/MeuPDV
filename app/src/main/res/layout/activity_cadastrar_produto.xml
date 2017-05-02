@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:background="@color/primaria"
+                    android:background="?android:attr/colorBackground"
                     android:onClick="carregarCodBarras"
                     android:src="@drawable/ic_camera" />
             </LinearLayout>

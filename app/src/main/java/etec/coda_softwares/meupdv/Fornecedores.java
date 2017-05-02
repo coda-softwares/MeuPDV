@@ -92,6 +92,11 @@ public class Fornecedores extends AppCompatActivity {
                 Fornecedor.class, R.layout.fornecedor_item, fornecedores.orderByKey()) {
             @Override
             protected void populateView(final View v, final Fornecedor model, int position) {
+
+                View nenhum = findViewById(R.id.fornecedor_nenhum);
+                if (nenhum.getVisibility() != View.GONE)
+                    nenhum.setVisibility(View.GONE);
+
                 TextView titulo = (TextView) v.findViewById(R.id.fornecedor_item_nome),
                         telefone = (TextView) v.findViewById(R.id.fornecedor_item_telefone);
 
@@ -105,7 +110,6 @@ public class Fornecedores extends AppCompatActivity {
                     }
                 });
 
-                //TODO: Carregar imagem, nescessita rework
                 if (!model.getImagem().equals("")) {
                     TelaInicial.getFile(model.getImagem(), new TelaInicial.UriCallback() {
                         @Override

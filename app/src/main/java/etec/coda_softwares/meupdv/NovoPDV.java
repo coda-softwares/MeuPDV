@@ -99,7 +99,7 @@ public class NovoPDV extends AppCompatActivity {
         setSupportActionBar(tb);
     }
 
-    public void addFoto(View v) {
+    public void addFotoNovoPDV(View v) {
         startActivityForResult(CropImage.getPickImageChooserIntent(this), REQUEST_FOTO);
     }
 

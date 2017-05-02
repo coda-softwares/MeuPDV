@@ -40,7 +40,7 @@
                 android:adjustViewBounds="false"
                 android:background="@color/primaria"
                 android:clickable="true"
-                android:onClick="addFoto"
+                android:onClick="addFotoNovoPDV"
                 android:padding="50dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_add_foto" />

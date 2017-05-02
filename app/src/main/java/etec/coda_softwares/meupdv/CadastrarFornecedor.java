@@ -55,7 +55,7 @@ public class CadastrarFornecedor extends AppCompatActivity {
                     .child("fornecedores") // pdv/[pdv_id]/fornecedores
                     .child(dbLocation.getKey() + ".jpg");//pdv/[pdv_id]/fornecedores/id.jpg
             Fornecedor fornecedor = (Fornecedor) getIntent().getSerializableExtra("fornecedor");
-            if (!fornecedor.getImagem().equals("")) {
+            if (fornecedor != null) if (!fornecedor.getImagem().equals("")) {
                 TelaInicial.eraseFile(fornecedor.getImagem(), true);
             }
 

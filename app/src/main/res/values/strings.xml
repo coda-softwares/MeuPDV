@@ -18,6 +18,7 @@
 
     <!-- Fornecedor -->
     <string name="fornecedor_mult">Fornecedores</string>
+    <string name="fornecedor_sem">Nenhum Fornecedor Encontrado</string>
     <string name="fornecedor_novo">Novo Fornecedor</string>
     <string name="fornecedor_nome">Nome Completo</string>
     <string name="fornecedor_email">Email</string>
