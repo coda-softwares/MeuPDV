@@ -32,6 +32,7 @@ import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
 public class CadastrarFornecedor extends AppCompatActivity {
     private static final int REQUEST_FOTO = 598;
+    public static final String NO_IMG = "$NOIMG$";
     private Uri image;
     private EditText etNome;
     private EditText etEmail;
@@ -55,7 +56,7 @@ public class CadastrarFornecedor extends AppCompatActivity {
                     .child("fornecedores") // pdv/[pdv_id]/fornecedores
                     .child(dbLocation.getKey() + ".jpg");//pdv/[pdv_id]/fornecedores/id.jpg
             Fornecedor fornecedor = (Fornecedor) getIntent().getSerializableExtra("fornecedor");
-            if (fornecedor != null) if (!fornecedor.getImagem().equals("")) {
+            if (fornecedor != null) if (!fornecedor.getImagem().contains(NO_IMG)) {
                 TelaInicial.eraseFile(fornecedor.getImagem(), true);
             }
 
@@ -76,6 +77,7 @@ public class CadastrarFornecedor extends AppCompatActivity {
                 }
             });
         } else {
+            f.setImagem("$NOIMG$/"+dbLocation.getKey());
             dbLocation.setValue(f).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -141,13 +143,15 @@ public class CadastrarFornecedor extends AppCompatActivity {
             etNome.setText(edit.getNome());
             etEmail.setText(edit.formatEmail());
             etTelefone.setText(edit.getTelefones().get(0));
-            TelaInicial.getFile(edit.getImagem(), new TelaInicial.UriCallback() {
-                @Override
-                void done(Uri u) {
-                    ivFoto.setPadding(0, 0, 0, 0);
-                    ivFoto.setImageURI(u);
-                }
-            });
+            if (!edit.getImagem().contains(NO_IMG)) {
+                TelaInicial.getFile(edit.getImagem(), new TelaInicial.UriCallback() {
+                    @Override
+                    void done(Uri u) {
+                        ivFoto.setPadding(0, 0, 0, 0);
+                        ivFoto.setImageURI(u);
+                    }
+                });
+            }
         }
     }
 

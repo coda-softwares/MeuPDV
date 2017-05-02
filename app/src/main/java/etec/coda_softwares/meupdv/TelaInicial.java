@@ -38,7 +38,6 @@ public class TelaInicial extends AppCompatActivity {
     private static File internalFiles;
     private static PDV CURRENT_PDV;
     // Propriedade de controle pro watcher da databse se essa atividade ainda esta viva
-    private static boolean LOADING = true;
 
     /**
      * Forma principal e global de conseguiur uma instancia do PDV atual.
@@ -46,6 +45,10 @@ public class TelaInicial extends AppCompatActivity {
      * @return o PDV atual.
      */
     public static PDV getCurrentPdv() {
+        if (CURRENT_PDV == null) {
+            FirebaseCrash.log("CurrentPDV era nulo");
+            System.exit(1);
+        }
         return CURRENT_PDV;
     }
 
@@ -102,11 +105,11 @@ public class TelaInicial extends AppCompatActivity {
                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
             startActivityForResult(aui.build(), REQ_LOGIN);
         } else {
-            populateList();
+            populateList(this);
         }
     }
 
-    private void populateList(){
+    private static void populateList(final TelaInicial self){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         final DatabaseReference ds;
@@ -123,10 +126,9 @@ public class TelaInicial extends AppCompatActivity {
                 //TODO: Atualizar ImageView.
                 a.initId(dataSnapshot.getKey());
                 CURRENT_PDV = a;
-                if (LOADING) {
-                    LOADING = false;
-                    nextActivity();
-                    finish();
+                if (self != null) {
+                    self.nextActivity();
+                    self.finish();
                 }
             }
 
@@ -147,8 +149,8 @@ public class TelaInicial extends AppCompatActivity {
                 String local = dataSnapshot.getValue(String.class);
                 //Se a key nao existir:
                 if (local == null) {
-                    Intent i = new Intent(TelaInicial.this, NovoPDV.class);
-                    startActivityForResult(i, REQ_NOVO_PDV);
+                    Intent i = new Intent(self, NovoPDV.class);
+                    self.startActivityForResult(i, REQ_NOVO_PDV);
                     return;
                 }
                 //Se ja existir carrega o PDV e fica de olho por alterações futuras também!
@@ -175,7 +177,7 @@ public class TelaInicial extends AppCompatActivity {
         if (requestCode == REQ_LOGIN) {
             IdpResponse res = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
-                populateList();
+                populateList(this);
                 return;
             } else if (res != null) {
                 if (res.getErrorCode() == ErrorCodes.NO_NETWORK) {

@@ -75,7 +75,8 @@ public class Fornecedores extends AppCompatActivity {
                     i.putExtra("id", id);
                     startActivity(i);
                 } else if (opcao.equalsIgnoreCase("apagar")) {
-                    TelaInicial.eraseFile(item.getImagem());
+                    if (!item.getImagem().contains(CadastrarFornecedor.NO_IMG))
+                        TelaInicial.eraseFile(item.getImagem());
                     Fornecedor.DBROOT.child(id).setValue(null);
                 }
             }
@@ -110,13 +111,16 @@ public class Fornecedores extends AppCompatActivity {
                     }
                 });
 
-                if (!model.getImagem().equals("")) {
+                if (!model.getImagem().contains("$NOIMG$")) {
                     TelaInicial.getFile(model.getImagem(), new TelaInicial.UriCallback() {
                         @Override
                         void done(Uri u) {
                             ((CircleImageView) v.findViewById(R.id.fornecedor_img)).setImageURI(u);
                         }
                     });
+                } else {
+                    ((CircleImageView) v.findViewById(R.id.fornecedor_img))
+                            .setImageResource(R.drawable.ic_def_fornecedor);
                 }
                 titulo.setText(model.getNome());
                 telefone.setText(model.getTelefones().get(0));
