@@ -53,6 +53,10 @@ public class TelaInicial extends AppCompatActivity {
     }
 
     public static void getFile(String firebaseURL, final UriCallback callback) {
+        if (firebaseURL != null) {
+            if (firebaseURL.equals(""))
+                return;
+        } else return;
         StorageReference file = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseURL);
         final File locFile =
                 new File(internalFiles.getAbsolutePath() + File.separator + file.getName());
@@ -83,30 +87,6 @@ public class TelaInicial extends AppCompatActivity {
                 new File(internalFiles.getAbsolutePath() + File.separator + file.getName());
         if (locFile.exists()) locFile.delete();
         if (!onlyLocal) file.delete();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tela_inicial);
-        internalFiles = getFilesDir();
-        tryLogin();
-    }
-
-    private void tryLogin() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            AuthUI.SignInIntentBuilder aui = AuthUI.getInstance().createSignInIntentBuilder();
-            aui.setLogo(R.drawable.ic_meupdv);
-            aui.setTheme(R.style.AppTheme_NoBar);
-            aui.setAllowNewEmailAccounts(true);
-            aui.setProviders(Arrays.asList(
-                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
-            startActivityForResult(aui.build(), REQ_LOGIN);
-        } else {
-            populateList(this);
-        }
     }
 
     private static void populateList(final TelaInicial self){
@@ -163,6 +143,30 @@ public class TelaInicial extends AppCompatActivity {
                 System.exit(0);
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tela_inicial);
+        internalFiles = getFilesDir();
+        tryLogin();
+    }
+
+    private void tryLogin() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            AuthUI.SignInIntentBuilder aui = AuthUI.getInstance().createSignInIntentBuilder();
+            aui.setLogo(R.drawable.ic_meupdv);
+            aui.setTheme(R.style.AppTheme_NoBar);
+            aui.setAllowNewEmailAccounts(true);
+            aui.setProviders(Arrays.asList(
+                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
+            startActivityForResult(aui.build(), REQ_LOGIN);
+        } else {
+            populateList(this);
+        }
     }
 
     private void nextActivity(){

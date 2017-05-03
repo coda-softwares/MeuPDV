@@ -78,6 +78,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
         </activity>
+        <activity
+            android:name=".CarregarImagem"
+            android:theme="@android:style/Theme.NoDisplay" />
     </application>
 
 </manifest>

@@ -1,12 +1,14 @@
 package etec.coda_softwares.meupdv.entitites;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import etec.coda_softwares.meupdv.CadastrarFornecedor;
 import etec.coda_softwares.meupdv.TelaInicial;
 
 /**
@@ -28,6 +30,12 @@ public class Fornecedor implements Serializable {
         this.telefones = telefones;
         this.email = email;
         this.nome = nome;
+    }
+
+    @Exclude
+    public String getId() {
+        String[] path = imagem.split("/");
+        return path[path.length - 1].replace(".jpg", "");
     }
 
     public List<String> getTelefones() {
@@ -67,8 +75,15 @@ public class Fornecedor implements Serializable {
         this.nome = nome;
     }
 
+    public boolean hasImagem() {
+        return !imagem.contains(CadastrarFornecedor.NO_IMG);
+    }
+
     public String getImagem() {
-        return imagem;
+        if (!hasImagem())
+            return "";
+        else
+            return imagem;
     }
 
     public void setImagem(String imagem) {

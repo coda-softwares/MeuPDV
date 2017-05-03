@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.Collections;
 
@@ -66,6 +65,7 @@ public class NovoPDV extends AppCompatActivity {
 
                         @Override
                         public void run() {
+                            //FIXME A atividade que deveria colocar na database.
                             PDV currentPdv = TelaInicial.getCurrentPdv();
                             if (currentPdv != null)
                                 if (!currentPdv.getId().equals("")) {
@@ -100,24 +100,16 @@ public class NovoPDV extends AppCompatActivity {
     }
 
     public void addFotoNovoPDV(View v) {
-        startActivityForResult(CropImage.getPickImageChooserIntent(this), REQUEST_FOTO);
+        startActivityForResult(new Intent(this, CarregarImagem.class), REQUEST_FOTO);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_FOTO) {
-                Uri img;
-                if (data == null)
-                    img = CropImage.getCaptureImageOutputUri(this);
-                else
-                    img = data.getData();
-                CropImage.activity(img).setAspectRatio(1, 1).setOutputCompressQuality(70)
-                        .setRequestedSize(512, 512).setMinCropResultSize(256, 256).start(this);
-            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 ImageView image = (ImageView) findViewById(R.id.npdv_img);
                 image.setPadding(0, 0, 0, 0);
-                this.image = CropImage.getActivityResult(data).getUri();
+                this.image = data.getParcelableExtra("imagem");
                 image.setImageURI(this.image);
             }
         }

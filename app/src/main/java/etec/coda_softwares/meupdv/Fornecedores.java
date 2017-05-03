@@ -26,6 +26,17 @@ public class Fornecedores extends AppCompatActivity {
     private FirebaseListAdapter<Fornecedor> adapter;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fornecedores);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.fornecedores_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        populateList();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
         inflater.inflate(R.menu.menu_fornecedores, menu);
@@ -39,17 +50,6 @@ public class Fornecedores extends AppCompatActivity {
             }
         });
         return true;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fornecedores);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.fornecedores_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        populateList();
     }
 
     private void showOptions(final Fornecedor item) {
@@ -66,18 +66,15 @@ public class Fornecedores extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String opcao = opcoes.getItem(which);
-                String[] path = item.getImagem().split("/");
-                String id = path[path.length - 1].replace(".jpg", "");
+                assert opcao != null;
 
                 if (opcao.equalsIgnoreCase("editar")) {
                     Intent i = new Intent(Fornecedores.this, CadastrarFornecedor.class);
                     i.putExtra("fornecedor", item);
-                    i.putExtra("id", id);
                     startActivity(i);
                 } else if (opcao.equalsIgnoreCase("apagar")) {
-                    if (!item.getImagem().contains(CadastrarFornecedor.NO_IMG))
-                        TelaInicial.eraseFile(item.getImagem());
-                    Fornecedor.DBROOT.child(id).setValue(null);
+                    TelaInicial.eraseFile(item.getImagem());
+                    Fornecedor.DBROOT.child(item.getId()).setValue(null);
                 }
             }
         });
@@ -111,16 +108,16 @@ public class Fornecedores extends AppCompatActivity {
                     }
                 });
 
-                if (!model.getImagem().contains("$NOIMG$")) {
+                final CircleImageView cImg = (CircleImageView) v.findViewById(R.id.fornecedor_img);
+                if (model.hasImagem()) {
                     TelaInicial.getFile(model.getImagem(), new TelaInicial.UriCallback() {
                         @Override
                         void done(Uri u) {
-                            ((CircleImageView) v.findViewById(R.id.fornecedor_img)).setImageURI(u);
+                            cImg.setImageURI(u);
                         }
                     });
                 } else {
-                    ((CircleImageView) v.findViewById(R.id.fornecedor_img))
-                            .setImageResource(R.drawable.ic_def_fornecedor);
+                    cImg.setImageResource(R.drawable.ic_def_fornecedor);
                 }
                 titulo.setText(model.getNome());
                 telefone.setText(model.getTelefones().get(0));

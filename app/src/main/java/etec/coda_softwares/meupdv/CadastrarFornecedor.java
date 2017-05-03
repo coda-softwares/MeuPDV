@@ -23,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,62 +30,17 @@ import java.util.List;
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
 public class CadastrarFornecedor extends AppCompatActivity {
-    private static final int REQUEST_FOTO = 598;
     public static final String NO_IMG = "$NOIMG$";
-    private Uri image;
+    private static final int REQUEST_FOTO = 598;
+    private boolean newImage = false;
+
     private EditText etNome;
     private EditText etEmail;
     private EditText etTelefone;
+    private Uri image;
     private ImageView ivFoto;
-
-    private void createFornecedor(String nome, String email, List<String> telefones) {
-        final Dialog d = new AlertDialog.Builder(this).setView(R.layout.layout_loading).create();
-        d.show();
-
-        String key = getIntent().getStringExtra("id");
-        final Fornecedor f = new Fornecedor(nome, email, telefones);
-        final DatabaseReference dbLocation = key == null ?
-                Fornecedor.DBROOT.push() : Fornecedor.DBROOT.child(key);
-
-        if (image != null) { //Se imagem nao for nula
-            //Um objeto task é obtido ao acessar o caminho:
-            StorageReference storageReference = FirebaseStorage.getInstance()
-                    .getReference("pdv") //pdv
-                    .child(TelaInicial.getCurrentPdv().getId()) // pdv/[pdv_id]
-                    .child("fornecedores") // pdv/[pdv_id]/fornecedores
-                    .child(dbLocation.getKey() + ".jpg");//pdv/[pdv_id]/fornecedores/id.jpg
-            Fornecedor fornecedor = (Fornecedor) getIntent().getSerializableExtra("fornecedor");
-            if (fornecedor != null) if (!fornecedor.getImagem().contains(NO_IMG)) {
-                TelaInicial.eraseFile(fornecedor.getImagem(), true);
-            }
-
-            //salvamos a imagem no objeto F antes do upload.
-            f.setImagem(storageReference.toString());
-            // Iniciamos o upload da foto
-            UploadTask uploadTask = storageReference.putFile(image);//quando o upload terminar...
-            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> t) {
-                    dbLocation.setValue(f).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            d.dismiss();
-                            finish();
-                        }
-                    });
-                }
-            });
-        } else {
-            f.setImagem("$NOIMG$/"+dbLocation.getKey());
-            dbLocation.setValue(f).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    d.dismiss();
-                    finish();
-                }
-            });
-        }
-    }
+    private Fornecedor old;
+    private Dialog loading;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,6 +80,8 @@ public class CadastrarFornecedor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_fornecedor);
 
+
+        loading = new AlertDialog.Builder(this).setView(R.layout.layout_loading).create();
         Toolbar tbar = (Toolbar)findViewById(R.id.fornecedor_toolbar);
         setSupportActionBar(tbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -138,16 +94,17 @@ public class CadastrarFornecedor extends AppCompatActivity {
 
         etTelefone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        Fornecedor edit = (Fornecedor) getIntent().getSerializableExtra("fornecedor");
-        if (edit != null) {
-            etNome.setText(edit.getNome());
-            etEmail.setText(edit.formatEmail());
-            etTelefone.setText(edit.getTelefones().get(0));
-            if (!edit.getImagem().contains(NO_IMG)) {
-                TelaInicial.getFile(edit.getImagem(), new TelaInicial.UriCallback() {
+        old = (Fornecedor) getIntent().getSerializableExtra("fornecedor");
+        if (old != null) {
+            etNome.setText(old.getNome());
+            etEmail.setText(old.formatEmail());
+            etTelefone.setText(old.getTelefones().get(0));
+            if (old.hasImagem()) {
+                TelaInicial.getFile(old.getImagem(), new TelaInicial.UriCallback() {
                     @Override
                     void done(Uri u) {
                         ivFoto.setPadding(0, 0, 0, 0);
+                        image = u;
                         ivFoto.setImageURI(u);
                     }
                 });
@@ -155,26 +112,71 @@ public class CadastrarFornecedor extends AppCompatActivity {
         }
     }
 
+    private void saveAndFinish(Fornecedor f, DatabaseReference dbLocation) {
+        dbLocation.setValue(f).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                loading.dismiss();
+                finish();
+            }
+        });
+    }
+
+    private void createFornecedor(String nome, String email, List<String> telefones) {
+        loading.show();
+
+        final Fornecedor f = new Fornecedor(nome, email, telefones);
+
+        final DatabaseReference dbLocation;
+        dbLocation = old == null ? Fornecedor.DBROOT.push() : Fornecedor.DBROOT.child(old.getId());
+
+        if (image != null) {
+            if (old != null) { // If editing.
+                if (!newImage) {
+                    f.setImagem(old.getImagem());
+                    saveAndFinish(f, dbLocation);
+                    return;
+                }
+                if (old.hasImagem())
+                    TelaInicial.eraseFile(old.getImagem(), true);
+            }
+
+            //Se imagem nao for nula
+            //Um objeto task é obtido ao acessar o caminho:
+            StorageReference storageReference = FirebaseStorage.getInstance()
+                    .getReference("pdv") //pdv
+                    .child(TelaInicial.getCurrentPdv().getId()) // pdv/[pdv_id]
+                    .child("fornecedores").child(dbLocation.getKey() + ".jpg"); // pdv/[pdv_id]/fornecedores/[forn_id]
+
+
+            //salvamos a imagem no objeto F antes do upload.
+            f.setImagem(storageReference.toString());
+            // Iniciamos o upload da foto
+            UploadTask uploadTask = storageReference.putFile(image);//quando o upload terminar...
+            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> t) {
+                    saveAndFinish(f, dbLocation);
+                }
+            });
+        } else {
+            f.setImagem(CadastrarFornecedor.NO_IMG + "/" + dbLocation.getKey());
+            saveAndFinish(f, dbLocation);
+        }
+    }
+
     public void addFoto(View v) {
-        startActivityForResult(CropImage.getPickImageChooserIntent(this), REQUEST_FOTO);
+        startActivityForResult(new Intent(this, CarregarImagem.class), REQUEST_FOTO);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_FOTO) {
-                Uri img;
-                if (data == null)
-                    img = CropImage.getCaptureImageOutputUri(this);
-                else
-                    img = data.getData();
-                assert img != null;
-                CropImage.activity(img).setAspectRatio(1, 1).setOutputCompressQuality(70)
-                        .setRequestedSize(512, 512).setMinCropResultSize(256, 256).start(this);
-            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                newImage = true;
+                image = data.getParcelableExtra("imagem");
                 ivFoto.setPadding(0, 0, 0, 0);
-                this.image = CropImage.getActivityResult(data).getUri();
-                ivFoto.setImageURI(this.image);
+                ivFoto.setImageURI(image);
             }
         }
     }
