@@ -28,8 +28,11 @@
                 android:id="@+id/prod_image"
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
+                android:background="?attr/colorPrimaryDark"
+                android:padding="60dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_meupdv" />
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_add_foto" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -41,7 +44,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:hint="@string/prod_nome"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
@@ -62,7 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:hint="@string/prod_validade"
                     android:imeOptions="actionNext"
                     android:inputType="date"
@@ -85,9 +86,8 @@
                         android:id="@+id/prod_quant"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                    android:hint="@string/prod_quant"
-                    android:inputType="numberSigned"
-
+                        android:hint="@string/prod_quant"
+                        android:inputType="numberSigned"
                         android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -100,9 +100,8 @@
                         android:id="@+id/prod_preco"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                    android:hint="@string/prod_preco"
-                    android:inputType="numberDecimal"
-
+                        android:hint="@string/prod_preco"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 

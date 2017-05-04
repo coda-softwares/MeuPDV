@@ -85,8 +85,10 @@ public class TelaInicial extends AppCompatActivity {
         StorageReference file = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseURL);
         final File locFile =
                 new File(internalFiles.getAbsolutePath() + File.separator + file.getName());
-        if (locFile.exists()) locFile.delete();
-        if (!onlyLocal) file.delete();
+        if (locFile.exists())
+            locFile.delete();
+        if (!onlyLocal)
+            file.delete();
     }
 
     private static void populateList(final TelaInicial self){

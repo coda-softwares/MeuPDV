@@ -110,6 +110,7 @@ public class Fornecedores extends AppCompatActivity {
 
                 final CircleImageView cImg = (CircleImageView) v.findViewById(R.id.fornecedor_img);
                 if (model.hasImagem()) {
+                    cImg.setImageBitmap(null); // Force the reloading of the image
                     TelaInicial.getFile(model.getImagem(), new TelaInicial.UriCallback() {
                         @Override
                         void done(Uri u) {
@@ -123,7 +124,6 @@ public class Fornecedores extends AppCompatActivity {
                 telefone.setText(model.getTelefones().get(0));
             }
         };
-
         list.setAdapter(adapter);
     }
 

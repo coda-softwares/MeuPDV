@@ -22,11 +22,14 @@ public class Fornecedor implements Serializable {
     private String email = "";
     private String nome = "";
     private String imagem = "";
+    private long ultimaModificacao;
 
     public Fornecedor() {
+        ultimaModificacao = System.currentTimeMillis();
     }
 
     public Fornecedor(String nome, String email, List<String> telefones) {
+        ultimaModificacao = System.currentTimeMillis();
         this.telefones = telefones;
         this.email = email;
         this.nome = nome;
@@ -88,6 +91,14 @@ public class Fornecedor implements Serializable {
 
     public void setImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public long getUltimaModificacao() {
+        return ultimaModificacao;
+    }
+
+    public void setUltimaModificacao(long ultimaModificacao) {
+        this.ultimaModificacao = ultimaModificacao;
     }
 
     @Override
