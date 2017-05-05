@@ -43,6 +43,10 @@
     <string name="npdv_nome">Nome do Ponto de Venda</string>
     <string name="npdv_lema">Slogan do seu PDV</string>
 
+    <!--Selecionador de imagem-->
+    <string name="imagem_camera">Tirar foto com a câmera</string>
+    <string name="imagem_galeria">Selecionar da Galeria</string>
+
     <string name="title_activity_produtos">Produtos</string>
     <string name="title_activity_produto">Produto</string>
 

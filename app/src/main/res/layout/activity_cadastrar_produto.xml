@@ -28,10 +28,10 @@
                 android:id="@+id/prod_image"
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
-                android:background="?attr/colorPrimaryDark"
-                android:padding="60dp"
-                android:scaleType="fitCenter"
                 android:layout_marginBottom="8dp"
+                android:onClick="novaImgProduto"
+                android:padding="38dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/ic_add_foto" />
 
             <android.support.design.widget.TextInputLayout

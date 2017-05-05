@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -25,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CadastrarProduto extends AppCompatActivity {
+    public static final int REQ_IMG = 1547;
     Date validade;
     EditText tb_barras;
 
@@ -94,9 +97,19 @@ public class CadastrarProduto extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (barcode == null) return;
-        tb_barras.setText(barcode.getContents());
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQ_IMG) {
+                ImageView img = (ImageView) findViewById(R.id.prod_image);
+                img.setImageURI((Uri) data.getParcelableExtra("imagem"));
+            }
+            IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (barcode == null) return;
+            tb_barras.setText(barcode.getContents());
+        }
+    }
+
+    public void novaImgProduto(View v) {
+        startActivityForResult(new Intent(this, CarregarImagem.class), REQ_IMG);
     }
 
     public void carregarCodBarras(View v) {
