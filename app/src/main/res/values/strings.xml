@@ -1,4 +1,5 @@
 <resources>
+    <!-- Login -->
     <string name="app_name">MeuPDV</string>
     <string name="descr_logo">Logo do projeto</string>
     <string name="username">Nome de usuário</string>
@@ -8,13 +9,14 @@
     <string name="title_activity_menu_principal">Menu Principal</string>
     <string name="sair">Fechar</string>
 
-    <!--Cadastrar produtos-->
-    <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
+    <!-- Produto -->
     <string name="prod_nome">Nome do Produto</string>
     <string name="prod_quant">Quant. de Produtos</string>
     <string name="prod_preco">Preço do Produto</string>
     <string name="prod_validade">Validade</string>
     <string name="prod_barras">Código de Barras</string>
+    <string name="produto_novo">Novo Produto</string>
+    <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
 
     <!-- Fornecedor -->
     <string name="fornecedor_mult">Fornecedores</string>
@@ -37,7 +39,6 @@
     <string name="title_activity_cadastrar_fornecedor">Cadastrar Fornecedor</string>
     <string name="atividade_novo_fornecedor">Novo Fornecedor</string>
 
-
     <!-- Pagina Cadastro!-->
     <string name="title_activity_novo_pdv">Novo Ponto de Venda</string>
     <string name="npdv_nome">Nome do Ponto de Venda</string>
@@ -49,6 +50,7 @@
 
     <string name="title_activity_produtos">Produtos</string>
     <string name="title_activity_produto">Produto</string>
+    <string name="produto_mult">Produtos</string>
 
     <!--bug android studio-->
     <item name="visible" type="id" />

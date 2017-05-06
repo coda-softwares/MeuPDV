@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.rey.material.widget.ListView;
+import android.widget.ListView;
 
 import etec.coda_softwares.meupdv.CadastrarProduto;
 import etec.coda_softwares.meupdv.R;
@@ -25,6 +27,22 @@ public class Produtos extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         populateList();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(this);
+        menuInflater.inflate(R.menu.menu_produtos, menu);
+        MenuItem item = menu.findItem(R.id.menu_produtos_add);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(Produtos.this, CadastrarProduto.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+        return true;
     }
 
     public void pesquisar(View v){

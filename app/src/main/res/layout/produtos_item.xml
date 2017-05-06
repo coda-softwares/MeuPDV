@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="81dp"
     android:orientation="horizontal"
     android:paddingEnd="15dp"
     android:paddingStart="15dp"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:background="?android:attr/selectableItemBackground">
 
     <!-- Icone do produto do lado esquerdo -->
-    <com.rey.material.widget.ImageView
+    <ImageView
         android:id="@+id/prod_icon"
         android:layout_width="150dp"
         android:layout_height="100dp"
@@ -16,14 +18,14 @@
         android:layout_weight="3" />
 
 
-    <com.rey.material.widget.LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="4"
         android:orientation="vertical">
         <!-- Titulo do produto com o nome do produto no meio -->
-        <com.rey.material.widget.TextView
+        <TextView
             android:id="@+id/prod_titulo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -33,7 +35,7 @@
             android:textSize="25sp" />
 
         <!-- Provavelmente o preço estara em baixo do titulo( em letras amarelas) -->
-        <com.rey.material.widget.TextView
+        <TextView
             android:id="@+id/prod_preco"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -43,10 +45,10 @@
             android:text="R$2.50"
             android:textColor="@color/cor_preco"
             android:textSize="20sp" />
-    </com.rey.material.widget.LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <!-- Botão seta para o lado direito -->
-    <com.rey.material.widget.Button
+    <Button
         android:id="@+id/prod_button"
         android:layout_width="150dp"
         android:layout_height="100dp"
@@ -55,5 +57,4 @@
         android:maxHeight="100dp"
         android:maxWidth="150dp"
         android:src="@drawable/ic_seta_direita"/><!-- onClick estara setado na classe adapter -->
-
 </LinearLayout>

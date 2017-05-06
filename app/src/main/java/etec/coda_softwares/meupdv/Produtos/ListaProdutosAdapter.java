@@ -15,8 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rey.material.widget.Button;
-
+import android.widget.Button;
 import java.text.NumberFormat;
 
 import etec.coda_softwares.meupdv.DetalhesProduto;
@@ -64,6 +63,7 @@ public class ListaProdutosAdapter extends ArrayAdapter<ItemProdutos> {
         preco.setText(formatter.format(ie.getPreco()));
 
         Button button = (Button) v.findViewById(R.id.prod_button);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
