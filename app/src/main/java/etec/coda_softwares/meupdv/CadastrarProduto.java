@@ -5,9 +5,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.drawable.DrawableWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -75,9 +80,16 @@ public class CadastrarProduto extends AppCompatActivity {
         campoCdDBarras = (EditText) findViewById(R.id.prod_barras);
         spinnerFornecedores = (MaterialSpinner) findViewById(R.id.lista_fornecedores_spineer);
 
-        setupValidade();
+        beautifySpinner();
 
         populateFornecedoresSpinner();
+
+        setupValidade();
+    }
+
+    private void beautifySpinner() {
+        spinnerFornecedores.setBackgroundColor(Color.alpha(0));
+        spinnerFornecedores.getPopupWindow().getContentView().setBackgroundColor(Color.WHITE);
     }
 
     private void populateFornecedoresSpinner() {
