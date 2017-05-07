@@ -3,6 +3,7 @@ package etec.coda_softwares.meupdv;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -20,11 +21,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
@@ -53,6 +57,10 @@ public class CadastrarProduto extends AppCompatActivity {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                // Test
+                Toast.makeText(CadastrarProduto.this, "Id Fornecedor: "+getSelectedFornecedor().getImagem(),
+                        Toast.LENGTH_LONG).show();
+
                 // Checar campos
 
                 // salvar no banco
@@ -96,21 +104,28 @@ public class CadastrarProduto extends AppCompatActivity {
 
         DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
 
-        // Pegar valores
-        fornecedoresRef.orderByKey().addValueEventListener(new ValueEventListener() {
+        /**
+         *  That's the trick! ;)
+         */
+        fornecedoresRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, Fornecedor> map = dataSnapshot.getValue(new GenericTypeIndicator<HashMap<String, Fornecedor>>(){});
-                // FIXME: Leia os fornecedores do banco de dados e guarde no spinner
+
+                final List<Fornecedor> fornecedores = new ArrayList<>();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Fornecedor fornecedor = snapshot.getValue(Fornecedor.class);
+                    fornecedor.setImagem(snapshot.getKey());
+                    fornecedores.add(fornecedor);
+                }
+
+                spinnerFornecedores.setItems(fornecedores);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("ERROR", "Operação de listagem de fornecedores cancelada");
-                System.exit(1);
+                throw databaseError.toException();
             }
         });
-
-        spinnerFornecedores.setItems(new String[]{"Eu", "você", "Zubumafu"});
     }
     /**
      *
