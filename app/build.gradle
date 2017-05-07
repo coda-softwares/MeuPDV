@@ -28,7 +28,8 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1' //Cortador de imagens
     compile 'org.apmem.tools:layouts:1.10' // Flow layout
     compile 'de.hdodenhof:circleimageview:2.1.0' //Imageview redonda
-    compile 'com.github.rey5137:material:1.2.4'
+    compile 'com.jaredrummler:material-spinner:1.1.0' // Spinner material
+    compile 'com.github.rey5137:material:1.2.4' // Retirar se possivel
 
     //Bibliotecas android versão antiga por causa do firebase
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

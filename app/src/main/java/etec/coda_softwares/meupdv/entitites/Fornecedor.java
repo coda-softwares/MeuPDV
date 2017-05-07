@@ -41,6 +41,15 @@ public class Fornecedor implements Serializable {
         return path[path.length - 1].replace(".jpg", "");
     }
 
+    /**
+     * Metodo utilizado para abilitar o acesso ao nome atraves de uma lista
+     * @return Retorna o nome
+     */
+    @Override
+    public String toString() {
+        return this.nome;
+    }
+
     public List<String> getTelefones() {
         return telefones;
     }

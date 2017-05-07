@@ -54,22 +54,40 @@
                     android:nextFocusUp="@string/prod_quant" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/prod_validade"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/prod_validade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/prod_validade"
+                        android:imeOptions="actionNext"
+                        android:inputType="date"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/lista_fornecedores_spineer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/prod_validade"
-                    android:imeOptions="actionNext"
-                    android:inputType="date"
-                    android:maxLines="1" />
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/cad_prod_forn_hint"
+                    >
+                </com.jaredrummler.materialspinner.MaterialSpinner>
+            </LinearLayout>
 
-            </android.support.design.widget.TextInputLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

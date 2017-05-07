@@ -51,6 +51,8 @@
     <string name="title_activity_produtos">Produtos</string>
     <string name="title_activity_produto">Produto</string>
     <string name="produto_mult">Produtos</string>
+    <string name="search_button_cont_desc">procurar</string>
+    <string name="cad_prod_forn_hint">Fornecedor</string>
 
     <!--bug android studio-->
     <item name="visible" type="id" />

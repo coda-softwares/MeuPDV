@@ -9,8 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
@@ -18,38 +20,92 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+
+import etec.coda_softwares.meupdv.entitites.Fornecedor;
 
 public class CadastrarProduto extends AppCompatActivity {
     public static final int REQ_IMG = 1547;
-    Date validade;
-    EditText tb_barras;
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
         inflater.inflate(R.menu.menu_confirma, menu);
-        //TODO: Botão confirma.
+        MenuItem item = menu.findItem(R.id.botao_confirma);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Checar campos
+
+                // salvar no banco
+                return true;
+            }
+        });
         return true;
     }
 
-    // id_Prod, id_Forn, nome_Prod, validade_Prod, cdgBarras_Prod, val_Prod, quant_Prod
+    Date validade;
+    MaterialSpinner spinnerFornecedores;
+    EditText campoNome, campoQuantidade, campoValor, campoCdDBarras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_produto);
-        tb_barras = (EditText) findViewById(R.id.prod_barras);
         Toolbar tbar = (Toolbar) findViewById(R.id.prod_toolbar);
         setSupportActionBar(tbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        campoNome = (EditText) findViewById(R.id.prod_nome);
+        campoQuantidade = (EditText) findViewById(R.id.prod_quant);
+        campoValor = (EditText) findViewById(R.id.prod_preco);
+        campoCdDBarras = (EditText) findViewById(R.id.prod_barras);
+        spinnerFornecedores = (MaterialSpinner) findViewById(R.id.lista_fornecedores_spineer);
+
         setupValidade();
+
+        populateFornecedoresSpinner();
+    }
+
+    private void populateFornecedoresSpinner() {
+
+        DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
+
+        // Pegar valores
+        fornecedoresRef.orderByKey().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Fornecedor> map = dataSnapshot.getValue(new GenericTypeIndicator<HashMap<String, Fornecedor>>(){});
+                // FIXME: Leia os fornecedores do banco de dados e guarde no spinner
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR", "Operação de listagem de fornecedores cancelada");
+                System.exit(1);
+            }
+        });
+
+        spinnerFornecedores.setItems(new String[]{"Eu", "você", "Zubumafu"});
+    }
+    /**
+     *
+     * @return Retorna o fornecedor selecionado da drop down list(Spinner)
+     */
+    private Fornecedor getSelectedFornecedor(){
+        return  (Fornecedor)spinnerFornecedores.getItems().get(spinnerFornecedores.getSelectedIndex());
     }
 
     private void setupValidade() {
@@ -104,7 +160,7 @@ public class CadastrarProduto extends AppCompatActivity {
             }
             IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (barcode == null) return;
-            tb_barras.setText(barcode.getContents());
+            campoCdDBarras.setText(barcode.getContents());
         }
     }
 

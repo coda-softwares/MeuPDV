@@ -83,8 +83,7 @@ public class Fornecedores extends AppCompatActivity {
 
     private void populateList() {
         ListView list = (ListView) findViewById(R.id.fornecedores_lista);
-        DatabaseReference fornecedores = FirebaseDatabase.getInstance().getReference("pdv")
-                .child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
+        DatabaseReference fornecedores = Fornecedor.DBROOT;
 
         adapter = new FirebaseListAdapter<Fornecedor>(this,
                 Fornecedor.class, R.layout.fornecedor_item, fornecedores.orderByKey()) {
