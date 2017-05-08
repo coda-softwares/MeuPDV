@@ -113,7 +113,7 @@
                     android:layout_weight="1">
 
                     <EditText
-                        android:id="@+id/prod_preco"
+                        android:id="@+id/prod_valor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prod_preco"

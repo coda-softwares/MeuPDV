@@ -14,22 +14,15 @@ public class DetalhesProduto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_produto);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.produto_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         // Terminar o XML em base aos extras
-        String title = savedInstanceState.getString("title");
-        Double preco = savedInstanceState.getDouble("preco");
-        String firebaseId = savedInstanceState.getString("firebase_id");
+        String nome = savedInstanceState.getString("nome");
+        String valor = savedInstanceState.getString("valor");
+        String cdDBarras = savedInstanceState.getString("cdDBarras");
+
+        toolbar.setTitle(nome);
     }
 
 }

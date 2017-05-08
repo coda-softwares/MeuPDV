@@ -9,18 +9,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.CadastrarProduto;
+import etec.coda_softwares.meupdv.DetalhesProduto;
 import etec.coda_softwares.meupdv.R;
 import etec.coda_softwares.meupdv.TelaInicial;
 import etec.coda_softwares.meupdv.entitites.Produto;
@@ -57,43 +63,49 @@ public class Produtos extends AppCompatActivity {
     }
 
     public void pesquisar(View v){
-        // Test
-        DatabaseReference refProdutos = FirebaseDatabase.getInstance()
-                .getReference("pdv").child(TelaInicial.getCurrentPdv().getId()).child("produtos");
-
-        List testValues = new ArrayList();
-
-        testValues.add(new Produto("Maçã", 1.5, 25, "334254245", null));
-        testValues.add(new Produto("Pera", .5, 35, "735287580", null));
-
-        refProdutos.setValue(testValues).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(Produtos.this, "Success!", Toast.LENGTH_LONG).show();
-            }
-        });
+        Toast.makeText(Produtos.this, "Sorry did not get that.", Toast.LENGTH_LONG).show();
     }
 
     public void add_produto(View view) {
-        //Toast.makeText(view.getContext(), "Ohppa gangnam style!", Toast.LENGTH_SHORT).show();
         view.getContext().startActivity(new Intent(Produtos.this, CadastrarProduto.class));
     }
-
     private void populateList(){
-        ListView l = (ListView) findViewById(R.id.lista_produtos);
-        ListaProdutosAdapter adapter = new ListaProdutosAdapter(this, R.layout.menu_principal_item,
-                R.id.menu_item_Title);
-        // TODO: Trocar ic_produtos, pelo icone do produto, provavelmente estara no aparelho
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Dolly", 1));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Coca-Cola", 2.5));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Fanta", 6.3));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Cheetos", 5));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Biribinha", 2.5));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "bala de mel", .10));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Caneta", 1.5));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Lapin", 1.0));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Borracha", 3.5));
-        adapter.add(new ItemProdutos(R.drawable.ic_produtos, "Caderno", 19.99));
-        l.setAdapter(adapter);
+        ListView lista_produtos = (ListView) findViewById(R.id.lista_produtos);
+
+        /**
+         * Yet Simple
+         */
+        DatabaseReference reference = Produto.DBROOT;
+        FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(this,
+                Produto.class, R.layout.produtos_item, reference.orderByKey()) {
+
+            private final NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+            @Override
+            protected void populateView(View v, final Produto model, int position) {
+                TextView nome = (TextView) v.findViewById(R.id.prod_nome);
+                nome.setText(model.getNome());
+
+                TextView valor = (TextView) v.findViewById(R.id.prod_valor);
+                valor.setText(model.getValor());
+
+                Button button = (Button) v.findViewById(R.id.prod_button);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Produtos.this, DetalhesProduto.class);
+
+                        intent.getExtras().putString("nome", model.getNome());
+                        intent.getExtras().putString("valor", model.getValor());
+                        intent.getExtras().putString("cdDBarras", model.getCodDBarras());
+
+                        view.getContext().startActivity(intent);
+                    }
+                });
+            }
+        };
+
+        lista_produtos.setAdapter(produtos);
     }
 }

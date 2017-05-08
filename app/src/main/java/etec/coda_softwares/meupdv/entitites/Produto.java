@@ -62,6 +62,11 @@ public class Produto implements Serializable {
         return valor.toPlainString();
     }
 
+    public void setValor(String valor) {
+        this.valor = new BigDecimal(valor);
+    }
+
+    @Exclude
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }

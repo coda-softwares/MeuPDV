@@ -95,7 +95,7 @@ public class CadastrarProduto extends AppCompatActivity {
 
         campoNome = (EditText) findViewById(R.id.prod_nome);
         campoQuantidade = (EditText) findViewById(R.id.prod_quant);
-        campoValor = (EditText) findViewById(R.id.prod_preco);
+        campoValor = (EditText) findViewById(R.id.prod_valor);
         campoCdDBarras = (EditText) findViewById(R.id.prod_barras);
         spinnerFornecedores = (MaterialSpinner) findViewById(R.id.lista_fornecedores_spineer);
 

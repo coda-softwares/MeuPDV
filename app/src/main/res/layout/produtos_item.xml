@@ -26,7 +26,7 @@
         android:orientation="vertical">
         <!-- Titulo do produto com o nome do produto no meio -->
         <TextView
-            android:id="@+id/prod_titulo"
+            android:id="@+id/prod_nome"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -36,7 +36,7 @@
 
         <!-- Provavelmente o preço estara em baixo do titulo( em letras amarelas) -->
         <TextView
-            android:id="@+id/prod_preco"
+            android:id="@+id/prod_valor"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
