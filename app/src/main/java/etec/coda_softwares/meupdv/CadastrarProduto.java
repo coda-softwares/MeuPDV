@@ -72,11 +72,12 @@ public class CadastrarProduto extends AppCompatActivity {
                     return true;
                 }
 
-                Produto prod = new Produto(nomeProd, preco, quantidade, cdgBarras);
+                Produto prod = new Produto(nomeProd, preco, quantidade, cdgBarras, f);
                 DatabaseReference referencia = Produto.DBROOT.child(cdgBarras + "");
 
                 referencia.setValue(prod);
                 // salvar no banco
+                CadastrarProduto.this.finish();
                 return true;
             }
         });
@@ -112,12 +113,13 @@ public class CadastrarProduto extends AppCompatActivity {
 
     private void populateFornecedoresSpinner() {
 
-        DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
+        final DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
 
         /**
          *  That's the trick! ;)
          */
         fornecedoresRef.addValueEventListener(new ValueEventListener() {
+            boolean tries = false;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -127,7 +129,25 @@ public class CadastrarProduto extends AppCompatActivity {
                     fornecedor.setImagem(snapshot.getKey());
                     fornecedores.add(fornecedor);
                 }
-
+                if (fornecedores.size() <= 0) {
+                    AlertDialog.Builder erro = new AlertDialog.Builder(CadastrarProduto.this);
+                    erro.setMessage("Nenhum fornecedor cadastrado!!");
+                    erro.setPositiveButton("Criar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(CadastrarProduto.this, CadastrarFornecedor.class);
+                            startActivity(i);
+                        }
+                    });
+                    erro.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    erro.show();
+                    return;
+                }
                 spinnerFornecedores.setItems(fornecedores);
             }
 

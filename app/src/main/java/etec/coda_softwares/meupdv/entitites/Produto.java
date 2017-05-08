@@ -1,8 +1,12 @@
 package etec.coda_softwares.meupdv.entitites;
 
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,17 +25,19 @@ public class Produto implements Serializable {
     private String nome = "";
     private BigDecimal valor = new BigDecimal(0);
     private int quantidade = 0;
+    private Fornecedor fornecedor;
     private String codDBarras = "";
 
     public Produto() {
-        this("", 0.0, 1, "");
+        this("", 0.0, 1, "", new Fornecedor());
     }
 
-    public Produto(String nome, double valor, int quantidade, String codDBarras) {
+    public Produto(String nome, double valor, int quantidade, String codDBarras, Fornecedor f) {
         this.nome = nome;
         this.valor = new BigDecimal(valor);
         this.valor = this.valor.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.quantidade = quantidade;
+        this.fornecedor = f;
         this.codDBarras = codDBarras;
     }
 
@@ -71,5 +77,39 @@ public class Produto implements Serializable {
 
     public void setCodDBarras(String codDBarras) {
         this.codDBarras = codDBarras;
+    }
+
+    @Exclude
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    @Exclude
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    public String getFornecedorId() {
+        if (fornecedor == null) return "";
+        return fornecedor.getId();
+    }
+
+    public void setFornecedorId(String id) {
+        Fornecedor.DBROOT.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                fornecedor = dataSnapshot.getValue(Fornecedor.class);
+                if (fornecedor == null) {
+                    FirebaseCrash.log("Fornecedor carregado nulo");
+                    System.exit(1);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                FirebaseCrash.report(databaseError.toException());
+                System.exit(1);
+            }
+        });
     }
 }

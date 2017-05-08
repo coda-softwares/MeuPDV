@@ -63,8 +63,8 @@ public class Produtos extends AppCompatActivity {
 
         List testValues = new ArrayList();
 
-        testValues.add(new Produto("Maçã", 1.5, 25, "334254245"));
-        testValues.add(new Produto("Pera", .5, 35, "735287580"));
+        testValues.add(new Produto("Maçã", 1.5, 25, "334254245", null));
+        testValues.add(new Produto("Pera", .5, 35, "735287580", null));
 
         refProdutos.setValue(testValues).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
