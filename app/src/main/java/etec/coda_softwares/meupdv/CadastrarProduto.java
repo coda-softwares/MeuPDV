@@ -132,6 +132,7 @@ public class CadastrarProduto extends AppCompatActivity {
                 if (fornecedores.size() <= 0) {
                     AlertDialog.Builder erro = new AlertDialog.Builder(CadastrarProduto.this);
                     erro.setMessage("Nenhum fornecedor cadastrado!!");
+                    erro.setCancelable(false);
                     erro.setPositiveButton("Criar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

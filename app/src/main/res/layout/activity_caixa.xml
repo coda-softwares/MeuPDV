@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="etec.coda_softwares.meupdv.Caixa">
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/caixa_leitor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/caixa_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00ffffff"
+        android:gravity="top" />
+
+
+    <ImageButton
+        android:id="@+id/caixa_confirma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:backgroundTint="#64dd17"
+        android:padding="13dp"
+        android:src="@drawable/ic_certo"
+        android:tint="#000000" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="18dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:cardBackgroundColor="#e0e0e0"
+        app:cardCornerRadius="3dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingEnd="3dp"
+            android:paddingRight="3dp">
+
+            <ImageButton
+                android:id="@+id/caixa_desfaz"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_undo" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:background="#808080" />
+
+            <NumberPicker
+                android:id="@+id/caixa_quantidade"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
