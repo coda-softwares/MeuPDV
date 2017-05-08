@@ -1,9 +1,11 @@
 package etec.coda_softwares.meupdv.entitites;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import etec.coda_softwares.meupdv.TelaInicial;
 
@@ -17,45 +19,22 @@ public class Produto implements Serializable {
 
     // Não utilizar imagem ainda
     private String nome = "";
-    private double valor = 0;
+    private BigDecimal valor = new BigDecimal(0);
     private int quantidade = 0;
-    private int codDBarras = 0;
+    private String codDBarras = "";
 
-    public Produto(){}
-    public Produto(String nome, double valor, int quantidade, int codDBarras){
+    public Produto() {
+        this("", 0.0, 1, "");
+    }
+
+    public Produto(String nome, double valor, int quantidade, String codDBarras) {
         this.nome = nome;
-        this.valor = valor;
+        this.valor = new BigDecimal(valor);
+        this.valor = this.valor.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.quantidade = quantidade;
         this.codDBarras = codDBarras;
     }
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Produto produto = (Produto) o;
-
-        if (Double.compare(produto.valor, valor) != 0) return false;
-        if (quantidade != produto.quantidade) return false;
-        if (codDBarras != produto.codDBarras) return false;
-        return nome != null ? nome.equals(produto.nome) : produto.nome == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = nome != null ? nome.hashCode() : 0;
-        temp = Double.doubleToLongBits(valor);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + quantidade;
-        result = 31 * result + codDBarras;
-        return result;
-    }
 
     public String getNome() {
         return nome;
@@ -63,14 +42,6 @@ public class Produto implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
     }
 
     public int getQuantidade() {
@@ -81,11 +52,24 @@ public class Produto implements Serializable {
         this.quantidade = quantidade;
     }
 
-    public int getCodDBarras() {
+    public String getValor() {
+        return valor.toPlainString();
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    @Exclude
+    public BigDecimal getValorReal() {
+        return valor;
+    }
+
+    public String getCodDBarras() {
         return codDBarras;
     }
 
-    public void setCodDBarras(int codDBarras) {
+    public void setCodDBarras(String codDBarras) {
         this.codDBarras = codDBarras;
     }
 }

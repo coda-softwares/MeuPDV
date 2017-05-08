@@ -3,35 +3,26 @@ package etec.coda_softwares.meupdv;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.drawable.DrawableWrapper;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -42,13 +33,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
+import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class CadastrarProduto extends AppCompatActivity {
     public static final int REQ_IMG = 1547;
+    Date validade;
+    MaterialSpinner spinnerFornecedores;
+    EditText campoNome, campoQuantidade, campoValor, campoCdDBarras;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
@@ -57,12 +52,30 @@ public class CadastrarProduto extends AppCompatActivity {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // Test
-                Toast.makeText(CadastrarProduto.this, "Id Fornecedor: "+getSelectedFornecedor().getImagem(),
-                        Toast.LENGTH_LONG).show();
-
                 // Checar campos
+                String nomeProd = Util.lerString(campoNome).trim();
+                int quantidade = (int) Util.lerDouble(campoQuantidade);
+                Fornecedor f = getSelectedFornecedor();
+                double preco = Util.lerDouble(campoValor);
+                String cdgBarras = Util.lerString(campoCdDBarras).trim();
+                Util.verificarStringsVazias(nomeProd, cdgBarras);
 
+                if (cdgBarras.length() < 8) {
+                    Util.showToast(CadastrarProduto.this, "Codigo de barras muito curto");
+                    return true;
+                }
+                if (preco <= 0) {
+                    return true;
+                }
+                if (quantidade <= 0) {
+                    Util.showToast(CadastrarProduto.this, "Quantidade tem que ser maior que zero");
+                    return true;
+                }
+
+                Produto prod = new Produto(nomeProd, preco, quantidade, cdgBarras);
+                DatabaseReference referencia = Produto.DBROOT.child(cdgBarras + "");
+
+                referencia.setValue(prod);
                 // salvar no banco
                 return true;
             }
@@ -70,9 +83,6 @@ public class CadastrarProduto extends AppCompatActivity {
         return true;
     }
 
-    Date validade;
-    MaterialSpinner spinnerFornecedores;
-    EditText campoNome, campoQuantidade, campoValor, campoCdDBarras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

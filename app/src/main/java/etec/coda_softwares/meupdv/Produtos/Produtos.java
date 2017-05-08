@@ -9,19 +9,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseIndexListAdapter;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.CadastrarProduto;
@@ -67,8 +63,8 @@ public class Produtos extends AppCompatActivity {
 
         List testValues = new ArrayList();
 
-        testValues.add(new Produto("Maçã", 1.5, 25, 334254245));
-        testValues.add(new Produto("Pera", .5, 35, 735287580));
+        testValues.add(new Produto("Maçã", 1.5, 25, "334254245"));
+        testValues.add(new Produto("Pera", .5, 35, "735287580"));
 
         refProdutos.setValue(testValues).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
