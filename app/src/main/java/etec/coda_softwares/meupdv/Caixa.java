@@ -55,6 +55,26 @@ public class Caixa extends AppCompatActivity {
         }
     };
 
+    private void nenhumProduto() {
+        AlertDialog.Builder erro = new AlertDialog.Builder(Caixa.this);
+        erro.setMessage("Nenhum produto foi cadastrado ainda.");
+        erro.setCancelable(false);
+        erro.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Caixa.this.finish();
+            }
+        });
+        erro.setPositiveButton("Criar novo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Caixa.this, CadastrarProduto.class));
+            }
+        });
+        erro.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +93,6 @@ public class Caixa extends AppCompatActivity {
 
         leitor = (DecoratedBarcodeView) findViewById(R.id.caixa_leitor);
         leitor.setStatusText("Carregando...");
-        leitor.decodeSingle(null);
 
         Produto.DBROOT.addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,26 +100,14 @@ public class Caixa extends AppCompatActivity {
                 GenericTypeIndicator<Map<String, Produto>> tipo =
                         new GenericTypeIndicator<Map<String, Produto>>() {
                         };
+                long time = System.currentTimeMillis();
                 produtos = dataSnapshot.getValue(tipo);
+                long total = System.currentTimeMillis() - time;
+
+                Util.showToast(Caixa.this, "Lido com " + total + " millisegundos");
 
                 if (produtos == null) {
-                    AlertDialog.Builder erro = new AlertDialog.Builder(Caixa.this);
-                    erro.setMessage("Nenhum produto foi cadastrado ainda.");
-                    erro.setCancelable(false);
-                    erro.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            Caixa.this.finish();
-                        }
-                    });
-                    erro.setPositiveButton("Criar novo", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Caixa.this, CadastrarProduto.class));
-                        }
-                    });
-                    erro.show();
+                    nenhumProduto();
                     return;
                 }
 
