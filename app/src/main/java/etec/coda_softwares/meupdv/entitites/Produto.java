@@ -62,13 +62,13 @@ public class Produto implements Serializable {
         return valor.toPlainString();
     }
 
-    public void setValor(String valor) {
-        this.valor = new BigDecimal(valor);
-    }
-
     @Exclude
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = new BigDecimal(valor);
     }
 
     @Exclude
@@ -116,5 +116,31 @@ public class Produto implements Serializable {
                 System.exit(1);
             }
         });
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Produto produto = (Produto) o;
+
+        if (quantidade != produto.quantidade) return false;
+        if (!nome.equals(produto.nome)) return false;
+        if (valor != null ? !valor.equals(produto.valor) : produto.valor != null) return false;
+        if (fornecedor != null ? !fornecedor.equals(produto.fornecedor) : produto.fornecedor != null)
+            return false;
+        return codDBarras.equals(produto.codDBarras);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = nome.hashCode();
+        result = 31 * result + (valor != null ? valor.hashCode() : 0);
+        result = 31 * result + quantidade;
+        result = 31 * result + (fornecedor != null ? fornecedor.hashCode() : 0);
+        result = 31 * result + codDBarras.hashCode();
+        return result;
     }
 }
