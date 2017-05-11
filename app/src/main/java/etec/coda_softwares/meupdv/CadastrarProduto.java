@@ -25,7 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.text.DateFormat;
@@ -38,11 +37,18 @@ import java.util.List;
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
 import etec.coda_softwares.meupdv.entitites.Produto;
 
+import static etec.coda_softwares.meupdv.Util.REQUEST_FOTO;
+import static etec.coda_softwares.meupdv.Util.REQ_IMG;
+
 public class CadastrarProduto extends AppCompatActivity {
-    public static final int REQ_IMG = 1547;
-    Date validade;
-    MaterialSpinner spinnerFornecedores;
     EditText campoNome, campoQuantidade, campoValor, campoCdDBarras;
+    private boolean newImage = false;
+    Uri image;
+
+    MaterialSpinner spinnerFornecedores;
+    ImageView ivFoto;
+    Date validade;
+    Produto old;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,7 +78,7 @@ public class CadastrarProduto extends AppCompatActivity {
                     return true;
                 }
 
-                Produto prod = new Produto(nomeProd, preco, quantidade, cdgBarras, f);
+                Produto prod = new Produto(nomeProd, validade, preco, quantidade, cdgBarras, f);
                 DatabaseReference referencia = Produto.DBROOT.child(cdgBarras + "");
 
                 referencia.setValue(prod);
@@ -83,7 +89,6 @@ public class CadastrarProduto extends AppCompatActivity {
         });
         return true;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +103,28 @@ public class CadastrarProduto extends AppCompatActivity {
         campoValor = (EditText) findViewById(R.id.prod_valor);
         campoCdDBarras = (EditText) findViewById(R.id.prod_barras);
         spinnerFornecedores = (MaterialSpinner) findViewById(R.id.lista_fornecedores_spineer);
+
+        // Instanciado só aqui pois é o unico lugar onde é utilizado
+        EditText campoValidade = (EditText) findViewById(R.id.prod_validade);
+
+        old = (Produto) getIntent().getSerializableExtra("produto");
+        if (old != null) {
+            campoNome.setText(old.getNome());
+            campoValidade.setText(old.getValidade().toString());
+            campoQuantidade.setText(old.getQuantidade());
+            campoValor.setText(old.getValor());
+            campoCdDBarras.setText(old.getCodDBarras());
+            if (old.hasImagem()) {
+                TelaInicial.getFile(old.getImagem(), new TelaInicial.UriCallback() {
+                    @Override
+                    void done(Uri u) {
+                        ivFoto.setPadding(0, 0, 0, 0);
+                        image = u;
+                        ivFoto.setImageURI(u);
+                    }
+                });
+            }
+        }
 
         beautifySpinner();
 
@@ -165,6 +192,9 @@ public class CadastrarProduto extends AppCompatActivity {
         return  (Fornecedor)spinnerFornecedores.getItems().get(spinnerFornecedores.getSelectedIndex());
     }
 
+    /**
+     * Adiciona utilidade para selecionar a validade facilmente
+     */
     private void setupValidade() {
         final EditText quant = (EditText) findViewById(R.id.prod_quant);
         final EditText data = (EditText) findViewById(R.id.prod_validade);
@@ -208,21 +238,18 @@ public class CadastrarProduto extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQ_IMG) {
-                ImageView img = (ImageView) findViewById(R.id.prod_image);
-                img.setImageURI((Uri) data.getParcelableExtra("imagem"));
-            }
-            IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (barcode == null) return;
-            campoCdDBarras.setText(barcode.getContents());
-        }
+    public void addFoto(View v) {
+        startActivityForResult(new Intent(this, CarregarImagem.class), REQ_IMG);
     }
 
-    public void novaImgProduto(View v) {
-        startActivityForResult(new Intent(this, CarregarImagem.class), REQ_IMG);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_FOTO) {
+                newImage = true;
+                image = data.getParcelableExtra("imagem");
+                ivFoto.setPadding(0,0,0,0);
+                ivFoto.setImageURI(image);
+        }
     }
 
     public void carregarCodBarras(View v) {

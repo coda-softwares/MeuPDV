@@ -10,6 +10,10 @@ import android.widget.Toast;
 
 public class Util {
 
+    public static final int REQ_IMG = 1547;
+    public static final int REQUEST_FOTO = 598;
+    public static final String NO_IMG = "$NOIMG$";
+
     public static String lerString(EditText view) {
         return view.getText().toString();
     }

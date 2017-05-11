@@ -17,9 +17,8 @@ import org.apmem.tools.layouts.FlowLayout;
 import java.util.Arrays;
 import java.util.List;
 
-import etec.coda_softwares.meupdv.CadastrarProduto;
 import etec.coda_softwares.meupdv.Fornecedores;
-import etec.coda_softwares.meupdv.Produtos.Produtos;
+import etec.coda_softwares.meupdv.Produtos;
 import etec.coda_softwares.meupdv.R;
 
 public class MenuPrincipal extends AppCompatActivity {

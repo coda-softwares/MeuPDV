@@ -34,11 +34,11 @@
         <activity
             android:name=".CadastrarProduto"
             android:label="@string/title_activity_cadastrar_produto"
-            android:parentActivityName=".Produtos.Produtos"
+            android:parentActivityName=".Produtos"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="etec.coda_softwares.meupdv.Produtos.Produtos" />
+                android:value="etec.coda_softwares.meupdv.Produtos" />
         </activity>
         <activity
             android:name=".CadastrarFornecedor"
@@ -57,7 +57,7 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".Produtos.Produtos"
+            android:name=".Produtos"
             android:label="@string/title_activity_produtos"
             android:parentActivityName=".menuPrincipal.MenuPrincipal"
             android:screenOrientation="portrait">
@@ -68,7 +68,7 @@
         <activity
             android:name=".DetalhesProduto"
             android:label="@string/title_activity_produto"
-            android:parentActivityName=".Produtos.Produtos"
+            android:parentActivityName=".Produtos"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Fornecedores"

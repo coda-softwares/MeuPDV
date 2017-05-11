@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import etec.coda_softwares.meupdv.CadastrarFornecedor;
 import etec.coda_softwares.meupdv.TelaInicial;
+import etec.coda_softwares.meupdv.Util;
 
 /**
  * Classe para represntar o fornecedor no bando de dados.
@@ -88,7 +88,7 @@ public class Fornecedor implements Serializable {
     }
 
     public boolean hasImagem() {
-        return !imagem.contains(CadastrarFornecedor.NO_IMG);
+        return !imagem.contains(Util.NO_IMG);
     }
 
     public String getImagem() {
