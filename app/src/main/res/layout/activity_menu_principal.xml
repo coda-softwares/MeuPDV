@@ -16,7 +16,6 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/mp_toolbar"
-            style="@style/AppTheme.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/title_activity_menu_principal" />

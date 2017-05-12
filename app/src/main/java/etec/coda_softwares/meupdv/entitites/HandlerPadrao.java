@@ -10,7 +10,7 @@ import com.google.firebase.database.Transaction;
  * Created by dovahkiin on 28/04/17.
  */
 
-abstract class HandlerPadrao implements Transaction.Handler {
+public abstract class HandlerPadrao implements Transaction.Handler {
     Runnable after;
 
     public HandlerPadrao(Runnable r) {

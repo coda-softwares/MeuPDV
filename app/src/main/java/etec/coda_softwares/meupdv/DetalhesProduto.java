@@ -1,11 +1,8 @@
 package etec.coda_softwares.meupdv;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 // Esta atividade servira para mostrar informações especificas do produto
 public class DetalhesProduto extends AppCompatActivity {
@@ -18,9 +15,9 @@ public class DetalhesProduto extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Terminar o XML em base aos extras
-        String nome = savedInstanceState.getString("nome");
-        String valor = savedInstanceState.getString("valor");
-        String cdDBarras = savedInstanceState.getString("cdDBarras");
+        String nome = getIntent().getStringExtra("nome");
+        String valor = getIntent().getStringExtra("valor");
+        String cdDBarras = getIntent().getStringExtra("cdDBarras");
 
         toolbar.setTitle(nome);
     }

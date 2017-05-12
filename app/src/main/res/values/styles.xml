@@ -1,44 +1,27 @@
 <resources>
-    <style name="AppTheme.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/primaria</item>
-        <item name="titleTextAppearance">@style/AppTheme.Toolbar.text</item>
-    </style>
 
-    <style name="AppTheme.Toolbar.text" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">#e0e0e0</item>
-    </style>
-
-    <style name="AppTheme.NoBar" parent="Theme.AppCompat.Light.NoActionBar">
-
+    <style name="TemaPadrao" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:homeAsUpIndicator">@drawable/ic_voltar</item>
-        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
-        <!-- Customize your theme here. -->
 
-        <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--Cores-->
+        <item name="colorPrimary">@color/primaria</item>
+        <item name="colorPrimaryDark">@color/secundaria</item>
+        <item name="colorAccent">@color/acento</item>
 
-        <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-
-        <!-- colorAccent is used as the default value for colorControlActivated
-             which is used to tint widgets -->
-        <item name="colorAccent">@color/colorPrimaryDark</item>
-
-        <!-- You can also set colorControlNormal, colorControlActivated
-             colorControlHighlight & colorSwitchThumbNormal. -->
+        <item name="toolbarStyle">@style/TemaPadrao.Barra</item>
     </style>
 
-    <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:color">@color/primaria</item>
-        <!-- Customize your theme here. -->
+    <style name="TemaPadrao.ComBarra">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
 
-    <style name="textaum" parent="@android:style/TextAppearance.Holo.Medium">
-        <item name="android:textSize">13sp</item>
+    <style name="TemaPadrao.Barra" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/primaria</item>
+        <item name="titleTextAppearance">@style/TemaPadrao.Barra.Titulo</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="TemaPadrao.Barra.Titulo" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">#ffffff</item>
+    </style>
 </resources>

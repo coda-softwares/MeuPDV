@@ -6,7 +6,7 @@
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
     <!-- MenuPrincipal -->
-    <string name="title_activity_menu_principal">Menu Principal</string>
+    <string name="title_activity_menu_principal">@string/app_name</string>
     <string name="sair">Fechar</string>
 
     <!-- Produto -->
@@ -57,4 +57,5 @@
     <!--bug android studio-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+    <string name="title_activity_pos_caixa">Confirmar Produtos</string>
 </resources>

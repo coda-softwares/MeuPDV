@@ -2,33 +2,25 @@ package etec.coda_softwares.meupdv.Produtos;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import etec.coda_softwares.meupdv.CadastrarProduto;
 import etec.coda_softwares.meupdv.DetalhesProduto;
 import etec.coda_softwares.meupdv.R;
-import etec.coda_softwares.meupdv.TelaInicial;
 import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class Produtos extends AppCompatActivity {
@@ -89,16 +81,16 @@ public class Produtos extends AppCompatActivity {
                 TextView valor = (TextView) v.findViewById(R.id.prod_valor);
                 valor.setText(model.getValor());
 
-                Button button = (Button) v.findViewById(R.id.prod_button);
+                ImageButton button = (ImageButton) v.findViewById(R.id.prod_button);
 
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(Produtos.this, DetalhesProduto.class);
 
-                        intent.getExtras().putString("nome", model.getNome());
-                        intent.getExtras().putString("valor", model.getValor());
-                        intent.getExtras().putString("cdDBarras", model.getCodDBarras());
+                        intent.putExtra("nome", model.getNome());
+                        intent.putExtra("valor", model.getValor());
+                        intent.putExtra("cdDBarras", model.getCodDBarras());
 
                         view.getContext().startActivity(intent);
                     }

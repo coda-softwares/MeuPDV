@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 
 import com.google.firebase.crash.FirebaseCrash;
@@ -30,7 +32,9 @@ import java.util.Stack;
 import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class Caixa extends AppCompatActivity {
-    private Produto lastProduto = new Produto();
+    public static final int REQ_CAIXA = 7847;
+    private Produto dummy = new Produto("$$$DUMMY", 0, 0, "", null);
+    private Produto lastProduto = dummy;
     private DecoratedBarcodeView leitor;
     private Map<String, Produto> produtos;
     private Stack<Produto> carrinho;
@@ -48,6 +52,7 @@ public class Caixa extends AppCompatActivity {
             }
 
             String res = result.getText(); // Nunca será nulo.
+            Util.showToast(Caixa.this, "Código de barras " + res + " lido!");
 
             Produto produto = produtos.get(res);
 
@@ -60,10 +65,17 @@ public class Caixa extends AppCompatActivity {
                 return;
             }
 
-            String anterior = "";
             int total = quantidade.getValue();
-            lastProduto.setQuantidade(total);
-            carrinho.push(lastProduto);
+            quantidade.setMaxValue(produto.getQuantidade());
+
+            String anterior = "";
+            if (!lastProduto.getNome().equals(dummy.getNome())) {
+                lastProduto.setQuantidade(total);
+                carrinho.push(lastProduto);
+            } else {
+                quantidade.setValue(1);
+                quantidade.setMinValue(1);
+            }
 
             if (carrinho.size() >= 2) {
                 anterior = total + " " + lastProduto.getNome() + " adicionados ao carrinho e\n";
@@ -71,6 +83,7 @@ public class Caixa extends AppCompatActivity {
 
             quantidade.setValue(1);
             lastProduto = produto;
+            lastProduto.setCodDBarras(res);
 
             leitor.setStatusText(anterior + produto.getNome() + " lido com sucesso.");
         }
@@ -96,10 +109,24 @@ public class Caixa extends AppCompatActivity {
         erro.setPositiveButton("Criar novo", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Caixa.this, CadastrarProduto.class));
+                startActivityForResult(new Intent(Caixa.this, CadastrarProduto.class), REQ_CAIXA);
             }
         });
         erro.show();
+    }
+
+    private void finalizarCompra() {
+        if (carrinho.isEmpty() && lastProduto.getNome().equals(dummy.getNome())) {
+            Util.showToast(this, "Nenhum produto escaneado...");
+            return;
+        }
+        int total = quantidade.getValue();
+        lastProduto.setQuantidade(total);
+        carrinho.push(lastProduto);
+        Intent fim = new Intent(this, PosCaixa.class);
+        fim.putExtra("carrinho", carrinho); // Stack é serializavel.
+        startActivity(fim);
+        finish();
     }
 
     @Override
@@ -114,9 +141,17 @@ public class Caixa extends AppCompatActivity {
         carrinho = new Stack<>();
 
         quantidade = (NumberPicker) findViewById(R.id.caixa_quantidade);
-        quantidade.setMaxValue(100);
-        quantidade.setValue(1);
-        quantidade.setMinValue(1);
+        quantidade.setValue(0);
+        quantidade.setMaxValue(0);
+        quantidade.setMinValue(0);
+
+        ImageButton confirma = (ImageButton) findViewById(R.id.caixa_confirma);
+        confirma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalizarCompra();
+            }
+        });
 
         leitor = (DecoratedBarcodeView) findViewById(R.id.caixa_leitor);
         leitor.setStatusText("Carregando...");
@@ -154,8 +189,29 @@ public class Caixa extends AppCompatActivity {
     }
 
     public void removerUltimoProduto(View v) {
+        if (carrinho.empty()) {
+            leitor.setStatusText("Lista de produtos vazia");
+            return;
+        }
         Produto fora = carrinho.pop();
         leitor.setStatusText(fora.getNome() + " foi removido da lista");
+        if (carrinho.empty()) {
+            lastProduto = dummy;
+            quantidade.setMinValue(0);
+            quantidade.setValue(0);
+            quantidade.setMaxValue(0);
+            return;
+        }
+        quantidade.setValue(0);
+        quantidade.setMaxValue(carrinho.peek().getQuantidade());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQ_CAIXA) {
+            finish();
+        }
+        //TODO outros codigos de resultado.
     }
 
     @Override
@@ -178,5 +234,11 @@ public class Caixa extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         produtos = null;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        leitor.onKeyDown(keyCode, event);
+        return super.onKeyDown(keyCode, event);
     }
 }

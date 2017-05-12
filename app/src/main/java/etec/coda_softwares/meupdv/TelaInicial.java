@@ -160,7 +160,7 @@ public class TelaInicial extends AppCompatActivity {
         if (auth.getCurrentUser() == null) {
             AuthUI.SignInIntentBuilder aui = AuthUI.getInstance().createSignInIntentBuilder();
             aui.setLogo(R.drawable.ic_meupdv);
-            aui.setTheme(R.style.AppTheme_NoBar);
+            aui.setTheme(R.style.TemaPadrao);
             aui.setAllowNewEmailAccounts(true);
             aui.setProviders(Arrays.asList(
                     new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),

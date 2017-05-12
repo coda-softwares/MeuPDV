@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/primaria</color>
-    <color name="colorPrimaryDark">#4527a0</color>
-    <color name="colorAccent">@color/acento</color>
-
     <color name="primaria">#512da8</color>
     <color name="secundaria">#5c6bc0</color>
-    <color name="acento">#efebe9</color>
+    <color name="acento">#00e5ff</color>
 
     <!-- Cor do texto de preço -->
-    <color name="cor_preco">#fff721</color>
+    <color name="cor_preco">#64dd17</color>
     <color name="border_preco">#2E2E2E</color>
 </resources>
