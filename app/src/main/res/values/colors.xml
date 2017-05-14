@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaria">#512da8</color>
-    <color name="secundaria">#5c6bc0</color>
-    <color name="acento">#00e5ff</color>
+    <color name="primaria">#fdd835</color>
+    <color name="secundaria">#c6a700</color>
+    <color name="acento">#c6a700</color>
 
     <!-- Cor do texto de preço -->
     <color name="cor_preco">#64dd17</color>

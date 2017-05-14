@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
@@ -73,7 +75,8 @@ public class Fornecedores extends AppCompatActivity {
                     i.putExtra("fornecedor", item);
                     startActivity(i);
                 } else if (opcao.equalsIgnoreCase("apagar")) {
-                    TelaInicial.eraseFile(item.getImagem());
+                    if (item.hasImagem())
+                        TelaInicial.eraseFile(item.getImagem());
                     Fornecedor.DBROOT.child(item.getId()).setValue(null);
                 }
             }
@@ -96,7 +99,6 @@ public class Fornecedores extends AppCompatActivity {
 
                 TextView titulo = (TextView) v.findViewById(R.id.fornecedor_item_nome),
                         telefone = (TextView) v.findViewById(R.id.fornecedor_item_telefone);
-
                 // Menu de contexo.
                 v.setLongClickable(true);
                 v.setOnLongClickListener(new View.OnLongClickListener() {
@@ -119,8 +121,16 @@ public class Fornecedores extends AppCompatActivity {
                 } else {
                     cImg.setImageResource(R.drawable.ic_def_fornecedor);
                 }
+                model.setId(this.getRef(position).getKey());
                 titulo.setText(model.getNome());
-                telefone.setText(model.getTelefones().get(0));
+                PhoneNumberUtil ut = PhoneNumberUtil.getInstance();
+                Phonenumber.PhoneNumber number;
+                try {
+                    number = ut.parse(model.getTelefones().get(0), "BR");
+                    telefone.setText(ut.format(number, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
+                } catch (NumberParseException e) {
+                    telefone.setText(model.getTelefones().get(0));
+                }
             }
         };
         list.setAdapter(adapter);

@@ -76,7 +76,7 @@
                 android:layout_weight="1"
                 android:hint="@string/fornecedor_email"
                 android:inputType="text|textEmailAddress"
-                android:maxLength="40" />
+                android:maxLength="60" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/fornecedor_telefone"
-                android:inputType="number|phone" />
+                android:inputType="phone"
+                android:maxLength="20" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 </LinearLayout>

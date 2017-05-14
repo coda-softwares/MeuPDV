@@ -1,7 +1,7 @@
 <resources>
 
     <style name="TemaPadrao" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:homeAsUpIndicator">@drawable/ic_voltar</item>
+        <!--<item name="android:homeAsUpIndicator">@drawable/ic_voltar</item>-->
 
         <!--Cores-->
         <item name="colorPrimary">@color/primaria</item>
@@ -18,10 +18,5 @@
 
     <style name="TemaPadrao.Barra" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/primaria</item>
-        <item name="titleTextAppearance">@style/TemaPadrao.Barra.Titulo</item>
-    </style>
-
-    <style name="TemaPadrao.Barra.Titulo" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">#ffffff</item>
     </style>
 </resources>

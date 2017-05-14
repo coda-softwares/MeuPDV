@@ -30,7 +30,7 @@ public class Fornecedor implements Serializable {
 
     public Fornecedor(String nome, String email, List<String> telefones) {
         ultimaModificacao = System.currentTimeMillis();
-        this.telefones = telefones;
+        setTelefones(telefones);
         this.email = email;
         this.nome = nome;
     }
@@ -39,6 +39,13 @@ public class Fornecedor implements Serializable {
     public String getId() {
         String[] path = imagem.split("/");
         return path[path.length - 1].replace(".jpg", "");
+    }
+
+    @Exclude
+    public void setId(String id) {
+        if (!getId().equals("") && !imagem.equals(""))
+            return;
+        imagem = CadastrarFornecedor.NO_IMG + "/" + id;
     }
 
     /**
@@ -54,8 +61,12 @@ public class Fornecedor implements Serializable {
         return telefones;
     }
 
-    public void setTelefones(ArrayList<String> telefones) {
-        this.telefones = telefones;
+    public void setTelefones(List<String> telefones) {
+        ArrayList<String> formatted = new ArrayList<>(telefones.size());
+        for (String tel : telefones) {
+            formatted.add(tel.replaceAll("\\(|-|\\)| |\t|\\+", ""));
+        }
+        this.telefones = formatted;
     }
 
     public String formatEmail() {
@@ -88,7 +99,7 @@ public class Fornecedor implements Serializable {
     }
 
     public boolean hasImagem() {
-        return !imagem.contains(CadastrarFornecedor.NO_IMG);
+        return !imagem.contains(CadastrarFornecedor.NO_IMG) && !imagem.equals("");
     }
 
     public String getImagem() {

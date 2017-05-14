@@ -63,9 +63,14 @@ public class CadastrarFornecedor extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     return true;
                 }
+                telefone = telefone.replaceAll("\\D", "");
                 if (telefone.equals("")) {
                     Toast.makeText(CadastrarFornecedor.this, R.string.telefone_vazio,
                             Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                if (telefone.length() < 8) {
+                    Util.showToast(CadastrarFornecedor.this, "Telefone muito curto");
                     return true;
                 }
                 createFornecedor(nome, email, Collections.singletonList(telefone));

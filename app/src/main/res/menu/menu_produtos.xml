@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/menu_produtos_add"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_mais"
         android:showAsAction="always"
         android:title="@string/produto_novo"
         tools:ignore="AppCompatResource" />

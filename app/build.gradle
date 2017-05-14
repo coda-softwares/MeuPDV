@@ -35,6 +35,8 @@ dependencies {
     compile 'com.jaredrummler:material-spinner:1.1.0'
     // Retirar se possivel
     compile 'com.github.rey5137:material:1.2.4'
+    // com/googlecode/libphonenumber/libphonenumber/8.4.3
+    compile 'com.googlecode.libphonenumber:libphonenumber:8.4.3'
 
     //Bibliotecas android versão antiga por causa do firebase
     compile 'com.android.support:appcompat-v7:25.1.1'
