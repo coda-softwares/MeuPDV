@@ -39,6 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
+            android:shadowColor="@color/border_preco"
+            android:shadowRadius="3"
             android:text="R$2.50"
             android:textColor="@color/cor_preco"
             android:textSize="22sp" />

@@ -19,7 +19,7 @@ import java.util.List;
 
 import etec.coda_softwares.meupdv.Caixa;
 import etec.coda_softwares.meupdv.Fornecedores;
-import etec.coda_softwares.meupdv.Produtos.Produtos;
+import etec.coda_softwares.meupdv.Produtos;
 import etec.coda_softwares.meupdv.R;
 
 public class MenuPrincipal extends AppCompatActivity {

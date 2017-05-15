@@ -10,8 +10,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import etec.coda_softwares.meupdv.TelaInicial;
+import etec.coda_softwares.meupdv.Util;
 
 /**
  * Created by jeffbustercase on 06/05/17.
@@ -21,24 +23,31 @@ public class Produto implements Serializable {
     public static final DatabaseReference DBROOT = FirebaseDatabase.getInstance()
             .getReference("pdv").child(TelaInicial.getCurrentPdv().getId()).child("produtos");
 
-    // Não utilizar imagem ainda
     private String nome = "";
+    private Date validade = new Date();
     private BigDecimal valor = new BigDecimal(0);
     private int quantidade = 0;
-    private Fornecedor fornecedor;
+    private Fornecedor fornecedor = new Fornecedor();
     private String codDBarras = "";
+    private String imagem = "";
+    private long ultimaModificacao;
+
+    /**
+     * Não criar getter e setter de validade. A validade funcionara em grupos.
+     */
 
     public Produto() {
-        this("", 0.0, 1, "", new Fornecedor());
+        ultimaModificacao = System.currentTimeMillis();
     }
 
-    public Produto(String nome, double valor, int quantidade, String codDBarras, Fornecedor f) {
+    public Produto(String nome, Date validade, double valor, int quantidade, String codDBarras, Fornecedor f) {
         this.nome = nome;
-        this.valor = new BigDecimal(valor);
+        this.validade = validade;
         this.valor = this.valor.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.quantidade = quantidade;
         this.fornecedor = f;
         this.codDBarras = codDBarras;
+        ultimaModificacao = System.currentTimeMillis();
     }
 
 
@@ -49,6 +58,24 @@ public class Produto implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public boolean hasImagem(){
+        return !imagem.contains(Util.NO_IMG);
+    }
+    public String getImagem() {
+        if (!hasImagem())
+            return "";
+        else
+            return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public Date getValidade() { return validade; }
+
+    public void setValidade(Date validade) { this.validade = validade; }
 
     public int getQuantidade() {
         return quantidade;
