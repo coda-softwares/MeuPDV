@@ -32,10 +32,6 @@ public class Produto implements Serializable {
     private String imagem = "";
     private long ultimaModificacao;
 
-    /**
-     * Não criar getter e setter de validade. A validade funcionara em grupos.
-     */
-
     public Produto() {
         ultimaModificacao = System.currentTimeMillis();
     }
@@ -43,6 +39,7 @@ public class Produto implements Serializable {
     public Produto(String nome, Date validade, double valor, int quantidade, String codDBarras, Fornecedor f) {
         this.nome = nome;
         this.validade = validade;
+        this.valor = new BigDecimal(valor);
         this.valor = this.valor.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.quantidade = quantidade;
         this.fornecedor = f;

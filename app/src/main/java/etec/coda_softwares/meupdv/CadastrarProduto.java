@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.text.DateFormat;
@@ -111,9 +112,9 @@ public class CadastrarProduto extends AppCompatActivity {
         if (old != null) {
             campoNome.setText(old.getNome());
             campoValidade.setText(old.getValidade().toString());
-            campoQuantidade.setText(old.getQuantidade());
-            campoValor.setText(old.getValor());
-            campoCdDBarras.setText(old.getCodDBarras());
+            campoQuantidade.setText(old.getQuantidade()+"");
+            campoValor.setText(old.getValor()+"");
+            campoCdDBarras.setText(old.getCodDBarras()+"");
             if (old.hasImagem()) {
                 TelaInicial.getFile(old.getImagem(), new TelaInicial.UriCallback() {
                     @Override
@@ -245,11 +246,16 @@ public class CadastrarProduto extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_FOTO) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_FOTO) {
                 newImage = true;
                 image = data.getParcelableExtra("imagem");
-                ivFoto.setPadding(0,0,0,0);
+                ivFoto.setPadding(0, 0, 0, 0);
                 ivFoto.setImageURI(image);
+            }
+            IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (barcode == null) return;
+            campoCdDBarras.setText(barcode.getContents());
         }
     }
 

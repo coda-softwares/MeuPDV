@@ -45,7 +45,7 @@ public class Fornecedor implements Serializable {
     public void setId(String id) {
         if (!getId().equals("") && !imagem.equals(""))
             return;
-        imagem = CadastrarFornecedor.NO_IMG + "/" + id;
+        imagem = Util.NO_IMG + "/" + id;
     }
 
     /**
@@ -99,7 +99,7 @@ public class Fornecedor implements Serializable {
     }
 
     public boolean hasImagem() {
-        return !imagem.contains(CadastrarFornecedor.NO_IMG) && !imagem.equals("");
+        return !imagem.contains(Util.NO_IMG) && !imagem.equals("");
     }
 
     public String getImagem() {

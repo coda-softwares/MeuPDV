@@ -25,6 +25,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -33,7 +34,7 @@ import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class Caixa extends AppCompatActivity {
     public static final int REQ_CAIXA = 7847;
-    private Produto dummy = new Produto("$$$DUMMY", 0, 0, "", null);
+    private Produto dummy = new Produto("$$$DUMMY", new Date(), 0, 0, "", null);
     private Produto lastProduto = dummy;
     private DecoratedBarcodeView leitor;
     private Map<String, Produto> produtos;
