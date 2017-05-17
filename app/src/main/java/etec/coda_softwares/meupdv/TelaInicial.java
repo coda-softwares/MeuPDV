@@ -56,7 +56,8 @@ public class TelaInicial extends AppCompatActivity {
         if (firebaseURL != null) {
             if (firebaseURL.equals(""))
                 return;
-        } else return;
+        } else
+            return;
         StorageReference file = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseURL);
         final File locFile =
                 new File(internalFiles.getAbsolutePath() + File.separator + file.getName());
@@ -82,6 +83,7 @@ public class TelaInicial extends AppCompatActivity {
     }
 
     public static void eraseFile(String firebaseURL, boolean onlyLocal) {
+        if (firebaseURL.equals("")) return;
         StorageReference file = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseURL);
         final File locFile =
                 new File(internalFiles.getAbsolutePath() + File.separator + file.getName());
@@ -106,7 +108,7 @@ public class TelaInicial extends AppCompatActivity {
                     System.exit(1);
                 }
                 //TODO: Atualizar ImageView.
-                a.initId(dataSnapshot.getKey());
+                a.setId(dataSnapshot.getKey());
                 CURRENT_PDV = a;
                 if (self != null) {
                     self.nextActivity();
@@ -179,7 +181,7 @@ public class TelaInicial extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == REQ_LOGIN) {
             IdpResponse res = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
@@ -207,14 +209,18 @@ public class TelaInicial extends AppCompatActivity {
             PDV res = (PDV) data.getExtras().get("pdv");
             if (res != null) {
                 TelaInicial.CURRENT_PDV = res;
-                CURRENT_PDV.saveOnDB();
-                nextActivity();
-                finish();
+                CURRENT_PDV.saveOnDB(new Runnable() {
+                    @Override
+                    public void run() {
+                        nextActivity();
+                        finish();
+                    }
+                });
             }
         }
     }
 
     public abstract static class UriCallback {
-        abstract void done(Uri u);
+        public abstract void done(Uri u);
     }
 }

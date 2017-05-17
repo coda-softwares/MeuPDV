@@ -107,7 +107,7 @@ public class CadastrarFornecedor extends AppCompatActivity {
             if (old.hasImagem()) {
                 TelaInicial.getFile(old.getImagem(), new TelaInicial.UriCallback() {
                     @Override
-                    void done(Uri u) {
+                    public void done(Uri u) {
                         ivFoto.setPadding(0, 0, 0, 0);
                         image = u;
                         ivFoto.setImageURI(u);

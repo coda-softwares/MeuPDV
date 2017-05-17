@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/margem_lateral"
+        android:layout_marginLeft="@dimen/margem_lateral"
+        android:layout_marginRight="@dimen/margem_lateral"
+        android:layout_marginStart="@dimen/margem_lateral"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/npdv_img"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:adjustViewBounds="false"
+                android:background="@color/primaria"
+                android:clickable="true"
+                android:onClick="addFotoNovoPDV"
+                android:padding="50dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_add_foto" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp">
+
+            <EditText
+                android:id="@+id/npdv_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/npdv_nome"
+                android:inputType="textCapWords|textPersonName"
+                android:maxLength="50"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/npdv_lema"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/npdv_lema"
+                android:inputType="textCapSentences|textPersonName"
+                android:maxLength="50"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+</LinearLayout>

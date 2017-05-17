@@ -1,6 +1,7 @@
 package etec.coda_softwares.meupdv.menuPrincipal;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +18,13 @@ import org.apmem.tools.layouts.FlowLayout;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import etec.coda_softwares.meupdv.Caixa;
 import etec.coda_softwares.meupdv.Fornecedores;
 import etec.coda_softwares.meupdv.Produtos;
 import etec.coda_softwares.meupdv.R;
+import etec.coda_softwares.meupdv.TelaInicial;
+import etec.coda_softwares.meupdv.entitites.PDV;
 
 public class MenuPrincipal extends AppCompatActivity {
 
@@ -47,7 +51,22 @@ public class MenuPrincipal extends AppCompatActivity {
         Toolbar ab = (Toolbar) findViewById(R.id.mp_toolbar);
         setSupportActionBar(ab);
         populateGrid();
+        TextView titulo = (TextView) findViewById(R.id.mp_pdv_nome);
+        TextView descr = (TextView) findViewById(R.id.mp_pdv_desc);
+        PDV esse = TelaInicial.getCurrentPdv();
+        titulo.setText(esse.getNome());
+        descr.setText(esse.getLema());
+        TelaInicial.getFile(esse.getImagem(), new TelaInicial.UriCallback() {
+            @Override
+            public void done(Uri u) {
+                CircleImageView imagem = (CircleImageView) findViewById(R.id.mp_pdv_img);
+                if (u != null)
+                    imagem.setImageURI(u);
+            }
+        });
+
     }
+
     private void populateGrid(){
         FlowLayout g = (FlowLayout) findViewById(R.id.mp_gridItems);
         LayoutInflater factory = LayoutInflater.from(this);

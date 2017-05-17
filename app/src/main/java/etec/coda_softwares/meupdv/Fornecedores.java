@@ -114,7 +114,7 @@ public class Fornecedores extends AppCompatActivity {
                     cImg.setImageBitmap(null); // Force the reloading of the image
                     TelaInicial.getFile(model.getImagem(), new TelaInicial.UriCallback() {
                         @Override
-                        void done(Uri u) {
+                        public void done(Uri u) {
                             cImg.setImageURI(u);
                         }
                     });

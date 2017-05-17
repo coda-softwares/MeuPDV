@@ -41,7 +41,7 @@ public class Caixa extends AppCompatActivity {
     private Stack<Produto> carrinho;
     private NumberPicker quantidade;
     private BarcodeCallback callback = new BarcodeCallback() {
-        List<BarcodeFormat> excluded = Arrays.asList(
+        List<BarcodeFormat> excluded = Arrays.asList( //TODO faltam mais tipos pra excluir
                 BarcodeFormat.QR_CODE,
                 BarcodeFormat.DATA_MATRIX
         );
@@ -175,9 +175,6 @@ public class Caixa extends AppCompatActivity {
 
                 leitor.setStatusText("Pronto!");
                 s.dismiss();
-                //FIXME remove!
-                Util.showToast(Caixa.this, "Lido com " + total + " millisegundos");
-                //leitor.resume();
                 leitor.decodeContinuous(callback);
             }
 

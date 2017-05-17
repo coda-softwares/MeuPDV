@@ -58,4 +58,7 @@
     <item name="visible" type="id" />
     <item name="masked" type="id" />
     <string name="title_activity_pos_caixa">Confirmar Produtos</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

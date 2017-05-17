@@ -1,19 +1,19 @@
 package etec.coda_softwares.meupdv.entitites;
 
+import android.net.Uri;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.TelaInicial;
@@ -25,16 +25,34 @@ import etec.coda_softwares.meupdv.TelaInicial;
  *
  */
 public class PDV implements Serializable {
-    public static final DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+    public static final DatabaseReference ROOT = FirebaseDatabase.getInstance().getReference()
+            .child("pdv");
     private String nome = "";
     private String lema = "";
+    private String imagem = "";
     private String id = "";
-    private List<String> integrantes = new ArrayList<>();
+    private List<String> integrantes;
 
     public PDV() {
+        this("", "", "", Collections.singletonList(""));
     }
 
-    public PDV(String nome, List<String> integrantes, String lema) {
+    public PDV(String nome, String lema, String imagem, List<String> integrantes) {
+        this.nome = nome;
+        this.lema = lema;
+        this.imagem = imagem;
+        this.integrantes = integrantes;
+    }
+
+    public PDV(String nome, String lema, Uri imagem, List<String> integrantes) {
+        initId();
+        if (imagem != null) {
+            StorageReference ref = FirebaseStorage.getInstance().getReference()
+                    .child("pdv").child(getId()).child("logo.jpg");
+            ref.putFile(imagem);
+            setImagem(ref.toString());
+        }
+
         this.nome = nome;
         this.lema = lema;
         this.integrantes = integrantes;
@@ -69,18 +87,30 @@ public class PDV implements Serializable {
         return id;
     }
 
-    public void initId(String id) {
-        if (this.id.equals("")) this.id = id;
+    public void setId(String id) {
+        if (this.id.equals("") && !id.equals("")) {
+            this.id = id;
+        }
     }
 
+    public DatabaseReference initId() {
+        if (!id.equals(""))
+            return null;
+        FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
+        if (u == null)
+            return null;
+        DatabaseReference ref = ROOT.push();
+        this.id = ref.getKey();
+        return ref;
+    }
 
     /**
      * Atualiza ou salva a instancia desse PDV no banco de dados atual e assimila com
-     * {@link FirebaseAuth#getCurrentUser()} até agora todas as entidades atualizão-se
-     * automaticamente quando modificadas. (29/04/17)
+     * {@link FirebaseAuth#getCurrentUser()} até agora todas as atividades editoras
+     * dos conteudos do PDV como fornecedor, atualizão o editado automaticamente
+     * quando modificadas. (29/04/17)
      */
-    public void saveOnDB() {
-        final DatabaseReference userPDV = root.child("pdv");
+    public void saveOnDB(final Runnable callback) {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
 
@@ -94,34 +124,26 @@ public class PDV implements Serializable {
                 }
                 saved = PDV.this;
                 data.setValue(saved);
+                DatabaseReference root = FirebaseDatabase.getInstance().getReference();
                 root.child("user").child(user.getUid()).child("pdv").setValue(saved.getId());
+                if (callback != null)
+                    callback.run();
                 return Transaction.success(data);
             }
         };
 
         if (id.equals("")) {
-            root.child("user").child(user.getUid()).child("pdv").addListenerForSingleValueEvent(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String usrid = (String) dataSnapshot.getValue();
-                            if (usrid != null) {
-                                if (!usrid.equals(""))
-                                    return;
-                            }
-                            DatabaseReference dfr = userPDV.push();
-                            initId(dfr.getKey());
-                            dfr.runTransaction(save);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            FirebaseCrash.report(databaseError.toException());
-                            System.exit(1);
-                        }
-                    });
+            initId().runTransaction(save);
         } else {
-            userPDV.child(id).runTransaction(save);
+            ROOT.child(id).runTransaction(save);
         }
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagemUrl) {
+        this.imagem = imagemUrl;
     }
 }

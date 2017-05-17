@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 
@@ -64,7 +65,8 @@ public class CarregarImagem extends Activity {
 
     private void initTempfoto() {
         try {
-            tempFoto = File.createTempFile("temporary", ".jpg", getExternalCacheDir());
+            tempFoto = File.createTempFile("temporary", ".jpg",
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
             tempFoto.delete();
         } catch (IOException e) {
             FirebaseCrash.report(e);

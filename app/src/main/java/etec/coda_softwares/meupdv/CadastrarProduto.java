@@ -43,13 +43,12 @@ import static etec.coda_softwares.meupdv.Util.REQ_IMG;
 
 public class CadastrarProduto extends AppCompatActivity {
     EditText campoNome, campoQuantidade, campoValor, campoCdDBarras;
-    private boolean newImage = false;
     Uri image;
-
     MaterialSpinner spinnerFornecedores;
     ImageView ivFoto;
     Date validade;
     Produto old;
+    private boolean newImage = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,7 +117,7 @@ public class CadastrarProduto extends AppCompatActivity {
             if (old.hasImagem()) {
                 TelaInicial.getFile(old.getImagem(), new TelaInicial.UriCallback() {
                     @Override
-                    void done(Uri u) {
+                    public void done(Uri u) {
                         ivFoto.setPadding(0, 0, 0, 0);
                         image = u;
                         ivFoto.setImageURI(u);
@@ -261,6 +260,9 @@ public class CadastrarProduto extends AppCompatActivity {
 
     public void carregarCodBarras(View v) {
         IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.setPrompt("Escaneie o código de barras do produto");
+        integrator.setBeepEnabled(true);
         integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);
     }
 
