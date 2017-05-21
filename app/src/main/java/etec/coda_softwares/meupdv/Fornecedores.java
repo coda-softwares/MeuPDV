@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -106,6 +107,14 @@ public class Fornecedores extends AppCompatActivity {
                     public boolean onLongClick(View v) {
                         showOptions(model);
                         return true;
+                    }
+                });
+
+                ImageButton more = (ImageButton) v.findViewById(R.id.fornecedor_opc);
+                more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showOptions(model);
                     }
                 });
 

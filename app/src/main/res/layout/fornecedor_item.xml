@@ -24,6 +24,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
+        android:layout_weight="10"
         android:gravity="center_vertical"
         android:orientation="vertical"
         tools:ignore="HardcodedText">
@@ -47,5 +48,16 @@
             android:text="+55 11 91111-2222" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/fornecedor_opc"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingRight="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_m_opcoes" />
 
 </LinearLayout>

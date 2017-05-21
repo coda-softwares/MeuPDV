@@ -78,7 +78,7 @@ public class CadastrarProduto extends AppCompatActivity {
                     return true;
                 }
 
-                Produto prod = new Produto(nomeProd, validade, preco, quantidade, cdgBarras, f);
+                Produto prod = new Produto(nomeProd, validade, preco + "", quantidade, cdgBarras, f);
                 DatabaseReference referencia = Produto.DBROOT.child(cdgBarras + "");
 
                 referencia.setValue(prod);

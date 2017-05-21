@@ -34,7 +34,7 @@ import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class Caixa extends AppCompatActivity {
     public static final int REQ_CAIXA = 7847;
-    private Produto dummy = new Produto("$$$DUMMY", new Date(), 0, 0, "", null);
+    private Produto dummy = new Produto("$$$DUMMY", new Date(), "", 0, "", null);
     private Produto lastProduto = dummy;
     private DecoratedBarcodeView leitor;
     private Map<String, Produto> produtos;
@@ -83,7 +83,9 @@ public class Caixa extends AppCompatActivity {
             }
 
             quantidade.setValue(1);
-            lastProduto = produto;
+            lastProduto = new Produto(produto.getNome(), produto.getValidade(),
+                    produto.getValor(), produto.getQuantidade(), produto.getCodDBarras(),
+                    produto.getFornecedor());
             lastProduto.setCodDBarras(res);
 
             leitor.setStatusText(anterior + produto.getNome() + " lido com sucesso.");
@@ -126,8 +128,7 @@ public class Caixa extends AppCompatActivity {
         carrinho.push(lastProduto);
         Intent fim = new Intent(this, PosCaixa.class);
         fim.putExtra("carrinho", carrinho); // Stack é serializavel.
-        startActivity(fim);
-        finish();
+        startActivityForResult(fim, REQ_CAIXA);
     }
 
     @Override
@@ -164,9 +165,7 @@ public class Caixa extends AppCompatActivity {
                 GenericTypeIndicator<Map<String, Produto>> tipo =
                         new GenericTypeIndicator<Map<String, Produto>>() {
                         };
-                long time = System.currentTimeMillis();
                 produtos = dataSnapshot.getValue(tipo);
-                long total = System.currentTimeMillis() - time;
 
                 if (produtos == null) {
                     nenhumProduto();
@@ -206,8 +205,10 @@ public class Caixa extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQ_CAIXA) {
-            finish();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQ_CAIXA) {
+                finish();
+            }
         }
         //TODO outros codigos de resultado.
     }

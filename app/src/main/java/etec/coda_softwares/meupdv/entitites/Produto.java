@@ -36,9 +36,11 @@ public class Produto implements Serializable {
         ultimaModificacao = System.currentTimeMillis();
     }
 
-    public Produto(String nome, Date validade, double valor, int quantidade, String codDBarras, Fornecedor f) {
+    public Produto(String nome, Date validade, String valor, int quantidade, String codDBarras, Fornecedor f) {
         this.nome = nome;
         this.validade = validade;
+        if (valor.equals(""))
+            valor = "0";
         this.valor = new BigDecimal(valor);
         this.valor = this.valor.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         this.quantidade = quantidade;
@@ -59,6 +61,7 @@ public class Produto implements Serializable {
     public boolean hasImagem(){
         return !imagem.contains(Util.NO_IMG);
     }
+
     public String getImagem() {
         if (!hasImagem())
             return "";
@@ -86,13 +89,13 @@ public class Produto implements Serializable {
         return valor.toPlainString();
     }
 
+    public void setValor(String valor) {
+        this.valor = new BigDecimal(valor);
+    }
+
     @Exclude
     public void setValor(BigDecimal valor) {
         this.valor = valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = new BigDecimal(valor);
     }
 
     @Exclude
