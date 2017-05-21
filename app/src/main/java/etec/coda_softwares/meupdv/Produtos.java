@@ -11,21 +11,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Produto;
 
@@ -86,6 +80,9 @@ public class Produtos extends AppCompatActivity {
 
                 TextView valor = (TextView) v.findViewById(R.id.prod_valor);
                 valor.setText(model.getValor());
+
+                TextView quantidade = (TextView) v.findViewById(R.id.prod_quant);
+                quantidade.setText(model.getQuantidade()+"");
 
                 ImageButton button = (ImageButton) v.findViewById(R.id.prod_button);
 

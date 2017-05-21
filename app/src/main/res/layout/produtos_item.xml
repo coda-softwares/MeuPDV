@@ -16,36 +16,57 @@
         android:layout_gravity="start"
         android:layout_weight="3" />
 
-
-    <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
+    <!-- Layout para centralizar o nome e preço do produto (HORIZONTAL) -->
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="4"
-        android:orientation="vertical">
-        <!-- Titulo do produto com o nome do produto no meio -->
-        <TextView
-            android:id="@+id/prod_nome"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        >
+        <!-- Layout vertical do nome e preço do produto (Fica no centro) -->
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_produtos"
-            android:text="Coca-Cola"
-            android:textSize="25sp" />
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+            <!-- Titulo do produto com o nome do produto no meio -->
+            <TextView
+                android:id="@+id/prod_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ic_produtos"
+                android:text="Coca-Cola"
+                android:textSize="25sp" />
 
-        <!-- Provavelmente o preço estara em baixo do titulo( em letras amarelas) -->
+            <!-- Provavelmente o preço estara em baixo do titulo( em letras amarelas ) -->
+            <TextView
+                android:id="@+id/prod_valor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:shadowColor="@color/border_preco"
+                android:shadowRadius="3"
+                android:text="R$2.50"
+                android:textColor="@color/cor_preco"
+                android:textSize="22sp" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <!-- Quantidade do produto horizontal no TOP|END -->
         <TextView
-            android:id="@+id/prod_valor"
+            android:id="@+id/prod_quant"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:shadowColor="@color/border_preco"
-            android:shadowRadius="3"
-            android:text="R$2.50"
-            android:textColor="@color/cor_preco"
-            android:textSize="22sp" />
-    </android.support.v7.widget.LinearLayoutCompat>
-
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:layout_gravity="end"
+            android:textAlignment="textEnd"
+            android:width="35dp"
+            android:text="55"
+            />
+    </LinearLayout>
     <!-- Botão seta para o lado direito -->
     <ImageButton
         android:id="@+id/prod_button"
