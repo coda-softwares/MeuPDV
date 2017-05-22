@@ -28,8 +28,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +36,7 @@ import java.util.List;
 import etec.coda_softwares.meupdv.entitites.Fornecedor;
 import etec.coda_softwares.meupdv.entitites.Produto;
 
+import static etec.coda_softwares.meupdv.Util.DateFormater;
 import static etec.coda_softwares.meupdv.Util.REQUEST_FOTO;
 import static etec.coda_softwares.meupdv.Util.REQ_IMG;
 
@@ -110,7 +109,8 @@ public class CadastrarProduto extends AppCompatActivity {
         old = (Produto) getIntent().getSerializableExtra("produto");
         if (old != null) {
             campoNome.setText(old.getNome());
-            campoValidade.setText(old.getValidade().toString());
+            campoValidade.setText(DateFormater.format(old.getValidade()));
+            validade = old.getValidade();
             campoQuantidade.setText(old.getQuantidade()+"");
             campoValor.setText(old.getValor()+"");
             campoCdDBarras.setText(old.getCodDBarras()+"");
@@ -201,7 +201,6 @@ public class CadastrarProduto extends AppCompatActivity {
         final EditText data = (EditText) findViewById(R.id.prod_validade);
         data.setKeyListener(null);
 
-        final DateFormat dateFormat = SimpleDateFormat.getDateInstance();
         data.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -218,7 +217,7 @@ public class CadastrarProduto extends AppCompatActivity {
                         c.set(dpicker.getYear(), dpicker.getMonth(), dpicker.getDayOfMonth());
                         if (c.getTime().after(new Date())) {
                             validade = c.getTime();
-                            data.setText(dateFormat.format(validade));
+                            data.setText(DateFormater.format(validade));
                             quant.requestFocusFromTouch();
                         } else {
                             Toast.makeText(dpicker.getContext(), "Data precisa ser depois de hoje",

@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by samuelh on 07/05/17.
  */
@@ -16,6 +19,7 @@ public class Util {
     public static final int REQ_IMG = 1547;
     public static final int REQUEST_FOTO = 598;
     public static final String NO_IMG = "$NOIMG$";
+    public static final DateFormat DateFormater = new SimpleDateFormat("dd/MM/yyyy");
 
     public static String lerString(EditText view) {
         return view.getText().toString();
@@ -26,6 +30,7 @@ public class Util {
     }
 
     public static boolean verificarStringsVazias(String... valores) {
+
         for (String s : valores) {
             if (s.trim().equals("")) {
                 return false;
