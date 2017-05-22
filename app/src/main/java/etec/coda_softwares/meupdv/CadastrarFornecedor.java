@@ -131,7 +131,6 @@ public class CadastrarFornecedor extends AppCompatActivity {
         loading.show();
 
         final Fornecedor f = new Fornecedor(nome, email, telefones);
-
         final DatabaseReference dbLocation;
         dbLocation = old == null ? Fornecedor.DBROOT.push() : Fornecedor.DBROOT.child(old.getId());
 

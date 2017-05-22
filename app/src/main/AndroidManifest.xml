@@ -99,6 +99,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="etec.coda_softwares.meupdv.Caixa" />
         </activity>
+        <activity android:name=".EditPDV"></activity>
     </application>
 
 </manifest>

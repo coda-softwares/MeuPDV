@@ -1,17 +1,19 @@
 package etec.coda_softwares.meupdv;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -154,7 +156,28 @@ public class TelaInicial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_inicial);
         internalFiles = getFilesDir();
-        tryLogin();
+        final ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (!isConnected) {
+            retryDialog("Sem conexao com a internet, tentar novamente?", new Runnable() {
+                @Override
+                public void run() {
+                    NetworkInfo activeNetwork1 = cm.getActiveNetworkInfo();
+                    boolean isConnected1 = activeNetwork1 != null &&
+                            activeNetwork1.isConnectedOrConnecting();
+                    if (!isConnected1) {
+                        retryDialog("Sem conexao com a internet, tentar novamente?", this);
+                    } else {
+                        tryLogin();
+                    }
+                }
+            });
+        } else {
+            tryLogin();
+        }
     }
 
     private void tryLogin() {
@@ -174,37 +197,52 @@ public class TelaInicial extends AppCompatActivity {
     }
 
     private void nextActivity(){
-        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class); //FIXME: CHANGE BACK!
+        Intent i = new Intent(TelaInicial.this, MenuPrincipal.class);
         i.putExtra("pdv", PDV.class);
         startActivity(i);
         finish();
     }
 
+    private Dialog retryDialog(final Runnable r) {
+        return retryDialog("Erro no login, tentar novamente?", r);
+    }
+
+    private Dialog retryDialog(String msg, final Runnable r) {
+        AlertDialog.Builder retry = new AlertDialog.Builder(this);
+        retry.setCancelable(false);
+        retry.setMessage(msg);
+        retry.setPositiveButton(android.R.string.yes, new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (r != null)
+                    r.run();
+            }
+        });
+        retry.setNegativeButton(android.R.string.no, new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                System.exit(0);
+            }
+        });
+        return retry.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == REQ_LOGIN) {
-            IdpResponse res = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 populateList(this);
-                return;
-            } else if (res != null) {
-                if (res.getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(this, "Não foi possivel se conectar a internet",
-                            Toast.LENGTH_LONG).show();
-                }
-                if (res.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                    Toast.makeText(this, "Erro desconhecido", Toast.LENGTH_LONG).show();
-                }
-                FirebaseCrash.log("Erro de login! " + res.getErrorCode());
             } else {
-                Toast.makeText(this, "Login cancelado.", Toast.LENGTH_SHORT).show();
+                retryDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        tryLogin();
+                    }
+                });
             }
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    System.exit(1); // Sai se o login falha.
-                }
-            }, 2000);
+
         } else if (requestCode == REQ_NOVO_PDV) { // Retorno da atividade de novo PDV
             PDV res = (PDV) data.getExtras().get("pdv");
             if (res != null) {
