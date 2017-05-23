@@ -49,6 +49,7 @@ public class CadastrarProduto extends AppCompatActivity {
     Produto old;
     private boolean newImage = false;
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
@@ -62,7 +63,7 @@ public class CadastrarProduto extends AppCompatActivity {
                 int quantidade = (int) Util.lerDouble(campoQuantidade);
                 Fornecedor f = getSelectedFornecedor();
                 double preco = Util.lerDouble(campoValor);
-                String cdgBarras = Util.lerString(campoCdDBarras).trim();
+                final String cdgBarras = Util.lerString(campoCdDBarras).trim();
                 Util.verificarStringsVazias(nomeProd, cdgBarras);
 
                 if (cdgBarras.length() < 8) {
@@ -77,17 +78,55 @@ public class CadastrarProduto extends AppCompatActivity {
                     return true;
                 }
 
-                Produto prod = new Produto(nomeProd, validade, preco + "", quantidade, cdgBarras, f);
-                DatabaseReference referencia = Produto.DBROOT.child(cdgBarras + "");
+                final Produto prod = new Produto(nomeProd, validade, preco + "", quantidade, cdgBarras, f);
+                /**
+                 * Utilizado para verificar a existência de duplicatas
+                 */
+                Produto.DBROOT.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(prod.getCodDBarras()+"")){
 
-                referencia.setValue(prod);
-                // salvar no banco
-                CadastrarProduto.this.finish();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(CadastrarProduto.this);
+                            builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem certeza que quer apagalo?");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("apagar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Produto.DBROOT.child(prod.getCodDBarras()+"").setValue(prod);
+                                    CadastrarProduto.this.endActivity();
+                                }
+                            });
+                            builder.setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {}
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        } else {
+                            Produto.DBROOT.child(prod.getCodDBarras() + "").setValue(prod);
+                            CadastrarProduto.this.endActivity();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Util.showToast(CadastrarProduto.this, "salvamento cancelado");
+                    }
+                });
                 return true;
             }
         });
         return true;
     }
+
+    public void endActivity(){
+        if(old!=null)
+            Produto.DBROOT.child(old.getCodDBarras()).removeValue();
+        CadastrarProduto.this.finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
