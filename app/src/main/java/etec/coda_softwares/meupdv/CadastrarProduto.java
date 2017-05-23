@@ -49,6 +49,7 @@ public class CadastrarProduto extends AppCompatActivity {
     Produto old;
     private boolean newImage = false;
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
@@ -85,29 +86,28 @@ public class CadastrarProduto extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.hasChild(prod.getCodDBarras()+"")){
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(CadastrarProduto.this);
                             builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem certeza que quer apagalo?");
                             builder.setCancelable(false);
                             builder.setPositiveButton("apagar", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Produto.DBROOT.child(prod.getCodDBarras()+"").setValue(prod);
-                                        }
-                                    });
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Produto.DBROOT.child(prod.getCodDBarras()+"").setValue(prod);
+                                    CadastrarProduto.this.endActivity();
+                                }
+                            });
                             builder.setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {}
-                                    });
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {}
+                            });
                             AlertDialog dialog = builder.create();
                             dialog.show();
+
                         } else {
                             Produto.DBROOT.child(prod.getCodDBarras() + "").setValue(prod);
+                            CadastrarProduto.this.endActivity();
                         }
-                        // Finalmente deleta a duplicata
-                        if(old!=null)
-                            Produto.DBROOT.child(old.getCodDBarras()).removeValue();
-
-                        CadastrarProduto.this.finish();
                     }
 
                     @Override
@@ -120,6 +120,13 @@ public class CadastrarProduto extends AppCompatActivity {
         });
         return true;
     }
+
+    public void endActivity(){
+        if(old!=null)
+            Produto.DBROOT.child(old.getCodDBarras()).removeValue();
+        CadastrarProduto.this.finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
