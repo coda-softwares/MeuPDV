@@ -20,6 +20,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import etec.coda_softwares.meupdv.Caixa;
+import etec.coda_softwares.meupdv.EditPDV;
 import etec.coda_softwares.meupdv.Fornecedores;
 import etec.coda_softwares.meupdv.Produtos;
 import etec.coda_softwares.meupdv.R;
@@ -27,6 +28,8 @@ import etec.coda_softwares.meupdv.TelaInicial;
 import etec.coda_softwares.meupdv.entitites.PDV;
 
 public class MenuPrincipal extends AppCompatActivity {
+
+    public static final int REQ_EDIT = 5988;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,6 +47,30 @@ public class MenuPrincipal extends AppCompatActivity {
         return true;
     }
 
+    private void updatePDVView() {
+        TextView titulo = (TextView) findViewById(R.id.mp_pdv_nome);
+        TextView descr = (TextView) findViewById(R.id.mp_pdv_desc);
+        PDV esse = TelaInicial.CURRENT_PDV;
+        titulo.setText(esse.getNome());
+        descr.setText(esse.getLema());
+        final CircleImageView imagem = (CircleImageView) findViewById(R.id.mp_pdv_img);
+        imagem.setImageResource(R.drawable.ic_caixa);
+        TelaInicial.getFile(esse.getImagem(), new TelaInicial.UriCallback() {
+            @Override
+            public void done(Uri u) {
+                if (u != null)
+                    imagem.setImageURI(u);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQ_EDIT) {
+            updatePDVView();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,17 +78,11 @@ public class MenuPrincipal extends AppCompatActivity {
         Toolbar ab = (Toolbar) findViewById(R.id.mp_toolbar);
         setSupportActionBar(ab);
         populateGrid();
-        TextView titulo = (TextView) findViewById(R.id.mp_pdv_nome);
-        TextView descr = (TextView) findViewById(R.id.mp_pdv_desc);
-        PDV esse = TelaInicial.getCurrentPdv();
-        titulo.setText(esse.getNome());
-        descr.setText(esse.getLema());
-        TelaInicial.getFile(esse.getImagem(), new TelaInicial.UriCallback() {
+        updatePDVView();
+        findViewById(R.id.mp_editpdv).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(Uri u) {
-                CircleImageView imagem = (CircleImageView) findViewById(R.id.mp_pdv_img);
-                if (u != null)
-                    imagem.setImageURI(u);
+            public void onClick(View v) {
+                startActivityForResult(new Intent(MenuPrincipal.this, EditPDV.class), REQ_EDIT);
             }
         });
 

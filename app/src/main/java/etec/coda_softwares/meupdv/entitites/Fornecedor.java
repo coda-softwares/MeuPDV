@@ -17,7 +17,7 @@ import etec.coda_softwares.meupdv.Util;
 
 public class Fornecedor implements Serializable {
     public static final DatabaseReference DBROOT = FirebaseDatabase.getInstance()
-            .getReference("pdv").child(TelaInicial.getCurrentPdv().getId()).child("fornecedores");
+            .getReference("pdv").child(TelaInicial.CURRENT_PDV.getId()).child("fornecedores");
     private List<String> telefones = new ArrayList<>();
     private String email = "";
     private String nome = "";

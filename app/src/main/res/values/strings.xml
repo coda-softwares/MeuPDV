@@ -54,6 +54,8 @@
     <string name="search_button_cont_desc">procurar</string>
     <string name="cad_prod_forn_hint">Fornecedor</string>
 
+    <string name="epdv_title">Editar PDV</string>
+
     <!--bug android studio-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />

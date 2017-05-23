@@ -57,7 +57,12 @@ public class NovoPDV extends AppCompatActivity {
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 assert user != null;
-                final PDV pdv = new PDV(nomePDV, lemaPDV, image, Collections.singletonList(user.getUid()));
+                PDV pdv = new PDV(nomePDV, lemaPDV, "", Collections.singletonList(user.getUid()));
+
+                if (image != null) {
+                    if (!image.equals(Uri.EMPTY))
+                        pdv.setImagem(image);
+                }
 
                 Intent i = getIntent();
                 i.putExtra("pdv", pdv);

@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -37,18 +36,76 @@ import etec.coda_softwares.meupdv.entitites.Fornecedor;
 import etec.coda_softwares.meupdv.entitites.Produto;
 
 import static etec.coda_softwares.meupdv.Util.DateFormater;
-import static etec.coda_softwares.meupdv.Util.REQUEST_FOTO;
 import static etec.coda_softwares.meupdv.Util.REQ_IMG;
 
 public class CadastrarProduto extends AppCompatActivity {
     EditText campoNome, campoQuantidade, campoValor, campoCdDBarras;
-    Uri image;
     MaterialSpinner spinnerFornecedores;
     ImageView ivFoto;
     Date validade;
     Produto old;
-    private boolean newImage = false;
 
+
+    private void finalizar() {
+        // Checar campos
+        String nomeProd = Util.lerString(campoNome).trim();
+        int quantidade = (int) Util.lerDouble(campoQuantidade);
+        Fornecedor f = getSelectedFornecedor();
+        double preco = Util.lerDouble(campoValor);
+        final String cdgBarras = Util.lerString(campoCdDBarras).trim();
+        if (Util.temStringVazia(nomeProd, cdgBarras)) {
+            Util.showToast(CadastrarProduto.this, "Codigo de barras ou nome nao inseridos");
+            return;
+        }
+        if (cdgBarras.length() < 8) {
+            Util.showToast(CadastrarProduto.this, "Codigo de barras muito curto");
+            return;
+        }
+        if (preco <= 0) {
+            Util.showToast(CadastrarProduto.this, "Preco tem que ser maior que zero.");
+            return;
+        }
+        if (quantidade <= 0) {
+            Util.showToast(CadastrarProduto.this, "Quantidade tem que ser maior que zero");
+            return;
+        }
+
+        final Produto prod = new Produto(nomeProd, validade, preco + "", quantidade, cdgBarras, f);
+
+        // Utilizado para verificar a existência de duplicatas
+        final DatabaseReference reference = Produto.DBROOT.child(cdgBarras);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(CadastrarProduto.this);
+                    builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem" +
+                            " certeza que quer apaga-lo?");
+                    // So vamos apagar caso o usuario confirme o sim, ja que nao temos que fazer
+                    // acao nenhuma no nao podemos permitir que seja canceleable
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Apagar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            reference.setValue(prod);
+                            CadastrarProduto.this.endActivity();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    reference.setValue(prod);
+                    CadastrarProduto.this.endActivity();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Util.showToast(CadastrarProduto.this, "salvamento cancelado");
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,63 +115,7 @@ public class CadastrarProduto extends AppCompatActivity {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // Checar campos
-                String nomeProd = Util.lerString(campoNome).trim();
-                int quantidade = (int) Util.lerDouble(campoQuantidade);
-                Fornecedor f = getSelectedFornecedor();
-                double preco = Util.lerDouble(campoValor);
-                final String cdgBarras = Util.lerString(campoCdDBarras).trim();
-                Util.verificarStringsVazias(nomeProd, cdgBarras);
-
-                if (cdgBarras.length() < 8) {
-                    Util.showToast(CadastrarProduto.this, "Codigo de barras muito curto");
-                    return true;
-                }
-                if (preco <= 0) {
-                    return true;
-                }
-                if (quantidade <= 0) {
-                    Util.showToast(CadastrarProduto.this, "Quantidade tem que ser maior que zero");
-                    return true;
-                }
-
-                final Produto prod = new Produto(nomeProd, validade, preco + "", quantidade, cdgBarras, f);
-                /**
-                 * Utilizado para verificar a existência de duplicatas
-                 */
-                Produto.DBROOT.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild(prod.getCodDBarras()+"")){
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(CadastrarProduto.this);
-                            builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem certeza que quer apagalo?");
-                            builder.setCancelable(false);
-                            builder.setPositiveButton("apagar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Produto.DBROOT.child(prod.getCodDBarras()+"").setValue(prod);
-                                    CadastrarProduto.this.endActivity();
-                                }
-                            });
-                            builder.setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {}
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-
-                        } else {
-                            Produto.DBROOT.child(prod.getCodDBarras() + "").setValue(prod);
-                            CadastrarProduto.this.endActivity();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Util.showToast(CadastrarProduto.this, "salvamento cancelado");
-                    }
-                });
+                finalizar();
                 return true;
             }
         });
@@ -133,6 +134,7 @@ public class CadastrarProduto extends AppCompatActivity {
         setContentView(R.layout.activity_cadastrar_produto);
         Toolbar tbar = (Toolbar) findViewById(R.id.prod_toolbar);
         setSupportActionBar(tbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -150,19 +152,9 @@ public class CadastrarProduto extends AppCompatActivity {
             campoNome.setText(old.getNome());
             campoValidade.setText(DateFormater.format(old.getValidade()));
             validade = old.getValidade();
-            campoQuantidade.setText(old.getQuantidade()+"");
-            campoValor.setText(old.getValor()+"");
-            campoCdDBarras.setText(old.getCodDBarras()+"");
-            if (old.hasImagem()) {
-                TelaInicial.getFile(old.getImagem(), new TelaInicial.UriCallback() {
-                    @Override
-                    public void done(Uri u) {
-                        ivFoto.setPadding(0, 0, 0, 0);
-                        image = u;
-                        ivFoto.setImageURI(u);
-                    }
-                });
-            }
+            campoQuantidade.setText(old.getQuantidade());
+            campoValor.setText(old.getValor());
+            campoCdDBarras.setText(old.getCodDBarras());
         }
 
         beautifySpinner();
@@ -178,12 +170,8 @@ public class CadastrarProduto extends AppCompatActivity {
     }
 
     private void populateFornecedoresSpinner() {
-
         final DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
 
-        /**
-         *  That's the trick! ;)
-         */
         fornecedoresRef.addValueEventListener(new ValueEventListener() {
             boolean tries = false;
             @Override
@@ -224,7 +212,9 @@ public class CadastrarProduto extends AppCompatActivity {
             }
         });
     }
+
     /**
+     * Getter da proriedade fornecedor.
      *
      * @return Retorna o fornecedor selecionado da drop down list(Spinner)
      */
@@ -284,12 +274,6 @@ public class CadastrarProduto extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_FOTO) {
-                newImage = true;
-                image = data.getParcelableExtra("imagem");
-                ivFoto.setPadding(0, 0, 0, 0);
-                ivFoto.setImageURI(image);
-            }
             IntentResult barcode = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (barcode == null) return;
             campoCdDBarras.setText(barcode.getContents());

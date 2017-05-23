@@ -37,22 +37,9 @@ import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
 public class TelaInicial extends AppCompatActivity {
     public static final int REQ_NOVO_PDV = 200;
     private static final int REQ_LOGIN = 742;
+    public static PDV CURRENT_PDV;
     private static File internalFiles;
-    private static PDV CURRENT_PDV;
     // Propriedade de controle pro watcher da databse se essa atividade ainda esta viva
-
-    /**
-     * Forma principal e global de conseguiur uma instancia do PDV atual.
-     *
-     * @return o PDV atual.
-     */
-    public static PDV getCurrentPdv() {
-        if (CURRENT_PDV == null) {
-            FirebaseCrash.log("CurrentPDV era nulo");
-            System.exit(1);
-        }
-        return CURRENT_PDV;
-    }
 
     public static void getFile(String firebaseURL, final UriCallback callback) {
         if (firebaseURL != null) {

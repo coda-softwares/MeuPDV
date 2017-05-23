@@ -1,6 +1,7 @@
 package etec.coda_softwares.meupdv.entitites;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +22,7 @@ import etec.coda_softwares.meupdv.TelaInicial;
 /**
  * Classe que representa o PDV do usuario, contendo todos os dados, o logo nome, produtos, etc.
  * Teoricamente somente uma instancia dessa classe por programa, instancia que fica salva em
- * {@link TelaInicial#getCurrentPdv()}
+ * {@link TelaInicial#CURRENT_PDV}
  *
  */
 public class PDV implements Serializable {
@@ -46,13 +47,7 @@ public class PDV implements Serializable {
 
     public PDV(String nome, String lema, Uri imagem, List<String> integrantes) {
         initId();
-        if (imagem != null) {
-            StorageReference ref = FirebaseStorage.getInstance().getReference()
-                    .child("pdv").child(getId()).child("logo.jpg");
-            ref.putFile(imagem);
-            setImagem(ref.toString());
-        }
-
+        setImagem(imagem);
         this.nome = nome;
         this.lema = lema;
         this.integrantes = integrantes;
@@ -141,6 +136,14 @@ public class PDV implements Serializable {
 
     public String getImagem() {
         return imagem;
+    }
+
+    @Exclude
+    public void setImagem(@NonNull Uri image) {
+        StorageReference ref = FirebaseStorage.getInstance().getReference()
+                .child("pdv").child(getId()).child("logo.jpg");
+        ref.putFile(image);
+        setImagem(ref.toString());
     }
 
     public void setImagem(String imagemUrl) {

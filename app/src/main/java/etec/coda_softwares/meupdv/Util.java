@@ -29,14 +29,14 @@ public class Util {
         return Double.parseDouble(t.getText().toString());
     }
 
-    public static boolean verificarStringsVazias(String... valores) {
+    public static boolean temStringVazia(String... valores) {
 
         for (String s : valores) {
             if (s.trim().equals("")) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public static void showToast(AppCompatActivity ativ, String msg) {
@@ -45,6 +45,7 @@ public class Util {
 
     public static Dialog dialogoCarregando(Activity a) {
         Dialog res = new AlertDialog.Builder(a).setView(R.layout.layout_loading).create();
+        res.setCancelable(false);
         res.show();
         return res;
     }

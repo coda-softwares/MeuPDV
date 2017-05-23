@@ -1,5 +1,7 @@
 package etec.coda_softwares.meupdv.entitites;
 
+import android.net.Uri;
+
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +23,7 @@ import etec.coda_softwares.meupdv.Util;
 
 public class Produto implements Serializable {
     public static final DatabaseReference DBROOT = FirebaseDatabase.getInstance()
-            .getReference("pdv").child(TelaInicial.getCurrentPdv().getId()).child("produtos");
+            .getReference("pdv").child(TelaInicial.CURRENT_PDV.getId()).child("produtos");
 
     private String nome = "";
     private Date validade = new Date();
@@ -69,6 +71,11 @@ public class Produto implements Serializable {
             return imagem;
     }
 
+    @Exclude
+    public void setImagem(Uri e) {
+
+    }
+
     public void setImagem(String imagem) {
         this.imagem = imagem;
     }
@@ -89,13 +96,13 @@ public class Produto implements Serializable {
         return valor.toPlainString();
     }
 
-    public void setValor(String valor) {
-        this.valor = new BigDecimal(valor);
-    }
-
     @Exclude
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = new BigDecimal(valor);
     }
 
     @Exclude

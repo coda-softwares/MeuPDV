@@ -149,7 +149,7 @@ public class CadastrarFornecedor extends AppCompatActivity {
             //Um objeto task é obtido ao acessar o caminho:
             StorageReference storageReference = FirebaseStorage.getInstance()
                     .getReference("pdv") //pdv
-                    .child(TelaInicial.getCurrentPdv().getId()) // pdv/[pdv_id]
+                    .child(TelaInicial.CURRENT_PDV.getId()) // pdv/[pdv_id]
                     .child("fornecedores").child(dbLocation.getKey() + ".jpg"); // pdv/[pdv_id]/fornecedores/[forn_id]
 
 

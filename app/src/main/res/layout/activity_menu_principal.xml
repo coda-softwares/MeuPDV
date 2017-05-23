@@ -60,14 +60,14 @@
                 android:textSize="20sp" />
 
             <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:id="@+id/mp_editpdv"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignTop="@id/mp_pdv_nome"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/mp_pdv_nome"
                 android:background="#00FFFFFF"
+                android:padding="6dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_editar" />
         </RelativeLayout>
