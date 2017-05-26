@@ -159,7 +159,7 @@ public class Caixa extends AppCompatActivity {
         leitor.setStatusText("Carregando...");
         final Dialog s = Util.dialogoCarregando(this);
 
-        Produto.DBROOT.addValueEventListener(new ValueEventListener() {
+        Produto.DBROOT.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<Map<String, Produto>> tipo =
@@ -173,7 +173,8 @@ public class Caixa extends AppCompatActivity {
                 }
 
                 leitor.setStatusText("Pronto!");
-                s.dismiss();
+                if (s != null)
+                    if (s.isShowing()) s.dismiss();
                 leitor.decodeContinuous(callback);
             }
 

@@ -83,8 +83,10 @@ public class PosCaixa extends AppCompatActivity {
                 public Transaction.Result doTransaction(MutableData mutableData) {
                     Produto produtoDB = mutableData.getValue(Produto.class);
                     produtoDB.setQuantidade(produtoDB.getQuantidade() - p.getQuantidade());
-                    if (produtoDB.getQuantidade() <= 0)
+                    if (produtoDB.getQuantidade() <= 0) {
+                        Produto.NOSTOQ_DBROOT.child(produtoDB.getCodDBarras()).setValue(produtoDB);
                         produtoDB = null;
+                    }
                     mutableData.setValue(produtoDB);
                     return Transaction.success(mutableData);
                 }

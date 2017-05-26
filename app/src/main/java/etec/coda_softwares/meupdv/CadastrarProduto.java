@@ -81,11 +81,11 @@ public class CadastrarProduto extends AppCompatActivity {
                     AlertDialog.Builder builder =
                             new AlertDialog.Builder(CadastrarProduto.this);
                     builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem" +
-                            " certeza que quer apaga-lo?");
+                            " certeza que quer subistitui-lo?");
                     // So vamos apagar caso o usuario confirme o sim, ja que nao temos que fazer
                     // acao nenhuma no nao podemos permitir que seja canceleable
                     builder.setCancelable(true);
-                    builder.setPositiveButton("Apagar", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton("Substituir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             reference.setValue(prod);
@@ -123,8 +123,6 @@ public class CadastrarProduto extends AppCompatActivity {
     }
 
     public void endActivity(){
-        if(old!=null)
-            Produto.DBROOT.child(old.getCodDBarras()).removeValue();
         CadastrarProduto.this.finish();
     }
 
@@ -152,9 +150,9 @@ public class CadastrarProduto extends AppCompatActivity {
             campoNome.setText(old.getNome());
             campoValidade.setText(DateFormater.format(old.getValidade()));
             validade = old.getValidade();
-            campoQuantidade.setText(old.getQuantidade());
-            campoValor.setText(old.getValor());
-            campoCdDBarras.setText(old.getCodDBarras());
+            campoQuantidade.setText(old.getQuantidade() + "");
+            campoValor.setText(old.getValor() + "");
+            campoCdDBarras.setText(old.getCodDBarras() + "");
         }
 
         beautifySpinner();
@@ -172,7 +170,7 @@ public class CadastrarProduto extends AppCompatActivity {
     private void populateFornecedoresSpinner() {
         final DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
 
-        fornecedoresRef.addValueEventListener(new ValueEventListener() {
+        fornecedoresRef.addListenerForSingleValueEvent(new ValueEventListener() {
             boolean tries = false;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -24,6 +24,8 @@ import etec.coda_softwares.meupdv.Util;
 public class Produto implements Serializable {
     public static final DatabaseReference DBROOT = FirebaseDatabase.getInstance()
             .getReference("pdv").child(TelaInicial.CURRENT_PDV.getId()).child("produtos");
+    public static final DatabaseReference NOSTOQ_DBROOT = FirebaseDatabase.getInstance()
+            .getReference("pdv").child(TelaInicial.CURRENT_PDV.getId()).child("produtos_zero");
 
     private String nome = "";
     private Date validade = new Date();
@@ -71,13 +73,13 @@ public class Produto implements Serializable {
             return imagem;
     }
 
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
     @Exclude
     public void setImagem(Uri e) {
 
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
     }
 
     public Date getValidade() { return validade; }
@@ -96,13 +98,13 @@ public class Produto implements Serializable {
         return valor.toPlainString();
     }
 
+    public void setValor(String valor) {
+        this.valor = new BigDecimal(valor);
+    }
+
     @Exclude
     public void setValor(BigDecimal valor) {
         this.valor = valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = new BigDecimal(valor);
     }
 
     @Exclude
