@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -48,5 +49,17 @@ public class Util {
         res.setCancelable(false);
         res.show();
         return res;
+    }
+
+    /**
+     * Necessária a implementação aqui pois é utilizado em mais de 1 lugar
+     *
+     * Metodo reorganiza a lista de produtos de acordo com o nome a ser pesquisado
+     *
+     * @param searchString
+     * @param listViewProdutos -> Lista a ser Reorganizada
+     */
+    public static void pesquisarProduto(String searchString, ListView listViewProdutos){
+
     }
 }

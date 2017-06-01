@@ -9,7 +9,7 @@
     android:weightSum="10">
 
     <!-- Icone do produto do lado esquerdo -->
-    <ImageView
+    <ImageButton
         android:id="@+id/prod_icon"
         android:layout_width="150dp"
         android:layout_height="100dp"

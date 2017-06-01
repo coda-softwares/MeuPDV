@@ -5,6 +5,7 @@
     <string name="username">Nome de usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
+
     <!-- MenuPrincipal -->
     <string name="title_activity_menu_principal">@string/app_name</string>
     <string name="sair">Fechar</string>
@@ -18,7 +19,7 @@
     <string name="produto_novo">Novo Produto</string>
     <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
 
-    <!-- Fornecedor -->
+    <!-- Cadastrar Fornecedor -->
     <string name="fornecedor_mult">Fornecedores</string>
     <string name="fornecedor_sem">Nenhum Fornecedor Encontrado</string>
     <string name="fornecedor_novo">Novo Fornecedor</string>

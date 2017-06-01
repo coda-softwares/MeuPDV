@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,11 +20,12 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 
-import java.text.NumberFormat;
-
 import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class Produtos extends AppCompatActivity {
+
+    public EditText searchInput;
+    public ListView listaProdutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,9 @@ public class Produtos extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        listaProdutos = (ListView) findViewById(R.id.lista_produtos);
+        searchInput = (EditText) findViewById(R.id.search_input);
 
         populateList();
     }
@@ -55,23 +60,22 @@ public class Produtos extends AppCompatActivity {
     }
 
     public void pesquisar(View v){
-        Toast.makeText(Produtos.this, "Sorry did not get that.", Toast.LENGTH_LONG).show();
+        // TODO: Utilizar o metodo de porcentagem
+        // O que tiver mais pontos sobe no placar
+        // Logo Este metodo reorganizara a lista de produtos
+
+        Util.pesquisarProduto(searchInput.getText().toString().trim(), listaProdutos);
+
+        Toast.makeText(Produtos.this, "Esta opção esta sendo desenvolvida! ;)", Toast.LENGTH_LONG).show();
     }
 
-    public void add_produto(View view) {
-        view.getContext().startActivity(new Intent(Produtos.this, CadastrarProduto.class));
-    }
     private void populateList(){
-        ListView lista_produtos = (ListView) findViewById(R.id.lista_produtos);
-
         /**
          * Yet Simple
          */
         DatabaseReference reference = Produto.DBROOT;
         FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(this,
                 Produto.class, R.layout.produtos_item, reference.orderByKey()) {
-
-            private final NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
             @Override
             protected void populateView(View v, final Produto model, int position) {
@@ -95,7 +99,7 @@ public class Produtos extends AppCompatActivity {
             }
         };
 
-        lista_produtos.setAdapter(produtos);
+        listaProdutos.setAdapter(produtos);
     }
     private void showOptions(final Produto item) {
         AlertDialog.Builder fabrica = new AlertDialog.Builder(this);
@@ -106,7 +110,6 @@ public class Produtos extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         opcoes.add("Editar");
         opcoes.add("Apagar");
-
         fabrica.setAdapter(opcoes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

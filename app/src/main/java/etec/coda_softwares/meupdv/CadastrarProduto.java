@@ -170,8 +170,7 @@ public class CadastrarProduto extends AppCompatActivity {
     private void populateFornecedoresSpinner() {
         final DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
 
-        fornecedoresRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            boolean tries = false;
+        fornecedoresRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
