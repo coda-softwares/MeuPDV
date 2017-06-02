@@ -4,16 +4,33 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import etec.coda_softwares.meupdv.entitites.PDV;
+import etec.coda_softwares.meupdv.entitites.Usuario;
 
 public class EditPDV extends AppCompatActivity {
     private static final int REQ_IMG = 2302;
@@ -22,6 +39,7 @@ public class EditPDV extends AppCompatActivity {
     private Uri image;
     private EditText lemaView;
     private EditText nomeView;
+    private ListView partc;
 
     private void terminar() {
         String nome = nomeView.getText().toString().trim();
@@ -81,6 +99,7 @@ public class EditPDV extends AppCompatActivity {
         lemaView = (EditText) findViewById(R.id.epdv_lema);
         nomeView = (EditText) findViewById(R.id.epdv_nome);
         imagemView = (CircleImageView) findViewById(R.id.epdv_img);
+        partc = (ListView) findViewById(R.id.epdv_participantes);
 
         imagemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,5 +119,59 @@ public class EditPDV extends AppCompatActivity {
             });
         }
 
+        final Iterator<String> userIds = novoPdv.getIntegrantes().iterator();
+
+        if (userIds.hasNext()) {
+            final Stack<Usuario> uStack = new Stack<>();
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user");
+            ref.child(userIds.next()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Usuario u = dataSnapshot.getValue(Usuario.class);
+                    if (u != null) {
+                        uStack.push(u);
+                    }
+                    if (userIds.hasNext()) {
+                        ref.child(userIds.next()).addListenerForSingleValueEvent(this);
+                    } else {
+                        populateParticipantes(uStack);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    FirebaseCrash.report(databaseError.toException());
+                    System.exit(1);
+                }
+            });
+        }
     }
+
+    private void populateParticipantes(List<Usuario> usuarios) {
+        final ArrayAdapter<Usuario> adap = new ArrayAdapter<Usuario>(this,
+                R.layout.participante_item, usuarios) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = EditPDV.this.getLayoutInflater().inflate(
+                            R.layout.participante_item, parent, false);
+                }
+
+                Usuario usu = this.getItem(position);
+                assert usu != null;
+                TextView name = (TextView) convertView.findViewById(R.id.pp_nome);
+                TextView descr = (TextView) convertView.findViewById(R.id.pp_email);
+
+                name.setText(usu.getNome());
+                descr.setText(usu.getEmail());
+
+                return convertView;
+            }
+        };
+        partc.setAdapter(adap);
+
+    }
+
+    
 }

@@ -47,6 +47,10 @@
                 android:layout_below="@id/mp_pdv_img"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:maxWidth="250dp"
                 android:text="@string/app_name"
                 android:textSize="28sp" />
 

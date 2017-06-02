@@ -29,9 +29,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import etec.coda_softwares.meupdv.entitites.PDV;
+import etec.coda_softwares.meupdv.entitites.Permissao;
+import etec.coda_softwares.meupdv.entitites.Usuario;
 import etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal;
 
 public class TelaInicial extends AppCompatActivity {
@@ -83,7 +86,7 @@ public class TelaInicial extends AppCompatActivity {
     }
 
     private static void populateList(final TelaInicial self){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         final DatabaseReference ds;
 
@@ -113,15 +116,20 @@ public class TelaInicial extends AppCompatActivity {
         };
 
         // acessa o node do usuario na database identificado pelo o seu UID
-        ds = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid())
-                .child("pdv");
+        ds = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
         ds.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Primeiro carregamos a key do PDV do usuario:
-                String local = dataSnapshot.getValue(String.class);
+                Usuario u = dataSnapshot.getValue(Usuario.class);
+                if (u == null) {
+                    u = new Usuario("", user.getDisplayName(), user.getEmail(),
+                            new ArrayList<Permissao>());
+                    ds.setValue(u);
+                }
+                String local = u.getPdv();
                 //Se a key nao existir:
-                if (local == null) {
+                if (local.trim().equals("")) {
                     Intent i = new Intent(self, NovoPDV.class);
                     self.startActivityForResult(i, REQ_NOVO_PDV);
                     return;
