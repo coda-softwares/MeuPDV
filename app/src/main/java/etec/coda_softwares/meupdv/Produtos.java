@@ -64,9 +64,11 @@ public class Produtos extends AppCompatActivity {
         // O que tiver mais pontos sobe no placar
         // Logo Este metodo reorganizara a lista de produtos
 
-        Util.pesquisarProduto(searchInput.getText().toString().trim(), listaProdutos);
+        Util.pesquisarProduto(searchInput.getText().toString().trim(),
+                (FirebaseListAdapter)listaProdutos.getAdapter());
 
-        Toast.makeText(Produtos.this, "Esta opção esta sendo desenvolvida! ;)", Toast.LENGTH_LONG).show();
+        Toast.makeText(Produtos.this, "Esta opção esta sendo desenvolvida! ;)", Toast.LENGTH_LONG)
+                .show();
     }
 
     private void populateList(){
