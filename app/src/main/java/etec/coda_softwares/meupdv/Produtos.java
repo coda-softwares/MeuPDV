@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Produto;
 
@@ -40,7 +49,7 @@ public class Produtos extends AppCompatActivity {
         listaProdutos = (ListView) findViewById(R.id.lista_produtos);
         searchInput = (EditText) findViewById(R.id.search_input);
 
-        populateList();
+        updateListViewAdapter(Produto.DBROOT.orderByKey());
     }
 
     @Override
@@ -59,56 +68,26 @@ public class Produtos extends AppCompatActivity {
         return true;
     }
 
-    public void pesquisar(View v){
-        String searchString = searchInput.getText().toString().trim();
+    public void pesquisar(View v) {
+        String searchString = searchInput.getText().toString().trim().toLowerCase();
 
-        if(Util.temStringVazia(searchString))
-            return;
-
-        // Faz a pesquisa (Query)
-        DatabaseReference foundRef = Produto.DBROOT.orderByChild("nome")
-                .startAt(searchString)
-                .endAt(searchString+"\uf8ff").getRef();
-
-        // Modifica o adapter da ListView e Organiza de acordo com os resultados
-        FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(Produtos.this,
-                Produto.class, R.layout.produtos_item, foundRef) {
-            @Override
-            protected void populateView(View v, final Produto model, int position) {
-                TextView nome = (TextView) v.findViewById(R.id.prod_nome);
-                nome.setText(model.getNome());
-
-                TextView valor = (TextView) v.findViewById(R.id.prod_valor);
-                valor.setText(model.getValor());
-
-                TextView quantidade = (TextView) v.findViewById(R.id.prod_quant);
-                quantidade.setText(model.getQuantidade() + "");
-
-                ImageButton button = (ImageButton) v.findViewById(R.id.prod_button);
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Produtos.this.showOptions(model);
-                    }
-                });
-            }
-        };
-
-        // Finalmente
-        listaProdutos.setAdapter(produtos);
-
-        Toast.makeText(Produtos.this, "Pesquisa Terminada", Toast.LENGTH_LONG)
-                .show();
+        Query query;
+        if (searchString.equals("")) {
+            query = Produto.DBROOT.orderByKey();
+        } else {
+            query = Produto.DBROOT.orderByChild("nome").startAt(searchString)
+                    .endAt(searchString+"\uf8ff");
+        }
+        updateListViewAdapter(query);
     }
 
-    private void populateList(){
-        /**
-         * Yet Simple
-         */
-        DatabaseReference reference = Produto.DBROOT;
+    /**
+     *
+     * @param query Define quais produtos serão listados
+     */
+    private void updateListViewAdapter(Query query){
         FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(this,
-                Produto.class, R.layout.produtos_item, reference.orderByKey()) {
+                Produto.class, R.layout.produtos_item, query) {
             @Override
             protected void populateView(View v, final Produto model, int position) {
                 TextView nome = (TextView) v.findViewById(R.id.prod_nome);
@@ -132,6 +111,7 @@ public class Produtos extends AppCompatActivity {
         };
 
         listaProdutos.setAdapter(produtos);
+
     }
     void showOptions(final Produto item) {
         AlertDialog.Builder fabrica = new AlertDialog.Builder(this);

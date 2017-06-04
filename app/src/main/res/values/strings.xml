@@ -10,6 +10,9 @@
     <string name="title_activity_menu_principal">@string/app_name</string>
     <string name="sair">Fechar</string>
 
+    <!-- Produtos -->
+    <string name="searchHint">PesquisarProduto</string>
+
     <!-- Produto -->
     <string name="prod_nome">Nome do Produto</string>
     <string name="prod_quant">Quant. de Produtos</string>
@@ -19,7 +22,7 @@
     <string name="produto_novo">Novo Produto</string>
     <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
 
-    <!-- Cadastrar Fornecedor -->
+    <!-- Fornecedor -->
     <string name="fornecedor_mult">Fornecedores</string>
     <string name="fornecedor_sem">Nenhum Fornecedor Encontrado</string>
     <string name="fornecedor_novo">Novo Fornecedor</string>

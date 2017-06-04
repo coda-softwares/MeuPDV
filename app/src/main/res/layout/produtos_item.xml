@@ -39,9 +39,9 @@
                 android:layout_marginTop="12dp"
                 android:src="@drawable/ic_produtos"
                 android:text="Coca-Cola"
-                android:textSize="25sp" />
+                android:textSize="18sp" />
 
-            <!-- Provavelmente o preço estara em baixo do titulo( em letras amarelas ) -->
+            <!-- Preço estara em baixo do titulo -->
             <TextView
                 android:id="@+id/prod_valor"
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                 android:shadowRadius="3"
                 android:text="R$2.50"
                 android:textColor="@color/cor_preco"
-                android:textSize="22sp" />
+                android:textSize="14sp" />
         </android.support.v7.widget.LinearLayoutCompat>
 
         <!-- Quantidade do produto horizontal no TOP|END -->
