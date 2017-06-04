@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -42,6 +43,8 @@ public class TelaInicial extends AppCompatActivity {
     private static final int REQ_LOGIN = 742;
     public static PDV CURRENT_PDV;
     private static File internalFiles;
+    private DatabaseReference userDBRef;
+    private FirebaseUser firebaseUser;
     // Propriedade de controle pro watcher da databse se essa atividade ainda esta viva
 
     public static void getFile(String firebaseURL, final UriCallback callback) {
@@ -85,11 +88,46 @@ public class TelaInicial extends AppCompatActivity {
             file.delete();
     }
 
-    private static void populateList(final TelaInicial self){
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        final DatabaseReference ds;
+    private void populateList(final TelaInicial self) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert firebaseUser != null;
 
+        // acessa o node do usuario na database identificado pelo o seu UID
+        userDBRef = FirebaseDatabase.getInstance().getReference().child("user").child(firebaseUser.getUid());
+        userDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Primeiro carregamos a key do PDV do usuario:
+                Util.usuario = dataSnapshot.getValue(Usuario.class);
+                if (Util.usuario == null) {
+                    Util.usuario = new Usuario("", firebaseUser.getDisplayName(), firebaseUser.getEmail(),
+                            new ArrayList<Permissao>());
+                    if (Util.usuario.getNome() == null) {
+                        Util.usuario.setNome(firebaseUser.getEmail().substring(0, firebaseUser.getEmail()
+                                .indexOf("@")));
+                    }
+                    userDBRef.setValue(Util.usuario);
+                }
+                String local = Util.usuario.getPdv();
+                //Se a key nao existir:
+                if (local.trim().equals("")) {
+                    TelaInicial.this.lerConvites(Util.usuario.getEmail());
+                    return;
+                }
+                //Se ja existir carrega o PDV e fica de olho por alterações futuras também!
+                loadPDV(local, null);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                FirebaseCrash.report(databaseError.toException());
+                System.exit(0);
+            }
+        });
+    }
+
+    private void loadPDV(@NonNull String pdv, @Nullable final String user) {
+        final DatabaseReference pdvRef = userDBRef.getRoot().child("pdv").child(pdv);
         final ValueEventListener pdvLoader = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -102,10 +140,12 @@ public class TelaInicial extends AppCompatActivity {
                 //TODO: Atualizar ImageView.
                 a.setId(dataSnapshot.getKey());
                 CURRENT_PDV = a;
-                if (self != null) {
-                    self.nextActivity();
-                    self.finish();
+                if (user != null && !CURRENT_PDV.getIntegrantes().contains(user)) {
+                    CURRENT_PDV.getIntegrantes().add(user);
+                    pdvRef.setValue(CURRENT_PDV);
                 }
+                TelaInicial.this.nextActivity();
+                TelaInicial.this.finish();
             }
 
             @Override
@@ -114,34 +154,32 @@ public class TelaInicial extends AppCompatActivity {
                 System.exit(0);
             }
         };
+        pdvRef.addListenerForSingleValueEvent(pdvLoader);
+    }
 
-        // acessa o node do usuario na database identificado pelo o seu UID
-        ds = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
-        ds.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void lerConvites(String email) {
+        email = Util.jsonifyEmail(email);
+        final DatabaseReference dbConviteRef = FirebaseDatabase.getInstance().getReference()
+                .child("convites").child(email);
+        dbConviteRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Primeiro carregamos a key do PDV do usuario:
-                Usuario u = dataSnapshot.getValue(Usuario.class);
-                if (u == null) {
-                    u = new Usuario("", user.getDisplayName(), user.getEmail(),
-                            new ArrayList<Permissao>());
-                    ds.setValue(u);
+                String pdv = dataSnapshot.getValue(String.class);
+                if (pdv == null) {
+                    Intent i = new Intent(TelaInicial.this, NovoPDV.class);
+                    TelaInicial.this.startActivityForResult(i, REQ_NOVO_PDV);
+                } else {
+                    Util.usuario.setPdv(pdv);
+                    userDBRef.setValue(Util.usuario);
+                    dbConviteRef.setValue(null);
+                    loadPDV(pdv, firebaseUser.getUid());
                 }
-                String local = u.getPdv();
-                //Se a key nao existir:
-                if (local.trim().equals("")) {
-                    Intent i = new Intent(self, NovoPDV.class);
-                    self.startActivityForResult(i, REQ_NOVO_PDV);
-                    return;
-                }
-                //Se ja existir carrega o PDV e fica de olho por alterações futuras também!
-                ds.getRoot().child("pdv").child(local).addListenerForSingleValueEvent(pdvLoader);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 FirebaseCrash.report(databaseError.toException());
-                System.exit(0);
+                System.exit(1);
             }
         });
     }
@@ -228,6 +266,7 @@ public class TelaInicial extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == REQ_LOGIN) {
             if (resultCode == RESULT_OK) {
+                Util.usuario.setPdv(TelaInicial.CURRENT_PDV.getId());
                 populateList(this);
             } else {
                 retryDialog(new Runnable() {

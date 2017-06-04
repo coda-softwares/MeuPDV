@@ -64,7 +64,7 @@
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -72,19 +72,35 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1.5dp"
-            android:background="#808080" />
+            android:layout_height="1.3dp"
+            android:background="#000000" />
 
         <TextView
+            android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
-            android:text="Participantes " />
+            android:text="Participantes "
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/epdv_mais"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/text"
+            android:layout_marginRight="3dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="enviarEnvite"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_mais" />
 
         <ListView
             android:id="@+id/epdv_participantes"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_below="@id/text" />
+    </RelativeLayout>
 </LinearLayout>
