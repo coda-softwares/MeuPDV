@@ -59,9 +59,12 @@ public class NovoPDV extends AppCompatActivity {
                 assert user != null;
                 PDV pdv = new PDV(nomePDV, lemaPDV, "", Collections.singletonList(user.getUid()));
 
+                pdv.initId();
+
                 if (image != null) {
                     if (!image.equals(Uri.EMPTY))
                         pdv.setImagem(image);
+
                 }
 
                 Intent i = getIntent();

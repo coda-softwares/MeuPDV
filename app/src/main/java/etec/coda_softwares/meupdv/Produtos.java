@@ -6,24 +6,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Produto;
 
 public class Produtos extends AppCompatActivity {
+
+    public EditText searchInput;
+    public ListView listaProdutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +46,10 @@ public class Produtos extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        populateList();
+        listaProdutos = (ListView) findViewById(R.id.lista_produtos);
+        searchInput = (EditText) findViewById(R.id.search_input);
+
+        updateListViewAdapter(Produto.DBROOT.orderByKey());
     }
 
     @Override
@@ -54,25 +68,26 @@ public class Produtos extends AppCompatActivity {
         return true;
     }
 
-    public void pesquisar(View v){
-        Toast.makeText(Produtos.this, "Sorry did not get that.", Toast.LENGTH_LONG).show();
+    public void pesquisar(View v) {
+        String searchString = searchInput.getText().toString().trim().toLowerCase();
+
+        Query query;
+        if (searchString.equals("")) {
+            query = Produto.DBROOT.orderByKey();
+        } else {
+            query = Produto.DBROOT.orderByChild("nome").startAt(searchString)
+                    .endAt(searchString+"\uf8ff");
+        }
+        updateListViewAdapter(query);
     }
 
-    public void add_produto(View view) {
-        view.getContext().startActivity(new Intent(Produtos.this, CadastrarProduto.class));
-    }
-    private void populateList(){
-        ListView lista_produtos = (ListView) findViewById(R.id.lista_produtos);
-
-        /**
-         * Yet Simple
-         */
-        DatabaseReference reference = Produto.DBROOT;
+    /**
+     *
+     * @param query Define quais produtos serão listados
+     */
+    private void updateListViewAdapter(Query query){
         FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(this,
-                Produto.class, R.layout.produtos_item, reference.orderByKey()) {
-
-            private final NumberFormat formatter = NumberFormat.getCurrencyInstance();
-
+                Produto.class, R.layout.produtos_item, query) {
             @Override
             protected void populateView(View v, final Produto model, int position) {
                 TextView nome = (TextView) v.findViewById(R.id.prod_nome);
@@ -82,7 +97,7 @@ public class Produtos extends AppCompatActivity {
                 valor.setText(model.getValor());
 
                 TextView quantidade = (TextView) v.findViewById(R.id.prod_quant);
-                quantidade.setText(model.getQuantidade()+"");
+                quantidade.setText(model.getQuantidade() + "");
 
                 ImageButton button = (ImageButton) v.findViewById(R.id.prod_button);
 
@@ -95,9 +110,10 @@ public class Produtos extends AppCompatActivity {
             }
         };
 
-        lista_produtos.setAdapter(produtos);
+        listaProdutos.setAdapter(produtos);
+
     }
-    private void showOptions(final Produto item) {
+    void showOptions(final Produto item) {
         AlertDialog.Builder fabrica = new AlertDialog.Builder(this);
         fabrica.setTitle(item.getNome().split(" ")[0]);
         fabrica.setCancelable(true);
@@ -106,7 +122,6 @@ public class Produtos extends AppCompatActivity {
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         opcoes.add("Editar");
         opcoes.add("Apagar");
-
         fabrica.setAdapter(opcoes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

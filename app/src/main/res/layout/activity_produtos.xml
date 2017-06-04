@@ -39,7 +39,7 @@
                 android:id="@+id/search_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Pesquise Aqui"
+                android:hint="@string/searchHint"
                 android:inputType="text"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>

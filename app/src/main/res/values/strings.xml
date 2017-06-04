@@ -5,9 +5,13 @@
     <string name="username">Nome de usuário</string>
     <string name="senha">Senha</string>
     <string name="login">Entrar</string>
+
     <!-- MenuPrincipal -->
     <string name="title_activity_menu_principal">@string/app_name</string>
     <string name="sair">Fechar</string>
+
+    <!-- Produtos -->
+    <string name="searchHint">PesquisarProduto</string>
 
     <!-- Produto -->
     <string name="prod_nome">Nome do Produto</string>

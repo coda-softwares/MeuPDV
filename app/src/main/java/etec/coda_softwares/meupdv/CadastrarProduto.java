@@ -70,20 +70,18 @@ public class CadastrarProduto extends AppCompatActivity {
             return;
         }
 
-        final Produto prod = new Produto(nomeProd, validade, preco + "", quantidade, cdgBarras, f);
+        final Produto prod = new Produto(nomeProd.toLowerCase(), validade, preco + "", quantidade, cdgBarras, f);
 
         // Utilizado para verificar a existência de duplicatas
         final DatabaseReference reference = Produto.DBROOT.child(cdgBarras);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists() && !(old.getCodDBarras().equals(prod.getCodDBarras()))) {
                     AlertDialog.Builder builder =
                             new AlertDialog.Builder(CadastrarProduto.this);
                     builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem" +
                             " certeza que quer subistitui-lo?");
-                    // So vamos apagar caso o usuario confirme o sim, ja que nao temos que fazer
-                    // acao nenhuma no nao podemos permitir que seja canceleable
                     builder.setCancelable(true);
                     builder.setPositiveButton("Substituir", new DialogInterface.OnClickListener() {
                         @Override
@@ -91,6 +89,14 @@ public class CadastrarProduto extends AppCompatActivity {
                             reference.setValue(prod);
                             CadastrarProduto.this.endActivity();
                         }
+                    });
+                    /**
+                     * Caso tivesse só uma opção 'substituir', seria peso demais para o usuário
+                     * Mesmo não fazendo nada, significa muito para o usuário
+                     */
+                    builder.setNegativeButton("cancelar", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
                     });
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -123,6 +129,8 @@ public class CadastrarProduto extends AppCompatActivity {
     }
 
     public void endActivity(){
+        if(old!=null && !(old.getCodDBarras().equals(campoCdDBarras.getText().toString().trim())))
+            Produto.DBROOT.child(old.getCodDBarras()).removeValue();
         CadastrarProduto.this.finish();
     }
 
@@ -170,8 +178,7 @@ public class CadastrarProduto extends AppCompatActivity {
     private void populateFornecedoresSpinner() {
         final DatabaseReference fornecedoresRef = Fornecedor.DBROOT;
 
-        fornecedoresRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            boolean tries = false;
+        fornecedoresRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
