@@ -60,14 +60,45 @@ public class Produtos extends AppCompatActivity {
     }
 
     public void pesquisar(View v){
-        // TODO: Utilizar o metodo de porcentagem
-        // O que tiver mais pontos sobe no placar
-        // Logo Este metodo reorganizara a lista de produtos
+        String searchString = searchInput.getText().toString().trim();
 
-        Util.pesquisarProduto(searchInput.getText().toString().trim(),
-                (FirebaseListAdapter)listaProdutos.getAdapter());
+        if(Util.temStringVazia(searchString))
+            return;
 
-        Toast.makeText(Produtos.this, "Esta opção esta sendo desenvolvida! ;)", Toast.LENGTH_LONG)
+        // Faz a pesquisa (Query)
+        DatabaseReference foundRef = Produto.DBROOT.orderByChild("nome")
+                .startAt(searchString)
+                .endAt(searchString+"\uf8ff").getRef();
+
+        // Modifica o adapter da ListView e Organiza de acordo com os resultados
+        FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(Produtos.this,
+                Produto.class, R.layout.produtos_item, foundRef) {
+            @Override
+            protected void populateView(View v, final Produto model, int position) {
+                TextView nome = (TextView) v.findViewById(R.id.prod_nome);
+                nome.setText(model.getNome());
+
+                TextView valor = (TextView) v.findViewById(R.id.prod_valor);
+                valor.setText(model.getValor());
+
+                TextView quantidade = (TextView) v.findViewById(R.id.prod_quant);
+                quantidade.setText(model.getQuantidade() + "");
+
+                ImageButton button = (ImageButton) v.findViewById(R.id.prod_button);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Produtos.this.showOptions(model);
+                    }
+                });
+            }
+        };
+
+        // Finalmente
+        listaProdutos.setAdapter(produtos);
+
+        Toast.makeText(Produtos.this, "Pesquisa Terminada", Toast.LENGTH_LONG)
                 .show();
     }
 
@@ -78,7 +109,6 @@ public class Produtos extends AppCompatActivity {
         DatabaseReference reference = Produto.DBROOT;
         FirebaseListAdapter<Produto> produtos = new FirebaseListAdapter<Produto>(this,
                 Produto.class, R.layout.produtos_item, reference.orderByKey()) {
-
             @Override
             protected void populateView(View v, final Produto model, int position) {
                 TextView nome = (TextView) v.findViewById(R.id.prod_nome);
@@ -88,7 +118,7 @@ public class Produtos extends AppCompatActivity {
                 valor.setText(model.getValor());
 
                 TextView quantidade = (TextView) v.findViewById(R.id.prod_quant);
-                quantidade.setText(model.getQuantidade()+"");
+                quantidade.setText(model.getQuantidade() + "");
 
                 ImageButton button = (ImageButton) v.findViewById(R.id.prod_button);
 
@@ -103,7 +133,7 @@ public class Produtos extends AppCompatActivity {
 
         listaProdutos.setAdapter(produtos);
     }
-    private void showOptions(final Produto item) {
+    void showOptions(final Produto item) {
         AlertDialog.Builder fabrica = new AlertDialog.Builder(this);
         fabrica.setTitle(item.getNome().split(" ")[0]);
         fabrica.setCancelable(true);

@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import etec.coda_softwares.meupdv.AtualizarEstoque;
 import etec.coda_softwares.meupdv.Caixa;
 import etec.coda_softwares.meupdv.EditPDV;
 import etec.coda_softwares.meupdv.Fornecedores;
@@ -102,12 +101,6 @@ public class MenuPrincipal extends AppCompatActivity {
                     @Override
                     public void run() {
                         startActivity(new Intent(MenuPrincipal.this, Produtos.class));
-                    }
-                }),
-                new ItemMenuPrincipal(R.drawable.ic_produtos, "Atualizar", new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuPrincipal.this, AtualizarEstoque.class));
                     }
                 }),
                 new ItemMenuPrincipal(R.drawable.ic_def_fornecedor, "Fornecedores", new Runnable() {
