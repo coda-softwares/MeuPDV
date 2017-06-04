@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import etec.coda_softwares.meupdv.Analisis;
 import etec.coda_softwares.meupdv.Caixa;
 import etec.coda_softwares.meupdv.EditPDV;
 import etec.coda_softwares.meupdv.Fornecedores;
@@ -85,7 +86,6 @@ public class MenuPrincipal extends AppCompatActivity {
                 startActivityForResult(new Intent(MenuPrincipal.this, EditPDV.class), REQ_EDIT);
             }
         });
-
     }
 
     private void populateGrid(){
@@ -113,6 +113,12 @@ public class MenuPrincipal extends AppCompatActivity {
                     @Override
                     public void run() {
                         startActivity(new Intent(MenuPrincipal.this, Caixa.class));
+                    }
+                }),
+                new ItemMenuPrincipal(R.drawable.ic_analisis, "Analisis", new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuPrincipal.this, Analisis.class));
                     }
                 })
         );

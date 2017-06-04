@@ -5,6 +5,6 @@
         android:id="@+id/menu_produtos_add"
         android:icon="@drawable/ic_mais"
         android:showAsAction="always"
-        android:title="@string/produto_novo"
+        android:title="@string/prods_menu_item_title"
         tools:ignore="AppCompatResource" />
 </menu>

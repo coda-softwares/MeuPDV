@@ -77,11 +77,23 @@ public class CadastrarProduto extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && !(old.getCodDBarras().equals(prod.getCodDBarras()))) {
+                /**
+                 * Tenha cuidado na hora que for mexer aqui
+                 * O Hack seguinte é necessário para que na hora que o usuário estiver criando
+                 * um novo produto, ele de um 'avoid' na hora de checar se foram feitas mudanças
+                 * no codigo de barras(pois ele não existia).
+                 */
+                String comparableOld;
+                if(old!=null)
+                    comparableOld = old.getCodDBarras();
+                else
+                    comparableOld = "";
+
+                if (dataSnapshot.exists() && !(comparableOld.equals(prod.getCodDBarras()))) {
                     AlertDialog.Builder builder =
                             new AlertDialog.Builder(CadastrarProduto.this);
                     builder.setMessage("Ja existe um produto com este mesmo codigo de barras, tem" +
-                            " certeza que quer subistitui-lo?");
+                            " certeza que quer substitui-lo?");
                     builder.setCancelable(true);
                     builder.setPositiveButton("Substituir", new DialogInterface.OnClickListener() {
                         @Override

@@ -12,6 +12,7 @@
 
     <!-- Produtos -->
     <string name="searchHint">PesquisarProduto</string>
+    <string name="prods_menu_item_title">Produtos</string>
 
     <!-- Produto -->
     <string name="prod_nome">Nome do Produto</string>
@@ -19,7 +20,6 @@
     <string name="prod_preco">Preço do Produto</string>
     <string name="prod_validade">Validade</string>
     <string name="prod_barras">Código de Barras</string>
-    <string name="produto_novo">Novo Produto</string>
     <string name="title_activity_cadastrar_produto">Cadastrar Produto</string>
 
     <!-- Fornecedor -->

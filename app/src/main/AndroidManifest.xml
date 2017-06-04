@@ -100,6 +100,14 @@
                 android:value="etec.coda_softwares.meupdv.Caixa" />
         </activity>
         <activity android:name=".EditPDV" />
+        <activity
+            android:name=".Analisis"
+            android:label="Analise"
+            android:parentActivityName=".menuPrincipal.MenuPrincipal">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="etec.coda_softwares.meupdv.menuPrincipal.MenuPrincipal" />
+        </activity>
     </application>
 
 </manifest>

@@ -14,6 +14,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 dependencies {
@@ -38,6 +42,7 @@ dependencies {
     compile 'org.apmem.tools:layouts:1.10'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.jaredrummler:material-spinner:1.1.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.googlecode.libphonenumber:libphonenumber:8.4.3'
     compile 'com.android.support:support-v4:25.1.1'
     compile 'com.android.support:appcompat-v7:25.1.1'
@@ -51,6 +56,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.2.0'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
 

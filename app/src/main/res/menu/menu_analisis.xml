@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/botao_confirma"
-        android:title="confirma"
-        android:icon="@drawable/ic_certo"
+        android:id="@+id/chart_mode_button"
+        android:icon="@drawable/ic_chart_block"
+        android:title="Analise"
         android:showAsAction="always"
-        tools:ignore="AppCompatResource"/>
+        tools:ignore="AppCompatResource"
+        />
 </menu>
