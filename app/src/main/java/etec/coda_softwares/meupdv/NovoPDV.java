@@ -39,8 +39,7 @@ public class NovoPDV extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 EditText titulo = (EditText) frag.findViewById(R.id.npdv_nome);
                 if (titulo == null) return true;
-                String nomePDV = titulo.getText()
-                        .toString().trim();
+                String nomePDV = titulo.getText().toString().trim();
                 String lemaPDV = ((EditText) frag.findViewById(R.id.npdv_lema)).getText()
                         .toString().trim();
 

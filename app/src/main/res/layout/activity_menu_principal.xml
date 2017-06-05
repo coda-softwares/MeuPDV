@@ -12,12 +12,19 @@
         android:id="@+id/default_toobar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="4dp">
+        app:cardCornerRadius="0dp"
+        app:cardElevation="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:contentPaddingLeft="-4.5dp"
+        app:contentPaddingRight="-4.5dp"
+        app:contentPaddingTop="-5.5dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/mp_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:padding="0dp"
             app:title="@string/title_activity_menu_principal" />
     </android.support.v7.widget.CardView>
 
@@ -47,6 +54,10 @@
                 android:layout_below="@id/mp_pdv_img"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:maxWidth="250dp"
                 android:text="@string/app_name"
                 android:textSize="28sp" />
 
@@ -74,13 +85,17 @@
 
     </android.support.v7.widget.CardView>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <org.apmem.tools.layouts.FlowLayout
         android:id="@+id/mp_gridItems"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:gravity="start|fill_horizontal"
+        android:gravity="start"
         android:horizontalSpacing="1dp"
         android:numColumns="3"
         android:verticalSpacing="1dp" />
+    </ScrollView>
 </LinearLayout>

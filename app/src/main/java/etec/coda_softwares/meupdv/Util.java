@@ -10,6 +10,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import etec.coda_softwares.meupdv.entitites.Usuario;
+
 /**
  * Created by samuelh on 07/05/17.
  */
@@ -19,6 +21,7 @@ public class Util {
     public static final int REQUEST_FOTO = 598;
     public static final String NO_IMG = "$NOIMG$";
     public static final DateFormat DateFormater = new SimpleDateFormat("dd/MM/yyyy");
+    static Usuario usuario;
 
     public static String lerString(EditText view) {
         return view.getText().toString();
@@ -47,5 +50,20 @@ public class Util {
         res.setCancelable(false);
         res.show();
         return res;
+    }
+
+    /**
+     * Simples metodo que formata emails antes de serem guardados no banco de dados,
+     * verdadeiro objetivo é manter a consistencia dos emails.
+     *
+     * @param email email em formato normal para ser convertido
+     * @return email pronto para ser guardado no banco de dados
+     */
+    public static String jsonifyEmail(String email) {
+        return email.toLowerCase().replace("@", ";A").replace(".", ";P");
+    }
+
+    public static String unjsonifyEmail(String email) {
+        return email.replace("@", ";A").replace(";P", ".");
     }
 }
