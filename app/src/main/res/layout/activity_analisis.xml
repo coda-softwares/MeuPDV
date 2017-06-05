@@ -31,13 +31,13 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ao Mês"
+                android:text="@string/chart_time_mode_month"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 />
 
             <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/test_chart"
+                android:id="@+id/chart"
                 android:layout_width="258dp"
                 android:layout_height="224dp"
                 android:layout_gravity="center_horizontal"

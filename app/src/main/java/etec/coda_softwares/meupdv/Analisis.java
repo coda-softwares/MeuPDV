@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -17,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Analisis extends AppCompatActivity {
+    private TextView labelTitle;
+
+    private Enum ChartMode;
+    private Enum Day, Week, Month, Year;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = new MenuInflater(this);
@@ -25,14 +31,35 @@ public class Analisis extends AppCompatActivity {
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        // TODO: Mudar o modo temporal da chart (Dia>Semana>Mês e vice-versa)
-                        return false;
+                        Analisis self = Analisis.this;
+
+                        if ( self.ChartMode == Day) {
+                            self.ChartMode = Week;
+                            self.resetLabels(R.string.chart_time_mode_week);
+                        } else if ( self.ChartMode == Week ) {
+                            self.ChartMode = Month;
+                            self.resetLabels(R.string.chart_time_mode_month);
+                        } else if ( self.ChartMode == Month ) {
+                            self.ChartMode = Year;
+                            self.resetLabels(R.string.chart_time_mode_year);
+                        } else {
+                            self.ChartMode = Day;
+                            self.resetLabels(R.string.chart_time_mode_day);
+                        }
+
+                        return true;
                     }
                 });
-
         return true;
     }
 
+    /**
+     * Muda o titulo da chart e demais quando for necessário
+     * @param titleLabel
+     */
+    public void resetLabels(int titleLabel){
+        labelTitle.setText( titleLabel );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,24 +70,28 @@ public class Analisis extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        LineChart test_chart = (LineChart) findViewById(R.id.test_chart);
+        ChartMode = Month;
 
-        int[] day = new int[14];
+        labelTitle = (TextView) findViewById(R.id.chart);
+
+        LineChart test_chart = (LineChart) findViewById(R.id.chart);
+
+        int[] time = new int[14];
         int[] money = new int[14];
 
         // Create test data
         for(int i=0;i<14;i++){
-            day[i] = i;
+            time[i] = i;
             if(i%2==0) money[i] = i+3;
             else money[i] = i-3;
         }
 
         List<Entry> entries = new ArrayList<>();
 
-        for(int i=0;i<day.length;i++)
-            entries.add(new Entry(day[i], money[i]));
+        for(int i=0;i<time.length;i++)
+            entries.add(new Entry(time[i], money[i]));
 
-        LineDataSet dataSet = new LineDataSet(entries, "Test Data");
+        LineDataSet dataSet = new LineDataSet(entries, "Exemplo");
         dataSet.setColor(Color.parseColor("#1111ae"));
         dataSet.setValueTextColor(Color.WHITE);
 

@@ -10,6 +10,12 @@
     <string name="title_activity_menu_principal">@string/app_name</string>
     <string name="sair">Fechar</string>
 
+    <!-- Analisis -->
+    <string name="chart_time_mode_day">Por Dia</string>
+    <string name="chart_time_mode_week">Por Semana</string>
+    <string name="chart_time_mode_month">Por Mês</string>
+    <string name="chart_time_mode_year">Por Ano</string>
+
     <!-- Produtos -->
     <string name="searchHint">PesquisarProduto</string>
     <string name="prods_menu_item_title">Produtos</string>
