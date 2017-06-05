@@ -134,8 +134,16 @@ public class PDV implements Serializable {
         }
     }
 
+    public void pushToDB() {
+        ROOT.child(getId()).setValue(this);
+    }
+
     public String getImagem() {
         return imagem;
+    }
+
+    public void setImagem(String imagemUrl) {
+        this.imagem = imagemUrl;
     }
 
     @Exclude
@@ -144,9 +152,5 @@ public class PDV implements Serializable {
                 .child("pdv").child(getId()).child("logo.jpg");
         ref.putFile(image);
         setImagem(ref.toString());
-    }
-
-    public void setImagem(String imagemUrl) {
-        this.imagem = imagemUrl;
     }
 }

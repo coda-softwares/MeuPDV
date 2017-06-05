@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,9 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import etec.coda_softwares.meupdv.entitites.PDV;
@@ -125,14 +127,14 @@ public class EditPDV extends AppCompatActivity {
         final Iterator<String> userIds = novoPdv.getIntegrantes().iterator();
 
         if (userIds.hasNext()) {
-            final Stack<Usuario> uStack = new Stack<>();
+            final HashMap<String, Usuario> uStack = new HashMap<>();
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user");
             ref.child(userIds.next()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Usuario u = dataSnapshot.getValue(Usuario.class);
                     if (u != null) {
-                        uStack.push(u);
+                        uStack.put(dataSnapshot.getKey(), u);
                     }
                     if (userIds.hasNext()) {
                         ref.child(userIds.next()).addListenerForSingleValueEvent(this);
@@ -150,9 +152,10 @@ public class EditPDV extends AppCompatActivity {
         }
     }
 
-    private void populateParticipantes(List<Usuario> usuarios) {
-        final ArrayAdapter<Usuario> adap = new ArrayAdapter<Usuario>(this,
-                R.layout.participante_item, usuarios) {
+    private void populateParticipantes(Map<String, Usuario> usuarios) {
+        final ArrayAdapter<Map.Entry<String, Usuario>> adap = new ArrayAdapter<
+                Map.Entry<String, Usuario>>(this, R.layout.participante_item,
+                new ArrayList<>(usuarios.entrySet())) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -161,19 +164,60 @@ public class EditPDV extends AppCompatActivity {
                             R.layout.participante_item, parent, false);
                 }
 
-                Usuario usu = this.getItem(position);
-                assert usu != null;
+                Map.Entry<String, Usuario> entry = this.getItem(position);
+                assert entry != null;
+                final String id = entry.getKey();
+                final Usuario usu = entry.getValue();
                 TextView name = (TextView) convertView.findViewById(R.id.pp_nome);
                 TextView descr = (TextView) convertView.findViewById(R.id.pp_email);
 
                 name.setText(usu.getNome());
                 descr.setText(usu.getEmail());
 
+                convertView.findViewById(R.id.pp_edita).setOnClickListener(new View
+                        .OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editParticipant(usu, id);
+                    }
+                });
+
                 return convertView;
             }
         };
         partc.setAdapter(adap);
 
+    }
+
+    private void editParticipant(final Usuario u, final String id) {
+        AlertDialog.Builder fabrica = new AlertDialog.Builder(this);
+        final String nome = u.getNome().split(" ")[0];
+        fabrica.setTitle(nome);
+        fabrica.setCancelable(true);
+
+        final ArrayAdapter<String> opcoes = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1);
+        opcoes.add("Apagar");
+
+        fabrica.setAdapter(opcoes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String opcao = opcoes.getItem(which);
+                assert opcao != null;
+                if (opcao.equalsIgnoreCase("apagar")) {
+                    if (id.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        Util.showToast(EditPDV.this, "Você não pode remover você mesmo");
+                        // TODO: Permitir, só que pedir confirmção
+                        return;
+                    }
+                    TelaInicial.CURRENT_PDV.getIntegrantes().remove(id);
+                    TelaInicial.CURRENT_PDV.pushToDB();
+                    u.setPdv("");
+                    Usuario.getRoot().child(id).setValue(u);
+                }
+            }
+        });
+        fabrica.show();
     }
 
     public void enviarEnvite(View v) {

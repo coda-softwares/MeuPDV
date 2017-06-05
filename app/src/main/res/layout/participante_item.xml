@@ -25,6 +25,7 @@
         android:text="amazing.email@example.com" />
 
     <ImageButton
+        android:id="@+id/pp_edita"
         android:layout_width="35dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
