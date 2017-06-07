@@ -2,9 +2,13 @@ package etec.coda_softwares.meupdv;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,6 +43,7 @@ public class Caixa extends AppCompatActivity {
     private DecoratedBarcodeView leitor;
     private Map<String, Produto> produtos;
     private Stack<Produto> carrinho;
+    private String lastRead = "";
     private NumberPicker quantidade;
     private BarcodeCallback callback = new BarcodeCallback() {
         List<BarcodeFormat> excluded = Arrays.asList( //TODO faltam mais tipos pra excluir
@@ -51,11 +56,17 @@ public class Caixa extends AppCompatActivity {
             if (excluded.contains(result.getBarcodeFormat())) {
                 return;
             }
-
             String res = result.getText(); // Nunca será nulo.
+            if (res.equals(lastRead)) {
+                return;
+            }
+            lastRead = res;
+
             Util.showToast(Caixa.this, "Código de barras " + res + " lido!");
 
             Produto produto = produtos.get(res);
+            Vibrator v = (Vibrator) Caixa.this.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(600);
 
             if (produto == null) {
                 leitor.setStatusText("Produto " + res + " não encontrado");
@@ -65,6 +76,9 @@ public class Caixa extends AppCompatActivity {
             if (res.equals(lastProduto.getCodDBarras())) {
                 return;
             }
+
+            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500);
 
             int total = quantidade.getValue();
             quantidade.setMaxValue(produto.getQuantidade());

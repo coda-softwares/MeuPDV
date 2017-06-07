@@ -1,78 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="81dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="horizontal"
-    android:paddingEnd="15dp"
-    android:paddingStart="15dp"
-    android:weightSum="10">
+    android:layout_height="70dp"
+    android:background="?android:attr/selectableItemBackground">
 
     <!-- Icone do produto do lado esquerdo -->
-    <ImageView
-        android:id="@+id/prod_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="start"
-        android:layout_weight="3" />
+    <!--<ImageView-->
+    <!--android:id="@+id/prod_icon"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="start"-->
+    <!--android:layout_weight="1" />-->
 
     <!-- Layout para centralizar o nome e preço do produto (HORIZONTAL) -->
+    <!-- Titulo do produto com o nome do produto no meio -->
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
-        <!-- Layout vertical do nome e preço do produto (Fica no centro) -->
-        <android.support.v7.widget.LinearLayoutCompat
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/prod_nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-            <!-- Titulo do produto com o nome do produto no meio -->
-            <TextView
-                android:id="@+id/prod_nome"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
-                android:src="@drawable/ic_produtos"
-                android:text="Coca-Cola"
-                android:textSize="18sp" />
+            android:text="Coca-Cola"
+            android:textSize="18sp" />
 
-            <!-- Preço estara em baixo do titulo -->
-            <TextView
-                android:id="@+id/prod_valor"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:shadowColor="@color/border_preco"
-                android:shadowRadius="2"
-                android:text="R$2.50"
-                android:textColor="@color/cor_preco"
-                android:textSize="14sp" />
-        </android.support.v7.widget.LinearLayoutCompat>
-
-        <!-- Quantidade do produto horizontal no TOP|END -->
+        <!-- Preço estara em baixo do titulo -->
         <TextView
-            android:id="@+id/prod_quant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="15dp"
-            android:layout_gravity="end"
-            android:textAlignment="textEnd"
-            android:width="35dp"
-            android:text="55"
-            />
+            android:id="@+id/prod_valor"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:shadowColor="@color/border_preco"
+            android:text="R$ 2.50"
+            android:textColor="@color/cor_preco"
+            android:textSize="14sp" />
     </LinearLayout>
-    <!-- Botão seta para o lado direito -->
-    <ImageButton
-        android:id="@+id/prod_button"
+
+    <!-- Quantidade do produto horizontal no TOP|END -->
+    <TextView
+        android:id="@+id/prod_quant"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="5"
-        android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_seta_direita" />
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/layout"
+        android:text="55" />
     <!-- onClick estara setado na classe adapter -->
-</LinearLayout>
+</RelativeLayout>
