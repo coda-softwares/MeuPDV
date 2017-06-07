@@ -15,23 +15,21 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import etec.coda_softwares.meupdv.entitites.HandlerPadrao;
 import etec.coda_softwares.meupdv.entitites.Venda;
 
-import static android.R.attr.data;
+import static etec.coda_softwares.meupdv.Analisis.ChartMode.*;
 
 public class Analisis extends AppCompatActivity {
     private TextView labelTitle;
 
-    private Enum ChartMode;
-    private Enum Day, Week, Month, Year;
+    private Enum chartMode;
+    public enum ChartMode { Day, Week, Month, Year }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,20 +41,20 @@ public class Analisis extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         Analisis self = Analisis.this;
 
-                        if ( self.ChartMode == Day) {
-                            self.ChartMode = Week;
+                        if ( self.chartMode == Day) {
+                            self.chartMode = Week;
                             self.resetLabels(R.string.chart_time_mode_week);
                             self.updateChart(self.getWeekData());
-                        } else if ( self.ChartMode == Week ) {
-                            self.ChartMode = Month;
+                        } else if ( self.chartMode == Week ) {
+                            self.chartMode = Month;
                             self.resetLabels(R.string.chart_time_mode_month);
                             self.updateChart(self.getMonthData());
-                        } else if ( self.ChartMode == Month ) {
-                            self.ChartMode = Year;
+                        } else if ( self.chartMode == Month ) {
+                            self.chartMode = Year;
                             self.resetLabels(R.string.chart_time_mode_year);
                             self.updateChart(self.getYearData());
                         } else {
-                            self.ChartMode = Day;
+                            self.chartMode = Day;
                             self.resetLabels(R.string.chart_time_mode_day);
                             self.updateChart(self.getDayData());
                         }
@@ -77,7 +75,7 @@ public class Analisis extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ChartMode = Month;
+        chartMode = Day;
 
         labelTitle = (TextView) findViewById(R.id.chart);
 
@@ -121,7 +119,13 @@ public class Analisis extends AppCompatActivity {
     }
 
     private void separateData(List<Venda> vendas){
-
+        // Test simples por dia
+        long lastTime = vendas.get(0).getData();
+        List<VendaData> dadosDasVendas = new ArrayList<>();
+        for(Venda venda : vendas){
+            // TODO: Separar por data e guardar em dadosDasVendas
+            // TODO: Depois passar para o chart cada VendaData
+        }
     }
     private void setupData(){
         Venda.DBROOT.addValueEventListener(new ValueEventListener() {
@@ -151,5 +155,37 @@ public class Analisis extends AppCompatActivity {
     }
     public List<Entry> getDayData(){
         return new ArrayList<Entry>();
+    }
+
+    /**
+     * Necessário pois representa um aglumerado de dados
+     * sendo eles por dia, semana, mês ou ano
+     */
+    private class VendaData {
+        private int data;
+        private BigDecimal recebido;
+        private long quantidadeDeProdutosVendidos;
+        /**
+         *
+         * @param data é representado como int pois é contado como um número commun
+         * @param recebido "Ainda" não se refere aos lucros
+         */
+        public VendaData(int data, BigDecimal recebido, long quantidadeDeProdutosVendidos){
+            this.data = data;
+            this.recebido = recebido;
+            this.quantidadeDeProdutosVendidos = quantidadeDeProdutosVendidos;
+        }
+
+        public int getData() {
+            return data;
+        }
+
+        public BigDecimal getRecebido() {
+            return recebido;
+        }
+
+        public long getQuantidadeDeProdutosVendidos() {
+            return quantidadeDeProdutosVendidos;
+        }
     }
 }
