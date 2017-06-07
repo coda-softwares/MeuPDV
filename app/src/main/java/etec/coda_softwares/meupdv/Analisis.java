@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Venda;
@@ -120,12 +121,32 @@ public class Analisis extends AppCompatActivity {
 
     private void separateData(List<Venda> vendas){
         // Test simples por dia
-        long lastTime = vendas.get(0).getData();
-        List<VendaData> dadosDasVendas = new ArrayList<>();
-        for(Venda venda : vendas){
-            // TODO: Separar por data e guardar em dadosDasVendas
-            // TODO: Depois passar para o chart cada VendaData
-        }
+        if ( this.chartMode == Day ) {
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(vendas.get(0).getData());
+
+            int lastTime = calendar.get(Calendar.DAY_OF_YEAR);
+
+            List<VendaData> dadosDasVendas = new ArrayList<>();
+            for (Venda venda : vendas) {
+                // TODO: Separar por data e guardar em dadosDasVendas
+                // TODO: Depois passar para o chart cada VendaData
+
+                // TODO:mini criar VendaData junto com lastTime, ou guardar lastTime na
+                // TODO:mini primeira VendaData e ir somando
+                calendar.setTimeInMillis(venda.getData());
+                if(calendar.get(Calendar.DAY_OF_YEAR) > lastTime){
+                    // Adiciona nova VendaData a dadosDasVendas
+                    // e continua a soma-la até que o data mude
+                    // e assim repete o processo(nova venda data)
+                } else {
+                    // Continua a somar
+                }
+
+            }
+        } // TODO: Criar o resto
+
     }
     private void setupData(){
         Venda.DBROOT.addValueEventListener(new ValueEventListener() {
