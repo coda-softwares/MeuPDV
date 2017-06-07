@@ -28,6 +28,7 @@ import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.HandlerPadrao;
 import etec.coda_softwares.meupdv.entitites.Produto;
+import etec.coda_softwares.meupdv.entitites.Venda;
 
 public class PosCaixa extends AppCompatActivity {
     BigDecimal total = new BigDecimal(0);
@@ -93,11 +94,11 @@ public class PosCaixa extends AppCompatActivity {
             });
         }
 
-        DatabaseReference log = Produto.DBROOT.getParent().child("vendas").push();
-        log.child("produtos").setValue(produtos);
-        log.child("data").setValue(System.currentTimeMillis());
-        log.child("total").setValue(total.toPlainString());
-        log.child("funcionario").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference log = Venda.DBROOT.push();
+        String funcUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        long horaDaVenda = System.currentTimeMillis();
+        Venda venda = new Venda(horaDaVenda, funcUid, produtos, total.toPlainString());
+        log.setValue(venda);
     }
 
     private class PrecoAdapter extends ArrayAdapter<Produto> {
@@ -133,7 +134,7 @@ public class PosCaixa extends AppCompatActivity {
             return antiga;
         }
 
-        //TODO REMOÇÃO E EDIÇÃO DE ITENS DA LISTA!
+        //TODO: REMOÇÃO E EDIÇÃO DE ITENS DA LISTA!
     }
 
 }

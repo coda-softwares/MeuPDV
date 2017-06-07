@@ -13,9 +13,19 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import etec.coda_softwares.meupdv.entitites.HandlerPadrao;
+import etec.coda_softwares.meupdv.entitites.Venda;
+
+import static android.R.attr.data;
 
 public class Analisis extends AppCompatActivity {
     private TextView labelTitle;
@@ -36,15 +46,19 @@ public class Analisis extends AppCompatActivity {
                         if ( self.ChartMode == Day) {
                             self.ChartMode = Week;
                             self.resetLabels(R.string.chart_time_mode_week);
+                            self.updateChart(self.getWeekData());
                         } else if ( self.ChartMode == Week ) {
                             self.ChartMode = Month;
                             self.resetLabels(R.string.chart_time_mode_month);
+                            self.updateChart(self.getMonthData());
                         } else if ( self.ChartMode == Month ) {
                             self.ChartMode = Year;
                             self.resetLabels(R.string.chart_time_mode_year);
+                            self.updateChart(self.getYearData());
                         } else {
                             self.ChartMode = Day;
                             self.resetLabels(R.string.chart_time_mode_day);
+                            self.updateChart(self.getDayData());
                         }
 
                         return true;
@@ -53,13 +67,6 @@ public class Analisis extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Muda o titulo da chart e demais quando for necessário
-     * @param titleLabel
-     */
-    public void resetLabels(int titleLabel){
-        labelTitle.setText( titleLabel );
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,5 +105,51 @@ public class Analisis extends AppCompatActivity {
         LineData lineData = new LineData(dataSet);
         test_chart.setData(lineData);
         test_chart.invalidate(); // refresh
+
+        setupData();
+    }
+
+    /**
+     * Muda o titulo da chart e demais quando for necessário
+     * @param titleLabel
+     */
+    public void resetLabels(int titleLabel){
+        labelTitle.setText( titleLabel );
+    }
+
+    private void updateChart(List<Entry> entries){
+    }
+
+    private void separateData(List<Venda> vendas){
+
+    }
+    private void setupData(){
+        Venda.DBROOT.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Venda> vendas = new ArrayList<>();
+                for(DataSnapshot data : dataSnapshot.getChildren())
+                    vendas.add(data.getValue(Venda.class));
+
+                Analisis.this.separateData(vendas);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Util.showToast(Analisis.this, "Carregamento dos dados cancelado");
+            }
+        });
+    }
+    public List<Entry> getYearData(){
+        return new ArrayList<Entry>();
+    }
+    public List<Entry> getMonthData(){
+        return new ArrayList<Entry>();
+    }
+    public List<Entry> getWeekData(){
+        return new ArrayList<Entry>();
+    }
+    public List<Entry> getDayData(){
+        return new ArrayList<Entry>();
     }
 }

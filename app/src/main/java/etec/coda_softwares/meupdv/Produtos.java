@@ -69,6 +69,7 @@ public class Produtos extends AppCompatActivity {
     }
 
     public void pesquisar(View v) {
+        // TODO: Mudar método de pesquisa para local
         String searchString = searchInput.getText().toString().trim().toLowerCase();
 
         Query query;
