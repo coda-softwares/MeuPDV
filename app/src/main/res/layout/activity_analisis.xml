@@ -28,7 +28,7 @@
             android:padding="15dp">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/chart_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/chart_time_mode_month"

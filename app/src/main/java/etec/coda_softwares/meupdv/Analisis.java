@@ -17,9 +17,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Venda;
@@ -28,6 +29,9 @@ import static etec.coda_softwares.meupdv.Analisis.ChartMode.*;
 
 public class Analisis extends AppCompatActivity {
     private TextView labelTitle;
+    private LineChart chart;
+
+    ArrayList<Venda> lastVendasLoaded;
 
     private Enum chartMode;
     public enum ChartMode { Day, Week, Month, Year }
@@ -45,25 +49,30 @@ public class Analisis extends AppCompatActivity {
                         if ( self.chartMode == Day) {
                             self.chartMode = Week;
                             self.resetLabels(R.string.chart_time_mode_week);
-                            self.updateChart(self.getWeekData());
+                            self.updateChart();
                         } else if ( self.chartMode == Week ) {
                             self.chartMode = Month;
                             self.resetLabels(R.string.chart_time_mode_month);
-                            self.updateChart(self.getMonthData());
+                            self.updateChart();
                         } else if ( self.chartMode == Month ) {
                             self.chartMode = Year;
                             self.resetLabels(R.string.chart_time_mode_year);
-                            self.updateChart(self.getYearData());
+                            self.updateChart();
                         } else {
                             self.chartMode = Day;
                             self.resetLabels(R.string.chart_time_mode_day);
-                            self.updateChart(self.getDayData());
+                            self.updateChart();
                         }
 
                         return true;
                     }
                 });
         return true;
+    }
+
+    private void updateChart(){
+        ArrayList<VendaData> dadosDasVendas = separateData(lastVendasLoaded);
+        passToChart(dadosDasVendas);
     }
 
     @Override
@@ -78,32 +87,9 @@ public class Analisis extends AppCompatActivity {
 
         chartMode = Day;
 
-        labelTitle = (TextView) findViewById(R.id.chart);
+        labelTitle = (TextView) findViewById(R.id.chart_title);
 
-        LineChart test_chart = (LineChart) findViewById(R.id.chart);
-
-        int[] time = new int[14];
-        int[] money = new int[14];
-
-        // Create test data
-        for(int i=0;i<14;i++){
-            time[i] = i;
-            if(i%2==0) money[i] = i+3;
-            else money[i] = i-3;
-        }
-
-        List<Entry> entries = new ArrayList<>();
-
-        for(int i=0;i<time.length;i++)
-            entries.add(new Entry(time[i], money[i]));
-
-        LineDataSet dataSet = new LineDataSet(entries, "Exemplo");
-        dataSet.setColor(Color.parseColor("#1111ae"));
-        dataSet.setValueTextColor(Color.WHITE);
-
-        LineData lineData = new LineData(dataSet);
-        test_chart.setData(lineData);
-        test_chart.invalidate(); // refresh
+        chart = (LineChart) findViewById(R.id.chart);
 
         setupData();
     }
@@ -116,47 +102,69 @@ public class Analisis extends AppCompatActivity {
         labelTitle.setText( titleLabel );
     }
 
-    private void updateChart(List<Entry> entries){
-    }
+    private ArrayList<VendaData> separateData(ArrayList<Venda> vendas){
+        lastVendasLoaded = vendas;
 
-    private void separateData(List<Venda> vendas){
+        ArrayList<VendaData> dadosDasVendas = new ArrayList<>();
+
         // Test simples por dia
         if ( this.chartMode == Day ) {
+
+            Collections.sort(vendas, new Comparator<Venda>() {
+                @Override
+                public int compare(Venda o1, Venda o2) {
+                    if (o1.getData()>o2.getData()){
+                        return 1;
+                    } else if (o1.getData()==o2.getData()){
+                        return 0;
+                    } else return -1;
+                }
+            });
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(vendas.get(0).getData());
 
             int lastTime = calendar.get(Calendar.DAY_OF_YEAR);
 
-            List<VendaData> dadosDasVendas = new ArrayList<>();
+            VendaData lastVendaData = new VendaData(lastTime, "0", 0);
+
             for (Venda venda : vendas) {
                 // TODO: Separar por data e guardar em dadosDasVendas
                 // TODO: Depois passar para o chart cada VendaData
 
                 // TODO:mini criar VendaData junto com lastTime, ou guardar lastTime na
                 // TODO:mini primeira VendaData e ir somando
+
                 calendar.setTimeInMillis(venda.getData());
-                if(calendar.get(Calendar.DAY_OF_YEAR) > lastTime){
+                if(calendar.get(Calendar.DAY_OF_YEAR) > lastVendaData.getData()){
                     // Adiciona nova VendaData a dadosDasVendas
                     // e continua a soma-la até que o data mude
                     // e assim repete o processo(nova venda data)
+                    dadosDasVendas.add(lastVendaData);
+                    lastVendaData = new VendaData(calendar.get(Calendar.DAY_OF_YEAR),
+                            venda.getTotal(), venda.getProdutos().size());
+
                 } else {
                     // Continua a somar
+                    lastVendaData.sumQuantidade(venda.getProdutos().size());
+                    lastVendaData.sumRecebido(venda.getTotal());
                 }
 
             }
+            dadosDasVendas.add(lastVendaData);
         } // TODO: Criar o resto
-
+        return dadosDasVendas;
     }
     private void setupData(){
         Venda.DBROOT.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Venda> vendas = new ArrayList<>();
+                ArrayList<Venda> vendas = new ArrayList<>();
                 for(DataSnapshot data : dataSnapshot.getChildren())
                     vendas.add(data.getValue(Venda.class));
 
-                Analisis.this.separateData(vendas);
+                ArrayList<VendaData> dadosDasVendas = Analisis.this.separateData(vendas);
+                Analisis.this.passToChart(dadosDasVendas);
             }
 
             @Override
@@ -165,6 +173,22 @@ public class Analisis extends AppCompatActivity {
             }
         });
     }
+
+    private void passToChart(ArrayList<VendaData> dadosDasVendas) {
+        List<Entry> entries = new ArrayList<>();
+
+        for(VendaData data : dadosDasVendas)
+            entries.add(new Entry(data.getData(), data.getRecebido()));
+
+        LineDataSet dataSet = new LineDataSet(entries, "Recebido");
+        dataSet.setColor(Color.parseColor("#1111ae"));
+        dataSet.setValueTextColor(Color.BLACK);
+
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+        chart.invalidate(); // refresh
+    }
+
     public List<Entry> getYearData(){
         return new ArrayList<Entry>();
     }
@@ -184,16 +208,16 @@ public class Analisis extends AppCompatActivity {
      */
     private class VendaData {
         private int data;
-        private BigDecimal recebido;
+        private float recebido;
         private long quantidadeDeProdutosVendidos;
         /**
          *
          * @param data é representado como int pois é contado como um número commun
          * @param recebido "Ainda" não se refere aos lucros
          */
-        public VendaData(int data, BigDecimal recebido, long quantidadeDeProdutosVendidos){
+        public VendaData(int data, String recebido, long quantidadeDeProdutosVendidos){
             this.data = data;
-            this.recebido = recebido;
+            this.recebido = Float.parseFloat(recebido);
             this.quantidadeDeProdutosVendidos = quantidadeDeProdutosVendidos;
         }
 
@@ -201,12 +225,18 @@ public class Analisis extends AppCompatActivity {
             return data;
         }
 
-        public BigDecimal getRecebido() {
+        public float getRecebido() {
             return recebido;
+        }
+        public void sumRecebido(String v){
+            recebido += Float.parseFloat(v);
         }
 
         public long getQuantidadeDeProdutosVendidos() {
             return quantidadeDeProdutosVendidos;
+        }
+        public void sumQuantidade(long v){
+            quantidadeDeProdutosVendidos += v;
         }
     }
 }
