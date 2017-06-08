@@ -129,11 +129,6 @@ public class Analisis extends AppCompatActivity {
             VendaData lastVendaData = new VendaData(lastTime, "0", 0);
 
             for (Venda venda : vendas) {
-                // TODO: Separar por data e guardar em dadosDasVendas
-                // TODO: Depois passar para o chart cada VendaData
-
-                // TODO:mini criar VendaData junto com lastTime, ou guardar lastTime na
-                // TODO:mini primeira VendaData e ir somando
 
                 calendar.setTimeInMillis(venda.getData());
                 if(calendar.get(Calendar.DAY_OF_YEAR) > lastVendaData.getData()){
