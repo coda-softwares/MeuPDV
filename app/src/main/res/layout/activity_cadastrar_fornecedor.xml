@@ -12,7 +12,8 @@
         android:id="@+id/default_toobar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        app:cardCornerRadius="0dp">
     <android.support.v7.widget.Toolbar
         android:id="@+id/fornecedor_toolbar"
         android:layout_width="match_parent"
