@@ -31,15 +31,15 @@
                 android:id="@+id/chart_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/chart_time_mode_month"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
+                android:text="@string/chart_time_mode_month"
                 />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
-                android:layout_width="258dp"
-                android:layout_height="224dp"
+                android:layout_width="458dp"
+                android:layout_height="424dp"
                 android:layout_gravity="center_horizontal"
                 />
 

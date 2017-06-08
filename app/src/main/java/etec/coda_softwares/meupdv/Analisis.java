@@ -1,8 +1,8 @@
 package etec.coda_softwares.meupdv;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,26 +15,29 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import etec.coda_softwares.meupdv.entitites.Venda;
 
-import static etec.coda_softwares.meupdv.Analisis.ChartMode.*;
+import static etec.coda_softwares.meupdv.Analisis.ChartMode.Day;
+import static etec.coda_softwares.meupdv.Analisis.ChartMode.Month;
+import static etec.coda_softwares.meupdv.Analisis.ChartMode.Week;
+import static etec.coda_softwares.meupdv.Analisis.ChartMode.Year;
 
 public class Analisis extends AppCompatActivity {
     private TextView labelTitle;
     private LineChart chart;
 
-    ArrayList<Venda> lastVendasLoaded;
-
     private Enum chartMode;
-    public enum ChartMode { Day, Week, Month, Year }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,8 +74,7 @@ public class Analisis extends AppCompatActivity {
     }
 
     private void updateChart(){
-        ArrayList<VendaData> dadosDasVendas = separateData(lastVendasLoaded);
-        passToChart(dadosDasVendas);
+        //
     }
 
     @Override
@@ -102,64 +104,49 @@ public class Analisis extends AppCompatActivity {
         labelTitle.setText( titleLabel );
     }
 
-    private ArrayList<VendaData> separateData(ArrayList<Venda> vendas){
-        lastVendasLoaded = vendas;
+    private void populateProfitByDay(List<Venda> vendas) {
+        if (vendas.isEmpty()) {
+            return;
+        }
 
-        ArrayList<VendaData> dadosDasVendas = new ArrayList<>();
-
-        // Test simples por dia
-        if ( this.chartMode == Day ) {
-
-            Collections.sort(vendas, new Comparator<Venda>() {
-                @Override
-                public int compare(Venda o1, Venda o2) {
-                    if (o1.getData()>o2.getData()){
-                        return 1;
-                    } else if (o1.getData()==o2.getData()){
-                        return 0;
-                    } else return -1;
-                }
-            });
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(vendas.get(0).getData());
-
-            int lastTime = calendar.get(Calendar.DAY_OF_YEAR);
-
-            VendaData lastVendaData = new VendaData(lastTime, "0", 0);
-
-            for (Venda venda : vendas) {
-
-                calendar.setTimeInMillis(venda.getData());
-                if(calendar.get(Calendar.DAY_OF_YEAR) > lastVendaData.getData()){
-                    // Adiciona nova VendaData a dadosDasVendas
-                    // e continua a soma-la até que o data mude
-                    // e assim repete o processo(nova venda data)
-                    dadosDasVendas.add(lastVendaData);
-                    lastVendaData = new VendaData(calendar.get(Calendar.DAY_OF_YEAR),
-                            venda.getTotal(), venda.getProdutos().size());
-
-                } else {
-                    // Continua a somar
-                    lastVendaData.sumQuantidade(venda.getProdutos().size());
-                    lastVendaData.sumRecebido(venda.getTotal());
-                }
-
+        Collections.sort(vendas, new Comparator<Venda>() {
+            @Override
+            public int compare(Venda o1, Venda o2) {
+                if (o1.getData() > o2.getData()) {
+                    return 1;
+                } else if (o1.getData() == o2.getData()) {
+                    return 0;
+                } else
+                    return -1;
             }
-            dadosDasVendas.add(lastVendaData);
-        } // TODO: Criar o resto
-        return dadosDasVendas;
+        });
+        ArrayList<Entry> dadosDasVendas = new ArrayList<>();
+        LineDataSet dataSet = new LineDataSet(dadosDasVendas, "Recebido");
+        dataSet.setColor(Color.parseColor("#1111ae"));
+        dataSet.setValueTextColor(Color.BLACK);
+
+        Iterator<Venda> a = vendas.iterator();
+        Calendar last = Calendar.getInstance();
+        last.setTimeInMillis(a.next().getData());
+
+        LineData lineData = new LineData(dataSet);
+
+        for (Venda venda : vendas) {
+        }
+        chart.setData(lineData);
+        chart.invalidate();
+        // TODO: Criar o resto
     }
+
     private void setupData(){
-        Venda.DBROOT.addValueEventListener(new ValueEventListener() {
+        Venda.DBROOT.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Venda> vendas = new ArrayList<>();
-                for(DataSnapshot data : dataSnapshot.getChildren())
-                    vendas.add(data.getValue(Venda.class));
-
-                ArrayList<VendaData> dadosDasVendas = Analisis.this.separateData(vendas);
-                Analisis.this.passToChart(dadosDasVendas);
+                GenericTypeIndicator<HashMap<String, Venda>> t = new GenericTypeIndicator<
+                        HashMap<String, Venda>>() {
+                };
+                HashMap<String, Venda> todas = dataSnapshot.getValue(t);
+                populateProfitByDay(new ArrayList<>(todas.values()));
             }
 
             @Override
@@ -187,15 +174,20 @@ public class Analisis extends AppCompatActivity {
     public List<Entry> getYearData(){
         return new ArrayList<Entry>();
     }
+
     public List<Entry> getMonthData(){
         return new ArrayList<Entry>();
     }
+
     public List<Entry> getWeekData(){
         return new ArrayList<Entry>();
     }
+
     public List<Entry> getDayData(){
         return new ArrayList<Entry>();
     }
+
+    public enum ChartMode {Day, Week, Month, Year}
 
     /**
      * Necessário pois representa um aglumerado de dados
