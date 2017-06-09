@@ -16,16 +16,18 @@ public class Venda implements Serializable {
     public static final DatabaseReference DBROOT = FirebaseDatabase.getInstance()
             .getReference("pdv").child(TelaInicial.CURRENT_PDV.getId()).child("vendas");
 
-    private long data = 0;
-    private String funcionario = "";
-    private String total = "";
+    private long data;
+    private String funcionario, total;
+    private ArrayList<Produto> produtos;
 
-    private ArrayList<Produto> produtos = new ArrayList<>();
+    public Venda() {
+    }
 
     /**
      * NOTA: Não editar uma venda já comfirmada
      */
-    public Venda(){}
+
+
     public Venda(long data, String funcionario, ArrayList<Produto> produtos, String total) {
         this.data = data;
         this.funcionario = funcionario;

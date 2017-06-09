@@ -88,7 +88,7 @@ public class TelaInicial extends AppCompatActivity {
             file.delete();
     }
 
-    private void populateList(final TelaInicial self) {
+    private void populateList() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
 
@@ -225,7 +225,7 @@ public class TelaInicial extends AppCompatActivity {
                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()));
             startActivityForResult(aui.build(), REQ_LOGIN);
         } else {
-            populateList(this);
+            populateList();
         }
     }
 
@@ -266,8 +266,7 @@ public class TelaInicial extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == REQ_LOGIN) {
             if (resultCode == RESULT_OK) {
-                Util.usuario.setPdv(TelaInicial.CURRENT_PDV.getId());
-                populateList(this);
+                populateList();
             } else {
                 retryDialog(new Runnable() {
                     @Override

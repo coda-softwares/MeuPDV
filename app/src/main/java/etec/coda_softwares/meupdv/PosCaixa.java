@@ -96,7 +96,7 @@ public class PosCaixa extends AppCompatActivity {
 
         DatabaseReference log = Venda.DBROOT.push();
         String funcUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        long horaDaVenda = System.currentTimeMillis();
+        long horaDaVenda = System.currentTimeMillis() * 1000;
         Venda venda = new Venda(horaDaVenda, funcUid, produtos, total.toPlainString());
         log.setValue(venda);
     }

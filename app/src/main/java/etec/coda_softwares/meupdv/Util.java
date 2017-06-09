@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import etec.coda_softwares.meupdv.entitites.Usuario;
 
@@ -65,5 +66,11 @@ public class Util {
 
     public static String unjsonifyEmail(String email) {
         return email.replace("@", ";A").replace(";P", ".");
+    }
+
+    public static Calendar getCalendar(long date) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(date);
+        return c;
     }
 }
