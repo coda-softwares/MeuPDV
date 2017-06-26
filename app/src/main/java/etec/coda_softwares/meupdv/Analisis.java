@@ -1,5 +1,7 @@
 package etec.coda_softwares.meupdv;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -118,6 +120,20 @@ public class Analisis extends AppCompatActivity {
     }
 
     private void lucroPorDiaAno() {
+        if (todasVendas.isEmpty()) {
+            AlertDialog.Builder er = new AlertDialog.Builder(this);
+            er.setCancelable(false);
+            er.setMessage("Sem dados suficientes para construir o gráfico.");
+            er.setNeutralButton("Voltar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            er.show();
+            return;
+        }
         ArrayList<Venda> vendas = new ArrayList<>(todasVendas);
         Collections.sort(vendas, new Comparator<Venda>() {
             @Override
